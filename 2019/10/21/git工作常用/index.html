@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>git工作常用命令 | 洋洋的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="baidu-site-verification" content="1ZsVVOmjoT" />
+    <meta name="description" content="介绍Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git工作常用命令">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;21&#x2F;git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8&#x2F;index.html">
+<meta property="og:site_name" content="洋洋的博客">
+<meta property="og:description" content="介绍Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-10-22T02:48:07.520Z">
+<meta name="twitter:card" content="summary">
+    
+      <link rel="alternative" href="/atom.xml" title="洋洋的博客" type="application/atom+xml">
+    
+    
+      <link rel="icon" href="/css/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+    
+<!-- Baidu Analytics -->
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?fe2c7555911b8560db5e56121c5d5960";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- End Baidu Analytics -->
+
+
+    <script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+</head>
+<body>
+<div id="container"> 
+
+    
+    <div id="wrap">
+	   
+
+<header id="header" class="hdpage">
+    
+    <div id="header-outer" class="outer">
+        
+        <div id="header-inner" class="inner">
+          <nav id="main-nav">
+            <a id="main-nav-toggle" class="nav-icon"></a>
+            
+              <a class="main-nav-link" href="/">
+                  
+                  
+
+                
+                  Home
+                </a>
+            
+              <a class="main-nav-link" href="/API">
+                  
+                  
+
+                
+                  API
+                </a>
+            
+              <a class="main-nav-link" href="/tags">
+                  
+                  
+
+                
+                  Tags
+                </a>
+            
+              <a class="main-nav-link" href="/archives">
+                  
+                  
+
+                
+                  Archives
+                </a>
+            
+              <a class="main-nav-link" href="/about">
+                  
+                  
+
+                
+                  About
+                </a>
+            
+              <a class="main-nav-link" href="https://github.com/JSLite/JSLite" target="_blank" rel="noopener">
+                  
+                  
+
+                
+                  Github
+                </a>
+            
+          </nav>
+          <nav id="sub-nav">
+            
+              <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+            
+            <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+          </nav>
+          <div id="search-form-wrap">
+            <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+          </div>
+        </div>
+    </div>
+</header>
+		<div class="outer">
+		
+    <article id="post-git工作常用" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="article-meta">
+        
+          <header class="article-header">
+            
+  
+    <a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/">
+      <h1 class="article-title" itemprop="name">
+        git工作常用命令
+      </h1>
+    </a>
+  
+
+
+
+          </header>
+        
+
+        <!--<a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" class="article-date">
+  <time datetime="2019-10-21T13:20:05.000Z" itemprop="datePublished">2019-10-21</time>
+</a>-->
+        <!--  -->
+      </div>
+      <div class="article-inner">
+            
+            
+              <!--<header class="article-header">
+                
+  
+    <a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/">
+      <h1 class="article-title" itemprop="name">
+        git工作常用命令
+      </h1>
+    </a>
+  
+
+
+
+              </header>-->
+            
+            <div class="article-entry" itemprop="articleBody">
+              <div class="page-toc">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作常用"><span class="toc-number">2.</span> <span class="toc-text">工作常用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支相关"><span class="toc-number">3.</span> <span class="toc-text">分支相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他操作"><span class="toc-number">4.</span> <span class="toc-text">其他操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见误操作处理方法"><span class="toc-number">5.</span> <span class="toc-text">常见误操作处理方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见错误处理方法"><span class="toc-number">6.</span> <span class="toc-text">常见错误处理方法</span></a></li></ol>
+              </div>
+              
+                <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p>
+<p>Git 管理项目时，文件流转的三个工作区域： </p>
+<ul>
+<li>Git 的工作目录</li>
+<li>暂存区域</li>
+<li>以及本地仓库</li>
+</ul>
+<p>基本的 Git 工作流程如下：</p>
+<ol>
+<li>在工作目录中修改某些文件。 </li>
+<li>对修改后的文件进行快照，然后保存到暂存区域。 </li>
+<li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li>
+</ol>
+<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p>分为俩种情况：</p>
+<ol>
+<li>在工作目录中初始化新仓库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$git init  # 初始化;产生一个 .git 文件</span><br><span class="line">$git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</span><br></pre></td></tr></table></figure></li>
+<li>从现有仓库克隆<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中</span><br><span class="line">包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略</span><br><span class="line">$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</span><br></pre></td></tr></table></figure>
+<h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git branch --set-upstream-to=origin/test test  与远程分支建立连接</span><br><span class="line">$ git branch：不加参数 列出本地</span><br><span class="line">    -r                      # 列出远程分支</span><br><span class="line">    -a                      # all</span><br><span class="line">    -name                   # 新建分支</span><br><span class="line">    -track                  # 本地/远程（创建分支并且关联远程）</span><br><span class="line">    -v                      # verbose详细信息</span><br><span class="line">    -d/-D name              # 删除指定分支</span><br><span class="line">    -m old_name new_name    # 修改分支名</span><br><span class="line">$ git push origin --delete branch_name # 删除远程分支</span><br><span class="line">$ git checkout -b branch_name [branch/commit] # 创建并切换分支</span><br></pre></td></tr></table></figure>
+<h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add name git_address   # 关联远程库</span><br><span class="line">$ git stash # 储藏当前工作，接着到另一分支处理问题</span><br><span class="line">$ git stash list # 查看储藏栈</span><br><span class="line">$ git stash pop # 提取最新工作并从栈删除</span><br><span class="line">$ git cherry-pick # 可以理解为”挑拣”提交，它会获取某一个分支的单笔提交，</span><br><span class="line">                                    并作为一个新的提交引入到你当前分支上。</span><br><span class="line">$ git diff 具体修改了那些地方 git diff &lt;local branch&gt; &lt;remote&gt;/&lt;remote branch&gt;对比远程分支</span><br><span class="line">$ git remote：管理主机名</span><br><span class="line">    不带参数 -列出所有远程主机</span><br><span class="line">    -v 参看远程主机的网址</span><br><span class="line">    -show &lt;主机名&gt;查看详细信息</span><br><span class="line">忽略文件：创建一个名为 .gitignore的文件，列出要忽略的文件模式。</span><br><span class="line">如：*.a       #忽略所有 .a 结尾的文件    !lib.a    #但 lib.a 除外</span><br></pre></td></tr></table></figure>
+
+<h3 id="常见误操作处理方法"><a href="#常见误操作处理方法" class="headerlink" title="常见误操作处理方法"></a>常见误操作处理方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">撤销 add：git reset HEAD</span><br><span class="line">合并 commit：</span><br><span class="line">    1. 追加至上一个 commit ：git commit --amend；commit 的时间是不会变的；可加上--no-edit</span><br><span class="line">    2. 合并多个：git rebase -i commit(-i 后参数可写commitHSAH值即你想合并至哪一个commit</span><br><span class="line">        或者-i HEAD~n(HEAD将它看做 你的上一次提交 的别名)HEAD~1 上个版本 HEAD~n 上n个版本)</span><br><span class="line">        - 紧接着进入vim界面：pick为保留，s或者squash为删除commit</span><br><span class="line">        - 又另一个vim界面：commit msg 保留自己需要的或者修改，用#删除别的commit msg</span><br><span class="line"></span><br><span class="line">如何重置某个文件到未修改的状态？  # git checkout -- &lt;filepath&gt;</span><br><span class="line">如何重置所有文件到未修改的状态？  # git reset --hard</span><br><span class="line">如何重置到某个 commit？          # git reset &lt;commit SHA&gt;</span><br><span class="line"></span><br><span class="line">git reset用于撤销未被提交到remote的改动，即撤销local的修改。除了移动当前分支的HEAD，</span><br><span class="line">还可以更改workspace和index：</span><br><span class="line">git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：</span><br><span class="line">    --soft：修改HEAD，不修改index和workspace。</span><br><span class="line">    --mixed：修改HEAD和index，不修改workspace。默认行为。</span><br><span class="line">    --hard：修改HEAD、index、workspace。把index和workspace的修改全部撤销。</span><br></pre></td></tr></table></figure>
+
+<h3 id="常见错误处理方法"><a href="#常见错误处理方法" class="headerlink" title="常见错误处理方法"></a>常见错误处理方法</h3><ul>
+<li>git pull or push报错：fatal: refusing to merge unrelated histories （拒绝合并不相关的历史）</li>
+</ul>
+<p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>
+
+              
+            </div>
+            <footer class="article-footer">
+              <a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" class="article-date">
+  <time datetime="2019-10-21T13:20:05.000Z" itemprop="datePublished">2019-10-21</time>
+</a>
+              <a data-url="http://yoursite.com/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" data-id="ck2191l5600016gveh00jhild" class="article-share-link">Share</a>
+              
+              
+            </footer>
+      </div>
+      
+        
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/21/hexo&markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hexo&amp;markdown常用命令</div>
+    </a>
+  
+</nav>
+
+      
+    </article>
+    <script type="text/javascript">
+      window.onscroll = function(){ 
+        $(function(){
+          var $toc = $('.page-toc'),
+              $article = $('.article-entry')
+              toc_top = $toc.offset().top
+              tocsub_width = $toc.children().width()
+              article_height = $article.children().height()
+              scroll_top = document.body.scrollTop
+              screen_h = $(window).height()
+              footer_top = $('.article-footer').offset().top - $(window).height()
+              if(toc_top&&scroll_top&&scroll_top>toc_top&&scroll_top<footer_top){
+                $toc.children().css({
+                  "position": "fixed",
+                  "height": (screen_h -20)+'px',
+                  "overflow": "auto"
+                })
+                $article.css('margin-right',tocsub_width+'px')
+              }else{
+                $toc.children().css({
+                  "position": "relative",
+                  "height":'inherit',
+                  "overflow": "auto"
+                })
+                $article.css('margin-right',0+'px')
+              }
+        })
+      } 
+    </script>
+
+
+
+
+
+
+
+
+		</div>
+		
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+        <div class="left">
+            &copy; 2019 YangYang Luo<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and Theme by <a href="https://github.com/jaywcjlove/hexoThemeKacper" target="_blank" rel="noopener">hexoThemeKacper </a>
+        </div>
+        <div class="right">
+            
+        </div>
+    </div>
+  </div>
+</footer>
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+  var $img = $('.article-entry img'),
+      $link = $img.css({
+        "display":"inline-block"
+      }).parent()
+
+  if($link.parent().is("a")){
+      $img.each(function(idx,item) {
+      $(this).parent().attr('href',$(this).parent().parent().attr('href'))
+    })
+  }
+})
+</script>
+
+
+<script src="/js/script.js"></script>
+
+  	</div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/API" class="mobile-nav-link">API</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="https://github.com/JSLite/JSLite" target="_blank" rel="noopener" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+</div>
+</body>
+</html>
+
