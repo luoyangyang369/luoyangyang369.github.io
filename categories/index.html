@@ -15,7 +15,7 @@
   <meta name="description" content="">
   <meta name="author" content="YangYang Luo">
   <meta name="keywords" content="">
-  <title>洋洋的博客</title>
+  <title>分类 ~ 洋洋的博客</title>
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
   <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
   <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
@@ -31,7 +31,7 @@
 
 
 <body>
-  <header style="height: 100vh;">
+  <header style="height: 80vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -105,10 +105,6 @@
           </div>
 
           
-            <div class="scroll-down-bar">
-              <i class="fa fa-angle-down scroll-down-arrow"></i>
-            </div>
-          
         </div>
       </div>
     </div>
@@ -123,167 +119,6 @@
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
-
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/">
-        <p class="h4 index-header">git工作常用命令</p>
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">介绍Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。
-Git 管理项目时，文件流转的三个工作区域： 
-
-Git 的工作目录
-暂存区域
-以及本地仓库
-
-基本的 Git 工作流程如下：
-
-在工作目录中修改某些文件。 
-对修改后的文件进行快照，然后保存到暂存区域。 
-提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。
-
-工作常用分为俩种情况：
-
-在工作目录中初始化新仓库$git init  # 初始化;产生一个 .git 文件
-$git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义
-从现有仓库克隆$ git clone git://github.com/s</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-21&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/21/hexo&markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-        <p class="h4 index-header">hexo&amp;markdown常用命令</p>
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">hexo常用命令笔记常用hexo n  # 写文章
-hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令
-hexo g  # 生成
-hexo d  # 部署 # 可与hexo g 合并为 hexo d -ghexonpm install hexo -g # 安装  
-npm update hexo -g # 升级  
-hexo init # 初始化简写hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章
-hexo p == hexo publish
-hexo g == hexo generate # 生成
-hexo s == hexo server  # 启动服务预览
-hexo d == hexo deploy  # 部署服务器hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。
-hexo server -s  # 静态模式
-hexo server -p 5000  # 更改端口
-hexo server -i 192.168.1.1  # 自定义 IP
-
-hexo clean</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-21&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/17/%E8%AE%B0%E5%BD%95%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
-        <p class="h4 index-header">记录如何使用hexo搭建博客</p>
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">一、hexo &amp; node 安装npm install hexo-cli -gnpm install hexo-deployer-git –saveor 使用yarn
-二、 Hexo初始化配置创建Hexo文件夹安装完成后，根据自己喜好建立目录（如F:\Blog\Hexo），直接进入F:\Blog\Hexo文件夹下右键鼠标，点击Git Bash Here，进入Git命令框，执行以下操作。
-
-$ hexo init
-
-本地查看效果执行下面语句，执行完即可登录localhost:4000查看效果
-
-hexo generatehexo server
-
-三、 将博客部署到Github Pages上创建项目代码库
-
-注册完登陆后，我们就创建一个我们自己的Github Pages项目。点击New repository。
-创建要点如下：
-
-配置SSH密钥
-
-创建一对新的SSH密钥(keys)
-
-
-$ssh-keygen -t rsa -C “your_email@example.com“#这将按照你提供的邮箱地址，创建一对密钥Generating public/private rsa key </div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-17&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/17/hello-world/">
-        <p class="h4 index-header">Hello World</p>
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post$ hexo new &quot;My New Post&quot;
-More info: Writing
-Run server$ hexo server
-More info: Server
-Generate static files$ hexo generate
-More info: Generating
-Deploy to remote sites$ hexo deploy
-More info: Deployment
-</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-17&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
 
 
 
@@ -361,7 +196,7 @@ More info: Deployment
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "&nbsp;",
+        "分类&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
