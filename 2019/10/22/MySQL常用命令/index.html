@@ -15,7 +15,7 @@
   <meta name="description" content="">
   <meta name="author" content="YangYang Luo">
   <meta name="keywords" content="">
-  <title>归档 ~ 洋洋&#39;s Blog</title>
+  <title>MySQL常用命令 ~ 洋洋&#39;s Blog</title>
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
   <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
   <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
@@ -31,7 +31,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -91,7 +91,7 @@
 </nav>
 
     <div class="view intro-2" id="background"
-         style="background: url('/img/default.png')no-repeat center center;
+         style="background: url('/img/avatar.png')no-repeat center center;
            background-size: cover;
            background-attachment: fixed;">
       <div class="full-bg-img">
@@ -101,6 +101,9 @@
               
             </span>
 
+            
+              <br>
+              <p class="mt-3">星期二, 十月 22日 2019, 5:25 下午</p>
             
           </div>
 
@@ -112,65 +115,101 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 6 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2019</p>
-    
-    <a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL常用命令</span>
-      <span style="float: right;">10-22</span>
-    </a>
-  
-    
-    <a href="/2019/10/22/%E5%B7%A5%E5%85%B7&%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">工具&amp;网站推荐</span>
-      <span style="float: right;">10-22</span>
-    </a>
-  
-    
-    <a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">git工作常用命令</span>
-      <span style="float: right;">10-21</span>
-    </a>
-  
-    
-    <a href="/2019/10/21/hexo&markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">hexo&amp;markdown常用命令</span>
-      <span style="float: right;">10-21</span>
-    </a>
-  
-    
-    <a href="/2019/10/17/hello-world/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Hello World</span>
-      <span style="float: right;">10-17</span>
-    </a>
-  
-    
-    <a href="/2019/10/17/%E8%AE%B0%E5%BD%95%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">记录如何使用hexo搭建博客</span>
-      <span style="float: right;">10-17</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <p>工作中常用的 MySQL 命令</p>
+<a id="more"></a>
 
-              </div>
-            </div>
+<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p><strong>基本命令</strong></p>
+<pre><code>登录：mysql -h -uroot -p
+show databases;  use youke;  show tables;  desc 表名;  exit;</code></pre><p><strong>针对表</strong><br>创建表 node这个数据库里面创建一个user表</p>
+<pre><code>创建：
+CREATE TABLE `node`.`nodeuser`(
+    `id` INT(11) NOT NULL AUTO_INCREMENT,  # id字段 int(11)数据类型，最大的值为11位 id自动增长
+    `username` varchar(64) NOT NULL,
+    `pass` varchar(64) NOT NULL,
+    PRIMARY KEY(`id`)  # 重要 主键
+)
+ENGINE = InnoDB CHARSET = utf8;
+增加字段：ALTER TABLE account ADD status int(11) NOT NULL DEFAULT 0;
+删除字段：ALTER TABLE &lt;表名&gt; DROP &lt;字段名称&gt;
+修改表名称：ALTER TABLE &lt;表名&gt; RENAME &lt;新表名&gt;</code></pre><p><strong>针对数据增删改查</strong></p>
+<pre><code>
+INSERT INTO &#39;user&#39; (`id`, &#39;username&#39;, &#39;pass&#39;) values (1, &#39;goudan&#39;, &#39;123&#39;);  # 增 固定代码 哪个表
+DELETE FROM user where id = 0  # 删 删article表的数据 因为id是唯一的
+update `xxx` set `username`=`1234` where `id`=6666;  # 改
+SELECT *FORM `shuoshuo` WHERE `id`=?  # 查</code></pre><p><strong>其他操作</strong></p>
+<pre><code>$ ./mysqldump -uyouke_write -p -h 10.66.92.228 -d youke &gt; /home/lyy/db.sql  # 导出表结构
+导入表结构，进入数据库，进入某一库，执行 source xxx.sql
+查看索引：show index from tblname; 等同于show keys from tblname;
+select version();  查看MySQL版本
+show create table audio_pos;查看创建table的SQL</code></pre><p><strong>常用操作总结</strong></p>
+<ul>
+<li>让别人访问自己的MySQL<pre><code>登录MySQL：mysql -u root -pvmwaremysql&gt;use mysql;
+mysql&gt;update user set host = &#39;%&#39; where user = &#39;root&#39;;
+mysql&gt;select host, user from user;
+重启MySQL服务：Windows可从服务重启</code></pre></li>
+</ul>
+<p><strong>相关知识</strong></p>
+<pre><code>MySQL字段类型：-2 147 483 648 ～ 2 147 483 647， INT UNSIGNED的范围类型就是0 ～ 4 294 967 295。
+insert on duplicate key update 比 replace快，原因是索引方面
+
+1. 如果Key是空的, 那么该列值的可以重复, 表示该列没有索引, 或者是一个非唯一的复合索引的非前导列
+2. 如果Key是PRI,  那么该列是主键的组成部分
+3. 如果Key是UNI,  那么该列是一个唯一值索引的第一列(前导列),并别不能含有空值(NULL)
+4. 如果Key是MUL,  那么该列的值可以重复, 该列是一个非唯一索引的前导列(第一列)或者是一个唯一性索引的组成部分但是可以含有空值NULL
+如果对于一个列的定义，同时满足上述4种情况的多种，比如一个列既是PRI,又是UNI
+那么&quot;desc 表名&quot;的时候，显示的Key值按照优先级来显示 PRI-&gt;UNI-&gt;MUL
+那么此时，显示PRI</code></pre><h3 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h3><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/%E5%91%BD%E4%BB%A4">命令</a>
+              
+                <a class="hover-with-bg" href="/tags/MySQL">MySQL</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -224,6 +263,11 @@
   <script src="/js/lazyload.js" ></script>
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
   <script src="/lib/prettify/prettify.min.js" ></script>
   <script>
@@ -239,7 +283,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "MySQL常用命令&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
