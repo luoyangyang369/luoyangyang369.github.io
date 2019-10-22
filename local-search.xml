@@ -12,6 +12,14 @@
     
     
     
+    <tags>
+      
+      <tag>git</tag>
+      
+      <tag>命令</tag>
+      
+    </tags>
+    
   </entry>
   
   
@@ -24,6 +32,35 @@
     <content type="html"><![CDATA[<h2 id="hexo常用命令笔记"><a href="#hexo常用命令笔记" class="headerlink" title="hexo常用命令笔记"></a>hexo常用命令笔记</h2><h4 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h4><pre><code>hexo n  # 写文章hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令hexo g  # 生成hexo d  # 部署 # 可与hexo g 合并为 hexo d -g</code></pre><h4 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h4><pre><code>npm install hexo -g # 安装  npm update hexo -g # 升级  hexo init # 初始化</code></pre><h4 id="简写"><a href="#简写" class="headerlink" title="简写"></a>简写</h4><pre><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章hexo p == hexo publishhexo g == hexo generate # 生成hexo s == hexo server  # 启动服务预览hexo d == hexo deploy  # 部署</code></pre><h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><pre><code>hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。hexo server -s  # 静态模式hexo server -p 5000  # 更改端口hexo server -i 192.168.1.1  # 自定义 IPhexo clean  # 清除缓存 网页正常情况下可以忽略此条命令hexo g  # 生成静态网页hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#markdown-基础语法" class="headerlink" title="markdown 基础语法"></a>markdown 基础语法</h2><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p><h4 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h4><ul><li>加粗： 要加粗的文字左右分别用两个*号包起来</li><li>斜体： 要倾斜的文字左右分别用一个*号包起来</li><li>斜体加粗：  要倾斜和加粗的文字左右分别用三个*号包起来</li><li>删除线：  要加删除线的文字左右分别用两个~~号包起来</li></ul><p><strong>效果：</strong><br><strong>这是加粗的文字</strong><br><em>这是倾斜的文字</em>`<br><strong><em>这是斜体加粗的文字</em></strong><br><del>这是加删除线的文字</del></p><h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><pre><code>&gt;这是引用的内容&gt;&gt;这是引用的内容&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;这是引用的内容</code></pre><p><strong>效果：</strong></p><blockquote><p>这是引用的内容</p></blockquote><h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>三个或者三个以上的 - 或者 * 都可以。<br><strong>效果：</strong></p><hr><h4 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h4><pre><code>![图片alt](图片地址 &#39;&#39;图片title&#39;&#39;)图片alt就是显示在图片下面的文字，相当于对图片内容的解释。图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加</code></pre><p>示例：</p><blockquote><p>![blockchain](<a href="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/" target="_blank" rel="noopener">https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/</a> u=702257389,1274025419&amp;fm=27&amp;gp=0.jpg “区块链”)</p></blockquote><p><strong>效果：</strong><br><img src="https://upload-images.jianshu.io/upload_images/6860761-fd2f51090a890873.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/550/format/webp" srcset="/img/loading.gif" alt="blockchain" title="区块链"></p><h4 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h4><blockquote><p>语法：<a href="超链接地址" title="超链接title">超链接名</a><br>title可加可不加</p></blockquote><p><strong>效果：</strong><br><a href="luoyangyang.pub">洋洋的博客</a></p><h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p>语法：</p><ul><li>无序列表：</li></ul><p>用 - + * 任何一种都可以<br>注意：- + * 跟内容之间都要有一个空格<br><strong>效果：</strong></p><ul><li>列表内容</li></ul><ul><li>列表内容</li></ul><ul><li>列表内容</li></ul><ul><li>有序列表：</li></ul><p>用数字加点</p><ol><li>列表内容</li><li>列表内容</li><li>列表内容</li></ol><ul><li>列表嵌套</li></ul><p>上一级和下一级之间敲三个空格即可</p><h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>单行代码：代码之间分别用一个反引号包起来<br>代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>]]></content>
     
     
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+      <tag>markdown</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="undefined2019/10/17/hello-world/"/>
+    <url>2019/10/17/hello-world/</url>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>helllo</tag>
+      
+      <tag>world</tag>
+      
+    </tags>
     
   </entry>
   
@@ -38,18 +75,13 @@
     
     
     
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="undefined2019/10/17/hello-world/"/>
-    <url>2019/10/17/hello-world/</url>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-    
-    
+    <tags>
+      
+      <tag>hexo</tag>
+      
+      <tag>教程</tag>
+      
+    </tags>
     
   </entry>
   
