@@ -46,8 +46,8 @@ insert on duplicate key update 比 replace快，原因是索引方面
 那么此时，显示PRI</code></pre><h3 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h3><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>
 ]]></content>
       <tags>
-        <tag>MySQL</tag>
         <tag>命令</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -257,8 +257,8 @@ git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：
 <p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>
 ]]></content>
       <tags>
-        <tag>命令</tag>
         <tag>git</tag>
+        <tag>命令</tag>
       </tags>
   </entry>
   <entry>
