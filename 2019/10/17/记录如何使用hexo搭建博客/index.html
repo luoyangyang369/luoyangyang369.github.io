@@ -127,21 +127,34 @@
             <p>hexo + GitHub pages 搭建博客流程</p>
 <a id="more"></a>
 <h3 id="一、hexo-amp-node-安装"><a href="#一、hexo-amp-node-安装" class="headerlink" title="一、hexo &amp; node 安装"></a>一、hexo &amp; node 安装</h3><p>npm install hexo-cli -g<br>npm install hexo-deployer-git –save<br>or 使用yarn</p>
-<h3 id="二、-Hexo初始化配置"><a href="#二、-Hexo初始化配置" class="headerlink" title="二、 Hexo初始化配置"></a>二、 Hexo初始化配置</h3><p><strong>创建Hexo文件夹</strong><br>安装完成后，根据自己喜好建立目录（如F:\Blog\Hexo），直接进入F:\Blog\Hexo文件夹下右键鼠标，点击Git Bash Here，进入Git命令框，执行以下操作。</p>
+<h3 id="二、-Hexo初始化配置"><a href="#二、-Hexo初始化配置" class="headerlink" title="二、 Hexo初始化配置"></a>二、 Hexo初始化配置</h3><h5 id="创建Hexo文件夹"><a href="#创建Hexo文件夹" class="headerlink" title="创建Hexo文件夹"></a>创建Hexo文件夹</h5><p>安装完成后，根据自己喜好建立目录（如F:\Blog\Hexo），直接进入F:\Blog\Hexo文件夹下右键鼠标，点击Git Bash Here，进入Git命令框，执行以下操作。</p>
 <blockquote>
 <p>$ hexo init</p>
 </blockquote>
-<p><strong>本地查看效果</strong><br>执行下面语句，执行完即可登录localhost:4000查看效果</p>
+<h5 id="项目文件介绍"><a href="#项目文件介绍" class="headerlink" title="项目文件介绍"></a>项目文件介绍</h5><p><img src="https://www.cnblogs.com/images/cnblogs_com/luoyangyang/1573981/t_hexo_mulu.png" srcset="/img/loading.gif" alt="hexo目录"></p>
+<ul>
+<li>deploy：执行hexo deploy命令部署到GitHub上的内容目录</li>
+<li>public：执行hexo generate命令，输出的静态网页内容目录</li>
+<li>scaffolds：layout模板文件目录，其中的md文件可以添加编辑</li>
+<li>scripts：扩展脚本目录，这里可以自定义一些javascript脚本</li>
+<li>source：文章源码目录，该目录下的markdown和html文件均会被hexo处理。该页面对应repo的根目录，404文件、favicon.ico文件，CNAME文件等都应该放这里，该目录下可新建页面目录。 <ul>
+<li>drafts：草稿文章</li>
+<li>posts：发布文章</li>
+</ul>
+</li>
+<li>themes：主题文件目录</li>
+<li>_config.yml：全局配置文件，大多数的设置都在这里</li>
+<li>package.json：应用程序数据，指明hexo的版本等信息，类似于一般软件中的关于按钮</li>
+</ul>
+<h5 id="本地查看效果"><a href="#本地查看效果" class="headerlink" title="本地查看效果"></a>本地查看效果</h5><p>执行下面语句，执行完即可登录localhost:4000查看效果</p>
 <blockquote>
 <p>hexo generate<br>hexo server</p>
 </blockquote>
-<h3 id="三、-将博客部署到Github-Pages上"><a href="#三、-将博客部署到Github-Pages上" class="headerlink" title="三、 将博客部署到Github Pages上"></a>三、 将博客部署到Github Pages上</h3><p><strong>创建项目代码库</strong></p>
-<ol>
+<h3 id="三、-将博客部署到Github-Pages上"><a href="#三、-将博客部署到Github-Pages上" class="headerlink" title="三、 将博客部署到Github Pages上"></a>三、 将博客部署到Github Pages上</h3><h5 id="创建项目代码库"><a href="#创建项目代码库" class="headerlink" title="创建项目代码库"></a>创建项目代码库</h5><ol>
 <li>注册完登陆后，我们就创建一个我们自己的Github Pages项目。点击New repository。</li>
 <li>创建要点如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c7492a1849?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" srcset="/img/loading.gif" alt="如图"></li>
 </ol>
-<p><strong>配置SSH密钥</strong></p>
-<ol>
+<h5 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h5><ol>
 <li>创建一对新的SSH密钥(keys)</li>
 </ol>
 <blockquote>
@@ -240,7 +253,8 @@
 <p>$ hexo d -g</p>
 </blockquote>
 <p>推送至我们的Github仓库即可。</p>
-<h3 id="七、-将自己的域名关联到Github-Pages上"><a href="#七、-将自己的域名关联到Github-Pages上" class="headerlink" title="七、 将自己的域名关联到Github Pages上"></a>七、 将自己的域名关联到Github Pages上</h3><h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p><a href="https://juejin.im/entry/5a574864f265da3e3c6c1217" target="_blank" rel="noopener">2018，你该搭建自己的博客了！</a><br><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/" target="_blank" rel="noopener">使用指南</a></p>
+<h3 id="七、-将自己的域名关联到Github-Pages上"><a href="#七、-将自己的域名关联到Github-Pages上" class="headerlink" title="七、 将自己的域名关联到Github Pages上"></a>七、 将自己的域名关联到Github Pages上</h3><p>#TODO</p>
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p><a href="https://juejin.im/entry/5a574864f265da3e3c6c1217" target="_blank" rel="noopener">2018，你该搭建自己的博客了！</a><br><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/" target="_blank" rel="noopener">使用指南</a></p>
 
             <hr>
           </div>

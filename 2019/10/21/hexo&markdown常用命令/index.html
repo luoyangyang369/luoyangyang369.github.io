@@ -126,39 +126,39 @@
           <div class="markdown-body">
             <p>hexo &amp; markdown 常用命令</p>
 <a id="more"></a>
-<h2 id="hexo常用命令笔记"><a href="#hexo常用命令笔记" class="headerlink" title="hexo常用命令笔记"></a>hexo常用命令笔记</h2><h4 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h4><pre><code>hexo n  # 写文章
+<h2 id="hexo常用命令笔记"><a href="#hexo常用命令笔记" class="headerlink" title="hexo常用命令笔记"></a>hexo常用命令笔记</h2><h5 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h5><pre><code>hexo n  # 写文章
 hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令
 hexo g  # 生成
-hexo d  # 部署 # 可与hexo g 合并为 hexo d -g</code></pre><h4 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h4><pre><code>npm install hexo -g # 安装  
+hexo d  # 部署 # 可与hexo g 合并为 hexo d -g</code></pre><h5 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h5><pre><code>npm install hexo -g # 安装  
 npm update hexo -g # 升级  
-hexo init # 初始化</code></pre><h4 id="简写"><a href="#简写" class="headerlink" title="简写"></a>简写</h4><pre><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章
+hexo init # 初始化</code></pre><h5 id="简写"><a href="#简写" class="headerlink" title="简写"></a>简写</h5><pre><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章
 hexo p == hexo publish
 hexo g == hexo generate # 生成
 hexo s == hexo server  # 启动服务预览
-hexo d == hexo deploy  # 部署</code></pre><h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><pre><code>hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。
+hexo d == hexo deploy  # 部署</code></pre><h5 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h5><pre><code>hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。
 hexo server -s  # 静态模式
 hexo server -p 5000  # 更改端口
 hexo server -i 192.168.1.1  # 自定义 IP
 
 hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令
 hexo g  # 生成静态网页
-hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#markdown-基础语法" class="headerlink" title="markdown 基础语法"></a>markdown 基础语法</h2><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p>
-<h4 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h4><ul>
+hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#markdown-基础语法" class="headerlink" title="markdown 基础语法"></a>markdown 基础语法</h2><h5 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h5><p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p>
+<h5 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h5><ul>
 <li>加粗： 要加粗的文字左右分别用两个*号包起来</li>
 <li>斜体： 要倾斜的文字左右分别用一个*号包起来</li>
 <li>斜体加粗：  要倾斜和加粗的文字左右分别用三个*号包起来</li>
 <li>删除线：  要加删除线的文字左右分别用两个~~号包起来</li>
 </ul>
 <p><strong>效果：</strong><br><strong>这是加粗的文字</strong><br><em>这是倾斜的文字</em>`<br><strong><em>这是斜体加粗的文字</em></strong><br><del>这是加删除线的文字</del></p>
-<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><pre><code>&gt;这是引用的内容
+<h5 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h5><pre><code>&gt;这是引用的内容
 &gt;&gt;这是引用的内容
 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;这是引用的内容</code></pre><p><strong>效果：</strong></p>
 <blockquote>
 <p>这是引用的内容</p>
 </blockquote>
-<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>三个或者三个以上的 - 或者 * 都可以。<br><strong>效果：</strong></p>
+<h5 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h5><p>三个或者三个以上的 - 或者 * 都可以。<br><strong>效果：</strong></p>
 <hr>
-<h4 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h4><pre><code>![图片alt](图片地址 &#39;&#39;图片title&#39;&#39;)
+<h5 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h5><pre><code>![图片alt](图片地址 &#39;&#39;图片title&#39;&#39;)
 
 图片alt就是显示在图片下面的文字，相当于对图片内容的解释。
 图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加</code></pre><p>示例：</p>
@@ -166,11 +166,11 @@ hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#mark
 <p>![blockchain](<a href="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/" target="_blank" rel="noopener">https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/</a> u=702257389,1274025419&amp;fm=27&amp;gp=0.jpg “区块链”)</p>
 </blockquote>
 <p><strong>效果：</strong><br><img src="https://upload-images.jianshu.io/upload_images/6860761-fd2f51090a890873.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/550/format/webp" srcset="/img/loading.gif" alt="blockchain" title="区块链"></p>
-<h4 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h4><blockquote>
+<h5 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h5><blockquote>
 <p>语法：<a href="超链接地址" title="超链接title">超链接名</a><br>title可加可不加</p>
 </blockquote>
 <p><strong>效果：</strong><br><a href="luoyangyang.pub">洋洋的博客</a></p>
-<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p>语法：</p>
+<h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><p>语法：</p>
 <ul>
 <li>无序列表：</li>
 </ul>
@@ -197,7 +197,7 @@ hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#mark
 <li>列表嵌套</li>
 </ul>
 <p>上一级和下一级之间敲三个空格即可</p>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>单行代码：代码之间分别用一个反引号包起来<br>代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>单行代码：代码之间分别用一个反引号包起来<br>代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>
 
             <hr>
           </div>
