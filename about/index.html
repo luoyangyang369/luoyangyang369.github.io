@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="MySQL,命令," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -88,15 +88,14 @@
 
 
 
-<meta name="description" content="工作中常用的 MySQL 命令">
-<meta name="keywords" content="MySQL,命令">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MySQL常用命令">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;22&#x2F;MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
+<meta name="description" content="个人blog网站">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;about&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
-<meta property="og:description" content="工作中常用的 MySQL 命令">
+<meta property="og:description" content="个人blog网站">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-24T08:35:40.992Z">
+<meta property="og:updated_time" content="2019-10-28T12:19:12.228Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -127,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/22/MySQL常用命令/"/>
+  <link rel="canonical" href="http://yoursite.com/about/"/>
 
 
 
 
 
-  <title>MySQL常用命令 | 洋洋's Blog</title>
+  <title>about | 洋洋's Blog</title>
   
 
 
@@ -304,271 +303,33 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="YangYang Luo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="洋洋's Blog">
-    </span>
-
     
+    
+    <div class="post-block page">
       <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">MySQL常用命令</h1>
-        
+	<h1 class="post-title" itemprop="name headline">about</h1>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T17:25:25+08:00">
-                2019-10-22
-              </time>
-            
 
-            
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="leancloud_visitors" data-flag-title="MySQL常用命令">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">Visitors&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  666
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
       
-
       
-        <p>工作中常用的 MySQL 命令</p>
-<a id="more"></a>
-
-<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><h5 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h5><pre><code>登录：mysql -h -uroot -p
-show databases;  use youke;  show tables;  desc 表名;  exit;</code></pre><h5 id="针对表"><a href="#针对表" class="headerlink" title="针对表"></a>针对表</h5><p>创建表 node这个数据库里面创建一个user表</p>
-<pre><code>创建：
-CREATE TABLE `node`.`nodeuser`(
-    `id` INT(11) NOT NULL AUTO_INCREMENT,  # id字段 int(11)数据类型，最大的值为11位 id自动增长
-    `username` varchar(64) NOT NULL,
-    `pass` varchar(64) NOT NULL,
-    PRIMARY KEY(`id`)  # 重要 主键
-)
-ENGINE = InnoDB CHARSET = utf8;
-增加字段：ALTER TABLE account ADD status int(11) NOT NULL DEFAULT 0;
-删除字段：ALTER TABLE &lt;表名&gt; DROP &lt;字段名称&gt;
-修改表名称：ALTER TABLE &lt;表名&gt; RENAME &lt;新表名&gt;</code></pre><h5 id="针对数据"><a href="#针对数据" class="headerlink" title="针对数据"></a>针对数据</h5><pre><code>INSERT INTO &#39;user&#39; (`id`, &#39;username&#39;, &#39;pass&#39;) values (1, &#39;goudan&#39;, &#39;123&#39;);  # 增 固定代码 哪个表
-DELETE FROM user where id = 0  # 删 删article表的数据 因为id是唯一的
-update `xxx` set `username`=`1234` where `id`=6666;  # 改
-SELECT *FORM `shuoshuo` WHERE `id`=?  # 查
-查询：
-    过滤：加distinct，如select distinct roomid from audio_pos;
-    区间查找：between and，如：select * from audio_pos where id between 2600 and 2650;</code></pre><h5 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h5><pre><code>$ ./mysqldump -uyouke_write -p -h 10.66.92.228 -d youke &gt; /home/lyy/db.sql  # 导出表结构
-导入表结构，进入数据库，进入某一库，执行 source xxx.sql
-查看索引：show index from tblname; 等同于show keys from tblname;
-select version();  查看MySQL版本
-show create table audio_pos;查看创建table的SQL</code></pre><h5 id="常用操作总结"><a href="#常用操作总结" class="headerlink" title="常用操作总结"></a>常用操作总结</h5><ul>
-<li>让别人访问自己的MySQL<pre><code>登录MySQL：mysql -u root -pvmwaremysql&gt;use mysql;
-mysql&gt;update user set host = &#39;%&#39; where user = &#39;root&#39;;
-mysql&gt;select host, user from user;
-重启MySQL服务：Windows可从服务重启</code></pre></li>
-</ul>
-<h5 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h5><pre><code>MySQL字段类型：-2 147 483 648 ～ 2 147 483 647， INT UNSIGNED的范围类型就是0 ～ 4 294 967 295。
-insert on duplicate key update 比 replace快，原因是索引方面
-
-1. 如果Key是空的, 那么该列值的可以重复, 表示该列没有索引, 或者是一个非唯一的复合索引的非前导列
-2. 如果Key是PRI,  那么该列是主键的组成部分
-3. 如果Key是UNI,  那么该列是一个唯一值索引的第一列(前导列),并别不能含有空值(NULL)
-4. 如果Key是MUL,  那么该列的值可以重复, 该列是一个非唯一索引的前导列(第一列)或者是一个唯一性索引的组成部分但是可以含有空值NULL
-如果对于一个列的定义，同时满足上述4种情况的多种，比如一个列既是PRI,又是UNI
-那么&quot;desc 表名&quot;的时候，显示的Key值按照优先级来显示 PRI-&gt;UNI-&gt;MUL
-那么此时，显示PRI</code></pre><h3 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h3><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>
-
+      <div class="post-body">
+        
+        
+          
+        
+      </div>
+      
+      
       
     </div>
     
     
     
-
-    <div>
-      
-        <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
-    
-</div>
-      
-    </div>
-    
-    <div>
-      
-        
-      
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
-          
-            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/" rel="next" title="pm2工作使用">
-                <i class="fa fa-chevron-left"></i> pm2工作使用
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-<span class="jiathis_txt">分享到：</span>
-<a class="jiathis_button_fav">收藏夹</a>
-<a class="jiathis_button_copy">复制网址</a>
-<a class="jiathis_button_email">邮件</a>
-<a class="jiathis_button_weixin">微信</a>
-<a class="jiathis_button_qzone">QQ空间</a>
-<a class="jiathis_button_tqq">腾讯微博</a>
-<a class="jiathis_button_douban">豆瓣</a>
-<a class="jiathis_button_share">一键分享</a>
-
-<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-<a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-var jiathis_config={
-  data_track_clickback:true,
-  summary:"",
-  shortUrl:false,
-  hideMore:false
-}
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-      
-    </div>
   </div>
 
 
@@ -603,17 +364,8 @@ var jiathis_config={
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -715,23 +467,6 @@ var jiathis_config={
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本命令"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对表"><span class="nav-number">1.0.2.</span> <span class="nav-text">针对表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对数据"><span class="nav-number">1.0.3.</span> <span class="nav-text">针对数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他操作"><span class="nav-number">1.0.4.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用操作总结"><span class="nav-number">1.0.5.</span> <span class="nav-text">常用操作总结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关知识"><span class="nav-number">1.0.6.</span> <span class="nav-text">相关知识</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点链接"><span class="nav-number">2.</span> <span class="nav-text">重点链接</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
