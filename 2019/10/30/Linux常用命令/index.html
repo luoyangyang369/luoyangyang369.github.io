@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="多媒体,FFmpeg," />
+  <meta name="keywords" content="命令,Linux," />
 
 
 
@@ -88,15 +88,15 @@
 
 
 
-<meta name="description" content="多媒体基本概念及 FFmpeg 常用命令介绍">
-<meta name="keywords" content="多媒体,FFmpeg">
+<meta name="description" content="git  工作常用命令">
+<meta name="keywords" content="命令,Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多媒体&amp;FFmpeg命令">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;22&#x2F;%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
+<meta property="og:title" content="Linux常用命令">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;30&#x2F;Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
-<meta property="og:description" content="多媒体基本概念及 FFmpeg 常用命令介绍">
+<meta property="og:description" content="git  工作常用命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-29T13:31:25.194Z">
+<meta property="og:updated_time" content="2019-10-30T01:47:51.446Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/22/多媒体&FFmpeg常用命令/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/10/30/Linux常用命令/"/>
 
 
 
 
 
-  <title>多媒体&FFmpeg命令 | 洋洋's Blog</title>
+  <title>Linux常用命令 | 洋洋's Blog</title>
   
 
 
@@ -316,7 +316,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YangYang Luo">
@@ -333,7 +333,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">多媒体&FFmpeg命令</h1>
+          <h1 class="post-title" itemprop="name headline">Linux常用命令</h1>
         
 
         <div class="post-meta">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T17:25:25+08:00">
-                2019-10-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-30T09:23:05+08:00">
+                2019-10-30
               </time>
             
 
@@ -363,7 +363,7 @@
 
           
           
-             <span id="/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="leancloud_visitors" data-flag-title="多媒体&FFmpeg命令">
+             <span id="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="leancloud_visitors" data-flag-title="Linux常用命令">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -389,7 +389,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.7k
+                  853
                 </span>
               
 
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  5
+                  3
                 </span>
               
             </div>
@@ -426,52 +426,52 @@
       
 
       
-        <p>多媒体基本概念及 FFmpeg 常用命令介绍</p>
+        <p>git  工作常用命令</p>
 <a id="more"></a>
 
-<h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。
-流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。
-帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。
-编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）
-复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）
-把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)
-
-采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。
-
-采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。
-
-声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。
-单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。
-
-码率：码率 = 采样率 * 采样位数 * 声道数
-如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。
-
-音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。
-
-编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。
-音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。
-
-解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。
-
-帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。
-
-分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播
-HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：
-        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。
-        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版
-MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重
-AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小
-ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。
-无损：WAV</code></pre><h3 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h3><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
--f 输出hls格式。
-
-hls协议流媒体网络传输协议：
-hls_list_size 3:HLS播放的列表，FFmpeg默认5。
--hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。
--hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环
--ar freq 设置音频采样率 
--ac channels 设置通道 缺省为与输入相同 
--acodec 使用pcm_s16le编码</code></pre>
+<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><pre><code>实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）
+du可以查看文件及文件夹的大小。  // du -h file_path
+查看磁盘占用：df -h
+查看进程：ps -ef | prep name
+解包：tar xvf FileName.tar　　unzip filename.zip
+打包：tar cvf FileName.tar DirName
+cp -r dir1 dir2
+远程传输  
+    上传$scp -r local_folder remote_username@remote_ip:remote_folder
+    下载$scp remote_username@remote_ip:remote_folder local_folder
+curl:用来请求web服务器，== postman。
+    get：参数加url后面.
+    POST：--data &quot;data&quot;,-X 动作，默认get,
+    -d POST自动带上Content-Type : application/x-www-form-urlencoded </code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装
+Linux 查看环境变量 echo $PATH 
+    临时设置：export env=xxx
+    永久设置：# vi /etc/profile 
+            export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib
+</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
+/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+/root：该目录为系统管理员，也称作超级权限者的用户主目录。
+/tmp：这个目录是用来存放一些临时文件的。
+/usr： 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。
+/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
+/media：linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
+/mnt：让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
+/usr/bin：系统用户使用的应用程序。
+/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。
+/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</code></pre><h2 id="文件颜色"><a href="#文件颜色" class="headerlink" title="文件颜色"></a>文件颜色</h2><pre><code>白色：表示普通文件
+浅蓝色：表示链接文件； 
+灰色：表示其他文件； 
+绿色：表示可执行文件； 
+红色：表示压缩文件； 
+蓝色：表示目录； 
+红色闪烁：表示链接的文件有问题了； 
+黄色：表示设备文件，包括block,char,fifo。 </code></pre><h2 id="实现ssh免密登录"><a href="#实现ssh免密登录" class="headerlink" title="实现ssh免密登录"></a>实现ssh免密登录</h2><pre><code>1、生成自己的公钥：$ ssh-keygen (一路回车)
+2、将公钥放到 对方.ssh/authorized_keys 下，没有则创建文件夹
+3、chmod 700 ~/.ssh   chmod 600 ~/.ssh/authorized_keys
+4、重启  // ubuntu系统：service ssh restart  // debian系统：/etc/init.d/ssh restart</code></pre>
       
     </div>
     
@@ -491,6 +491,35 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
     <div>
       
         
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Linux常用命令</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
+  <p><span>发布时间:</span>2019年10月30日 - 09:10</p>
+  <p><span>最后更新:</span>2019年10月30日 - 09:10</p>
+  <p><span>原始链接:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
       
     </div>
 
@@ -504,9 +533,9 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/" rel="tag"><i class="fa fa-tag"></i> 多媒体</a>
+            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
           
-            <a href="/tags/FFmpeg/" rel="tag"><i class="fa fa-tag"></i> FFmpeg</a>
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
           
         </div>
       
@@ -532,8 +561,8 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/22/%E5%B7%A5%E5%85%B7&%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" rel="next" title="工具&网站推荐">
-                <i class="fa fa-chevron-left"></i> 工具&网站推荐
+              <a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="MySQL常用命令">
+                <i class="fa fa-chevron-left"></i> MySQL常用命令
               </a>
             
           </div>
@@ -542,8 +571,8 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/" rel="prev" title="pm2工作使用">
-                pm2工作使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" rel="prev" title="vim常用操作">
+                vim常用操作 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -773,7 +802,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多媒体基本概念"><span class="nav-number">1.</span> <span class="nav-text">多媒体基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本概念"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#视频基本概念"><span class="nav-number">1.0.2.</span> <span class="nav-text">视频基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#M3U8-amp-HLS"><span class="nav-number">1.0.3.</span> <span class="nav-text">M3U8 &amp; HLS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MP3-amp-AAC-区别"><span class="nav-number">1.0.4.</span> <span class="nav-text">MP3 &amp; AAC 区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见音频格式"><span class="nav-number">1.0.5.</span> <span class="nav-text">常见音频格式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFmpeg-常用命令"><span class="nav-number">2.</span> <span class="nav-text">FFmpeg 常用命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他命令"><span class="nav-number">2.</span> <span class="nav-text">其他命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用目录"><span class="nav-number">3.</span> <span class="nav-text">常用目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件颜色"><span class="nav-number">4.</span> <span class="nav-text">文件颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现ssh免密登录"><span class="nav-number">5.</span> <span class="nav-text">实现ssh免密登录</span></a></li></ol></div>
             
 
           </div>

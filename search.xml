@@ -4,6 +4,48 @@
   
     
     <entry>
+      <title>vim常用操作</title>
+      <link href="/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"/>
+      <url>/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<h2 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h2><pre><code>i → Insert 模式，按 ESC 回到 Normal 模式.x → 删当前光标所在的一个字符。dd → 删除当前行，并把删除的行存到剪贴板里p → 粘贴剪贴板normal模式下：插入：a → 在光标后插入  o → 在当前行后插入一个新行  O → 在当前行前插入一个新行  cw → 替换从光标所在位置后到一个单词结尾的字符移动光标：0 → 数字零，到行头    ^ → 到本行第一个不是blank字符的位置（所谓blank字符就是空格，tab，换行，回车等）$ → 到本行行尾    g_ → 到本行最后一个不是blank字符的位置。/pattern → 搜索 pattern 的字符串（陈皓注：如果搜索出多个匹配，可按n键到下一个）拷贝/粘贴：P → 粘贴  p是表示在当前位置之后，P表示在当前位置之前yy → 拷贝当前行当行于 ddPgg → 到第一行。G → 到最后一行。w → 到下一个单词的开头。e → 到下一个单词的结尾。查找命令：/text　　查找text，n下一个，N前一个?text　　查找text，反向查找，n下一个，N前一个替换命令ra 将当前字符替换为a，当期字符即光标所在字符。:s/old/new/ 用old替换new，替换当前行的第一个匹配:s/old/new/g 用old替换new，替换当前行的所有匹配:%s/old/new/ 用old替换new，替换所有行的第一个匹配:%s/old/new/g 用old替换new，替换整个文件的所有匹配撤销与重做u           撤销（Undo）U           撤销对整行的操作Ctrl + r    重做（Redo），即撤销的撤销ZZ 保存并退出:q! 强制退出并忽略所有更改:e! 放弃所有修改，并打开原来文件</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 命令 </tag>
+            
+            <tag> vim </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux常用命令</title>
+      <link href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<p>git  工作常用命令</p><a id="more"></a><h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><pre><code>实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）du可以查看文件及文件夹的大小。  // du -h file_path查看磁盘占用：df -h查看进程：ps -ef | prep name解包：tar xvf FileName.tar　　unzip filename.zip打包：tar cvf FileName.tar DirNamecp -r dir1 dir2远程传输      上传$scp -r local_folder remote_username@remote_ip:remote_folder    下载$scp remote_username@remote_ip:remote_folder local_foldercurl:用来请求web服务器，== postman。    get：参数加url后面.    POST：--data &quot;data&quot;,-X 动作，默认get,    -d POST自动带上Content-Type : application/x-www-form-urlencoded </code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装Linux 查看环境变量 echo $PATH     临时设置：export env=xxx    永久设置：# vi /etc/profile             export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。/root：该目录为系统管理员，也称作超级权限者的用户主目录。/tmp：这个目录是用来存放一些临时文件的。/usr： 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。/media：linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。/mnt：让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。/usr/bin：系统用户使用的应用程序。/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</code></pre><h2 id="文件颜色"><a href="#文件颜色" class="headerlink" title="文件颜色"></a>文件颜色</h2><pre><code>白色：表示普通文件浅蓝色：表示链接文件； 灰色：表示其他文件； 绿色：表示可执行文件； 红色：表示压缩文件； 蓝色：表示目录； 红色闪烁：表示链接的文件有问题了； 黄色：表示设备文件，包括block,char,fifo。 </code></pre><h2 id="实现ssh免密登录"><a href="#实现ssh免密登录" class="headerlink" title="实现ssh免密登录"></a>实现ssh免密登录</h2><pre><code>1、生成自己的公钥：$ ssh-keygen (一路回车)2、将公钥放到 对方.ssh/authorized_keys 下，没有则创建文件夹3、chmod 700 ~/.ssh   chmod 600 ~/.ssh/authorized_keys4、重启  // ubuntu系统：service ssh restart  // debian系统：/etc/init.d/ssh restart</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 命令 </tag>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MySQL常用命令</title>
       <link href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
       <url>/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
@@ -14,9 +56,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> 命令 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -86,6 +128,27 @@
     
     
     <entry>
+      <title>git工作常用命令</title>
+      <link href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/"/>
+      <url>/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<p>git  工作常用命令</p><a id="more"></a><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p><p>Git 管理项目时，文件流转的三个工作区域： </p><ul><li>Git 的工作目录</li><li>暂存区域</li><li>以及本地仓库</li></ul><p>基本的 Git 工作流程如下：</p><ol><li>在工作目录中修改某些文件。 </li><li>对修改后的文件进行快照，然后保存到暂存区域。 </li><li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li></ol><h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p>分为俩种情况：</p><ol><li>在工作目录中初始化新仓库<pre><code>$git init  # 初始化;产生一个 .git 文件$git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</code></pre></li><li>从现有仓库克隆<pre><code>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</code></pre></li></ol><p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p><pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接$ git branch：不加参数 列出本地    -r                      # 列出远程分支    -a                      # all    -name                   # 新建分支    -track                  # 本地/远程（创建分支并且关联远程）    -v                      # verbose详细信息    -d/-D name              # 删除指定分支    -m old_name new_name    # 修改分支名$ git push origin --delete branch_name # 删除远程分支$ git checkout -b branch_name [branch/commit] # 创建并切换分支</code></pre><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>$ git remote add name git_address   # 关联远程库$ git stash # 储藏当前工作，接着到另一分支处理问题$ git stash list # 查看储藏栈$ git stash pop # 提取最新工作并从栈删除$ git cherry-pick # 可以理解为”挑拣”提交，它会获取某一个分支的单笔提交，                                    并作为一个新的提交引入到你当前分支上。$ git diff 具体修改了那些地方 git diff &lt;local branch&gt; &lt;remote&gt;/&lt;remote branch&gt;对比远程分支$ git remote：管理主机名    不带参数 -列出所有远程主机    -v 参看远程主机的网址    -show &lt;主机名&gt;查看详细信息忽略文件：创建一个名为 .gitignore的文件，列出要忽略的文件模式。如：*.a       #忽略所有 .a 结尾的文件    !lib.a    #但 lib.a 除外</code></pre><h3 id="常见误操作处理方法"><a href="#常见误操作处理方法" class="headerlink" title="常见误操作处理方法"></a>常见误操作处理方法</h3><pre><code>撤销 add：git reset HEAD合并 commit：    1. 追加至上一个 commit ：git commit --amend；commit 的时间是不会变的；可加上--no-edit    2. 合并多个：git rebase -i commit(-i 后参数可写commitHSAH值即你想合并至哪一个commit        或者-i HEAD~n(HEAD将它看做 你的上一次提交 的别名)HEAD~1 上个版本 HEAD~n 上n个版本)        - 紧接着进入vim界面：pick为保留，s或者squash为删除commit        - 又另一个vim界面：commit msg 保留自己需要的或者修改，用#删除别的commit msg如何重置某个文件到未修改的状态？  # git checkout -- &lt;filepath&gt;如何重置所有文件到未修改的状态？  # git reset --hard如何重置到某个 commit？          # git reset &lt;commit SHA&gt;git reset用于撤销未被提交到remote的改动，即撤销local的修改。除了移动当前分支的HEAD，还可以更改workspace和index：git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：    --soft：修改HEAD，不修改index和workspace。    --mixed：修改HEAD和index，不修改workspace。默认行为。    --hard：修改HEAD、index、workspace。把index和workspace的修改全部撤销。</code></pre><h3 id="常见错误处理方法"><a href="#常见错误处理方法" class="headerlink" title="常见错误处理方法"></a>常见错误处理方法</h3><ul><li>git pull or push报错：fatal: refusing to merge unrelated histories （拒绝合并不相关的历史）</li></ul><p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> git </tag>
+            
+            <tag> 命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>hexo&amp;markdown常用命令</title>
       <link href="/2019/10/21/hexo&amp;markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
       <url>/2019/10/21/hexo&amp;markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
@@ -101,27 +164,6 @@
             <tag> Hexo </tag>
             
             <tag> markdown </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>git工作常用命令</title>
-      <link href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/"/>
-      <url>/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/</url>
-      
-        <content type="html"><![CDATA[<p>git  工作常用命令</p><a id="more"></a><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p><p>Git 管理项目时，文件流转的三个工作区域： </p><ul><li>Git 的工作目录</li><li>暂存区域</li><li>以及本地仓库</li></ul><p>基本的 Git 工作流程如下：</p><ol><li>在工作目录中修改某些文件。 </li><li>对修改后的文件进行快照，然后保存到暂存区域。 </li><li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li></ol><h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p>分为俩种情况：</p><ol><li>在工作目录中初始化新仓库<pre><code>$git init  # 初始化;产生一个 .git 文件$git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</code></pre></li><li>从现有仓库克隆<pre><code>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</code></pre></li></ol><p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p><pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接$ git branch：不加参数 列出本地    -r                      # 列出远程分支    -a                      # all    -name                   # 新建分支    -track                  # 本地/远程（创建分支并且关联远程）    -v                      # verbose详细信息    -d/-D name              # 删除指定分支    -m old_name new_name    # 修改分支名$ git push origin --delete branch_name # 删除远程分支$ git checkout -b branch_name [branch/commit] # 创建并切换分支</code></pre><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>$ git remote add name git_address   # 关联远程库$ git stash # 储藏当前工作，接着到另一分支处理问题$ git stash list # 查看储藏栈$ git stash pop # 提取最新工作并从栈删除$ git cherry-pick # 可以理解为”挑拣”提交，它会获取某一个分支的单笔提交，                                    并作为一个新的提交引入到你当前分支上。$ git diff 具体修改了那些地方 git diff &lt;local branch&gt; &lt;remote&gt;/&lt;remote branch&gt;对比远程分支$ git remote：管理主机名    不带参数 -列出所有远程主机    -v 参看远程主机的网址    -show &lt;主机名&gt;查看详细信息忽略文件：创建一个名为 .gitignore的文件，列出要忽略的文件模式。如：*.a       #忽略所有 .a 结尾的文件    !lib.a    #但 lib.a 除外</code></pre><h3 id="常见误操作处理方法"><a href="#常见误操作处理方法" class="headerlink" title="常见误操作处理方法"></a>常见误操作处理方法</h3><pre><code>撤销 add：git reset HEAD合并 commit：    1. 追加至上一个 commit ：git commit --amend；commit 的时间是不会变的；可加上--no-edit    2. 合并多个：git rebase -i commit(-i 后参数可写commitHSAH值即你想合并至哪一个commit        或者-i HEAD~n(HEAD将它看做 你的上一次提交 的别名)HEAD~1 上个版本 HEAD~n 上n个版本)        - 紧接着进入vim界面：pick为保留，s或者squash为删除commit        - 又另一个vim界面：commit msg 保留自己需要的或者修改，用#删除别的commit msg如何重置某个文件到未修改的状态？  # git checkout -- &lt;filepath&gt;如何重置所有文件到未修改的状态？  # git reset --hard如何重置到某个 commit？          # git reset &lt;commit SHA&gt;git reset用于撤销未被提交到remote的改动，即撤销local的修改。除了移动当前分支的HEAD，还可以更改workspace和index：git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：    --soft：修改HEAD，不修改index和workspace。    --mixed：修改HEAD和index，不修改workspace。默认行为。    --hard：修改HEAD、index、workspace。把index和workspace的修改全部撤销。</code></pre><h3 id="常见错误处理方法"><a href="#常见错误处理方法" class="headerlink" title="常见错误处理方法"></a>常见错误处理方法</h3><ul><li>git pull or push报错：fatal: refusing to merge unrelated histories （拒绝合并不相关的历史）</li></ul><p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 命令 </tag>
-            
-            <tag> git </tag>
             
         </tags>
       
