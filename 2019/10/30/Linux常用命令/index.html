@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="命令,Linux," />
+  <meta name="keywords" content="Linux,命令," />
 
 
 
@@ -89,14 +89,14 @@
 
 
 <meta name="description" content="git  工作常用命令">
-<meta name="keywords" content="命令,Linux">
+<meta name="keywords" content="Linux,命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux常用命令">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;30&#x2F;Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:description" content="git  工作常用命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-30T01:47:51.446Z">
+<meta property="og:updated_time" content="2019-10-30T02:54:14.783Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -201,9 +201,9 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/%20" rel="section">
+          <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             Home
           </a>
@@ -211,9 +211,9 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/about/%20" rel="section">
+          <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             About
           </a>
@@ -221,9 +221,9 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/%20" rel="section">
+          <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             Tags
           </a>
@@ -231,21 +231,11 @@
       
         
         <li class="menu-item menu-item-categories">
-          <a href="/categories/%20" rel="section">
+          <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             Categories
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            Archives
           </a>
         </li>
       
@@ -389,7 +379,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  853
+                  1k
                 </span>
               
 
@@ -405,7 +395,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3
+                  4
                 </span>
               
             </div>
@@ -432,6 +422,7 @@
 <h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><pre><code>实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）
 du可以查看文件及文件夹的大小。  // du -h file_path
 查看磁盘占用：df -h
+mv file1 file2：移动文件，若file2不存在则为改名字
 查看进程：ps -ef | prep name
 解包：tar xvf FileName.tar　　unzip filename.zip
 打包：tar cvf FileName.tar DirName
@@ -442,7 +433,25 @@ cp -r dir1 dir2
 curl:用来请求web服务器，== postman。
     get：参数加url后面.
     POST：--data &quot;data&quot;,-X 动作，默认get,
-    -d POST自动带上Content-Type : application/x-www-form-urlencoded </code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装
+    -d POST自动带上Content-Type : application/x-www-form-urlencoded </code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
+拥有者-属组用户-其他用户
+x-可执行r-可读w-可写
+rwx = 111 = 7
+rw- = 110 = 6
+r-x = 101 = 5
+r-- = 100 = 4
+-wx = 011 = 3
+-w- = 010 = 2
+--x = 001 = 1
+--- = 000 = 0
+ll 关于第一位最高位的解释：
+    d代表的是目录(directroy)
+    -代表的是文件(regular file)
+    s代表的是套字文件(socket)
+    p代表的管道文件(pipe)或命名管道文件(named pipe)
+    l代表的是符号链接文件(symbolic link)
+    b代表的是该文件是面向块的设备文件(block-oriented device file)
+    c代表的是该文件是面向字符的设备文件(charcter-oriented device file)</code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装
 Linux 查看环境变量 echo $PATH 
     临时设置：export env=xxx
     永久设置：# vi /etc/profile 
@@ -500,7 +509,7 @@ Linux 查看环境变量 echo $PATH
   <p><span>本文标题:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Linux常用命令</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年10月30日 - 09:10</p>
-  <p><span>最后更新:</span>2019年10月30日 - 09:10</p>
+  <p><span>最后更新:</span>2019年10月30日 - 10:10</p>
   <p><span>原始链接:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"  aria-label="复制成功！"></i></span>
   </p>
@@ -533,9 +542,9 @@ Linux 查看环境变量 echo $PATH
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
-          
             <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          
+            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
           
         </div>
       
@@ -680,7 +689,7 @@ var jiathis_config={
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/%20%7C%7C%20archive">
+                <a href="/archives">
               
                   <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
@@ -689,15 +698,24 @@ var jiathis_config={
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
 
             
               
               
               <div class="site-state-item site-state-tags">
-                
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
-                
+                </a>
               </div>
             
 
@@ -802,7 +820,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他命令"><span class="nav-number">2.</span> <span class="nav-text">其他命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用目录"><span class="nav-number">3.</span> <span class="nav-text">常用目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件颜色"><span class="nav-number">4.</span> <span class="nav-text">文件颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现ssh免密登录"><span class="nav-number">5.</span> <span class="nav-text">实现ssh免密登录</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限相关"><span class="nav-number">2.</span> <span class="nav-text">权限相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他命令"><span class="nav-number">3.</span> <span class="nav-text">其他命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用目录"><span class="nav-number">4.</span> <span class="nav-text">常用目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件颜色"><span class="nav-number">5.</span> <span class="nav-text">文件颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现ssh免密登录"><span class="nav-number">6.</span> <span class="nav-text">实现ssh免密登录</span></a></li></ol></div>
             
 
           </div>
@@ -839,7 +857,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.9k</span>
+    <span title="Site words total count">8.1k</span>
   
 </div>
 

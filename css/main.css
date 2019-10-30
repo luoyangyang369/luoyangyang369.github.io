@@ -2032,7 +2032,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #20d1ff;
+  background: #750ae3;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3403,7 +3403,7 @@ pre {
   color: #ff71a8;
 }
 img.img-topic {
-  width: 100%;
+  width: 50%;
 }
 @-moz-keyframes heartAnimate {
   0%, 100% {
