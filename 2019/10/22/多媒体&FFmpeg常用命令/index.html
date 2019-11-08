@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:description" content="多媒体基本概念及 FFmpeg 常用命令介绍">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-30T03:09:11.588Z">
+<meta property="og:updated_time" content="2019-11-08T01:53:55.878Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.7k
+                  1.8k
                 </span>
               
 
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  5
+                  6
                 </span>
               
             </div>
@@ -474,7 +474,7 @@ HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流�
 MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重
 AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小
 ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。
-无损：WAV</code></pre><h3 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h3><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
+无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
 -f 输出hls格式。
 
 hls协议流媒体网络传输协议：
@@ -483,7 +483,19 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
 -hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环
 -ar freq 设置音频采样率 
 -ac channels 设置通道 缺省为与输入相同 
--acodec 使用pcm_s16le编码</code></pre>
+-acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul>
+<li>合并多段音频</li>
+</ul>
+<p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址</p>
+<ul>
+<li>aac =&gt; mp3</li>
+</ul>
+<p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p>
+<ul>
+<li>一段音频剪切中间一段</li>
+</ul>
+<p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>
+
       
     </div>
     
@@ -544,8 +556,8 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/22/%E5%B7%A5%E5%85%B7&%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" rel="next" title="工具&网站推荐">
-                <i class="fa fa-chevron-left"></i> 工具&网站推荐
+              <a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="MySQL常用命令">
+                <i class="fa fa-chevron-left"></i> MySQL常用命令
               </a>
             
           </div>
@@ -554,8 +566,8 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/" rel="prev" title="pm2工作使用">
-                pm2工作使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="Linux常用命令">
+                Linux常用命令 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -665,7 +677,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -676,7 +688,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -687,7 +699,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -794,7 +806,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多媒体基本概念"><span class="nav-number">1.</span> <span class="nav-text">多媒体基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本概念"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#视频基本概念"><span class="nav-number">1.0.2.</span> <span class="nav-text">视频基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#M3U8-amp-HLS"><span class="nav-number">1.0.3.</span> <span class="nav-text">M3U8 &amp; HLS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MP3-amp-AAC-区别"><span class="nav-number">1.0.4.</span> <span class="nav-text">MP3 &amp; AAC 区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见音频格式"><span class="nav-number">1.0.5.</span> <span class="nav-text">常见音频格式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFmpeg-常用命令"><span class="nav-number">2.</span> <span class="nav-text">FFmpeg 常用命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多媒体基本概念"><span class="nav-number">1.</span> <span class="nav-text">多媒体基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本概念"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#视频基本概念"><span class="nav-number">1.0.2.</span> <span class="nav-text">视频基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#M3U8-amp-HLS"><span class="nav-number">1.0.3.</span> <span class="nav-text">M3U8 &amp; HLS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MP3-amp-AAC-区别"><span class="nav-number">1.0.4.</span> <span class="nav-text">MP3 &amp; AAC 区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见音频格式"><span class="nav-number">1.0.5.</span> <span class="nav-text">常见音频格式</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FFmpeg-常用命令"><span class="nav-number"></span> <span class="nav-text">FFmpeg 常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FFmpeg常用操作"><span class="nav-number"></span> <span class="nav-text">FFmpeg常用操作</span></a></div>
             
 
           </div>
@@ -831,7 +843,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.3k</span>
+    <span title="Site words total count">12.4k</span>
   
 </div>
 

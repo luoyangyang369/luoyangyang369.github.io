@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:description" content="git  工作常用命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-01T07:29:22.609Z">
+<meta property="og:updated_time" content="2019-11-06T02:36:00.522Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -379,7 +379,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.1k
+                  1.2k
                 </span>
               
 
@@ -419,10 +419,11 @@
         <p>git  工作常用命令</p>
 <a id="more"></a>
 
-<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><pre><code>md5sum 计算文件md5值，对比文件是否一样
+<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><p><a href="http://linux.51yip.com/" target="_blank" rel="noopener">Linux 在线手册</a><br><a href="https://www.cnblogs.com/peida/archive/2012/12/05/2803591.html" target="_blank" rel="noopener">Linux 命令学习</a></p>
+<pre><code>md5sum 计算文件md5值，对比文件是否一样
 实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）
 du可以查看文件及文件夹的大小。  // du -h file_path
-查看磁盘占用：df -h
+查看磁盘占用：df -h 查看当前文件夹大小（包含子目录）：du -sh
 mv file1 file2：移动文件，若file2不存在则为改名字
 查看进程：ps -ef | prep name
 解包：tar xvf FileName.tar　　unzip filename.zip
@@ -434,7 +435,8 @@ cp -r dir1 dir2
 curl:用来请求web服务器，== postman。
     get：参数加url后面.
     POST：--data &quot;data&quot;,-X 动作，默认get,
-    -d POST自动带上Content-Type : application/x-www-form-urlencoded </code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
+    -d POST自动带上Content-Type : application/x-www-form-urlencoded 
+</code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
 拥有者-属组用户-其他用户
 x-可执行r-可读w-可写
 rwx = 111 = 7
@@ -457,7 +459,10 @@ Linux 查看环境变量 echo $PATH
     临时设置：export env=xxx
     永久设置：# vi /etc/profile 
             export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib
-</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+查看一个文件夹中所有文件的大小（不含子目录中的文件）：du -Sh或du -Ssh
+查看一个文件夹中所有文件的大小（包含子目录中的文件）：du -h或者du -sh
+S：表示不统计子目录，s：表示不要显示其下子目录和文件占用的磁盘空间大小信息，只显示总的占用空间大小
+查看文件夹中每一个文件的大小：du -ah 或者ls -lRh</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。
 /boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
 /dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
 /opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
@@ -513,7 +518,7 @@ Linux 查看环境变量 echo $PATH
   <p><span>本文标题:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Linux常用命令</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年10月30日 - 09:10</p>
-  <p><span>最后更新:</span>2019年11月01日 - 15:11</p>
+  <p><span>最后更新:</span>2019年11月06日 - 10:11</p>
   <p><span>原始链接:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"  aria-label="复制成功！"></i></span>
   </p>
@@ -574,8 +579,8 @@ Linux 查看环境变量 echo $PATH
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="MySQL常用命令">
-                <i class="fa fa-chevron-left"></i> MySQL常用命令
+              <a href="/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="多媒体&FFmpeg命令">
+                <i class="fa fa-chevron-left"></i> 多媒体&FFmpeg命令
               </a>
             
           </div>
@@ -695,7 +700,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -706,7 +711,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -717,7 +722,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -861,7 +866,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.3k</span>
+    <span title="Site words total count">12.4k</span>
   
 </div>
 

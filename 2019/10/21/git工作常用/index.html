@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:description" content="git  工作常用命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-30T02:57:51.090Z">
+<meta property="og:updated_time" content="2019-11-06T10:51:19.660Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -379,7 +379,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.1k
+                  1.4k
                 </span>
               
 
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -418,7 +418,18 @@
       
         <p>git  工作常用命令</p>
 <a id="more"></a>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p>
+
+<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p>
+<pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略
+$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h5 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h5><h5 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h5><p>当master领先自己本地一个分支时，即其他同事合并了代码，而我本地也做了修改<br>git:(dev) git rebase master</p>
+<p>git 所做操作：首先，git 会把 dev 分支里面的每个 commit 取消掉；<br>其次，把上面的操作临时保存成 patch 文件，存在 .git/rebase 目录下；<br>然后，把 dev 分支更新到最新的 master 分支；<br>最后，把上面保存的 patch 文件应用到 dev 分支上；</p>
+<p><strong>提醒</strong></p>
+<pre><code>在 rebase 的过程中，也许会出现冲突 conflict。在这种情况，git 会停止 rebase 并会让你去解决冲突。在解决完冲突后，用 git add 命令去更新这些内容。
+[注意]此步骤你无需执行 git-commit，只要执行 continue
+git rebase --continue
+这样 git 会继续应用余下的 patch 补丁文件。
+当然，在任何时候，我们都可以用 --abort 参数来终止 rebase 的行动，并且分支会回到 rebase 开始前的状态。
+git rebase —abort</code></pre><h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p>
 <p>Git 管理项目时，文件流转的三个工作区域： </p>
 <ul>
 <li>Git 的工作目录</li>
@@ -431,16 +442,16 @@
 <li>对修改后的文件进行快照，然后保存到暂存区域。 </li>
 <li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li>
 </ol>
-<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p>分为俩种情况：</p>
+<p>分为俩种情况：</p>
 <ol>
-<li>在工作目录中初始化新仓库<pre><code>$git init  # 初始化;产生一个 .git 文件
-$git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</code></pre></li>
-<li>从现有仓库克隆<pre><code>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中
-包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</code></pre></li>
+<li>在工作目录中初始化新仓库</li>
 </ol>
-<p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p>
-<pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略
-$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接
+<p>$ git init  # 初始化;产生一个 .git 文件<br>$ git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</p>
+<ol start="2">
+<li>从现有仓库克隆</li>
+</ol>
+<p>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</p>
+<h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接
 $ git branch：不加参数 列出本地
     -r                      # 列出远程分支
     -a                      # all
@@ -512,7 +523,7 @@ git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：
   <p><span>本文标题:</span><a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/">git工作常用命令</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年10月21日 - 21:10</p>
-  <p><span>最后更新:</span>2019年10月30日 - 10:10</p>
+  <p><span>最后更新:</span>2019年11月06日 - 18:11</p>
   <p><span>原始链接:</span><a href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" title="git工作常用命令">http://yoursite.com/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/"  aria-label="复制成功！"></i></span>
   </p>
@@ -583,8 +594,8 @@ git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/21/hexo&markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="hexo&markdown常用命令">
-                hexo&markdown常用命令 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/22/%E5%B7%A5%E5%85%B7&%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" rel="prev" title="工具&网站推荐">
+                工具&网站推荐 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -694,7 +705,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -705,7 +716,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -716,7 +727,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -823,7 +834,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作常用"><span class="nav-number">2.</span> <span class="nav-text">工作常用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支相关"><span class="nav-number">3.</span> <span class="nav-text">分支相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他操作"><span class="nav-number">4.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见误操作处理方法"><span class="nav-number">5.</span> <span class="nav-text">常见误操作处理方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见错误处理方法"><span class="nav-number">6.</span> <span class="nav-text">常见错误处理方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#命令"><span class="nav-number">1.0.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分支合并"><span class="nav-number">1.0.2.</span> <span class="nav-text">分支合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本知识"><span class="nav-number">2.</span> <span class="nav-text">基本知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支相关"><span class="nav-number">3.</span> <span class="nav-text">分支相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他操作"><span class="nav-number">4.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见误操作处理方法"><span class="nav-number">5.</span> <span class="nav-text">常见误操作处理方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见错误处理方法"><span class="nav-number">6.</span> <span class="nav-text">常见错误处理方法</span></a></li></ol></div>
             
 
           </div>
@@ -860,7 +871,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.3k</span>
+    <span title="Site words total count">12.4k</span>
   
 </div>
 
