@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="命令,MySQL," />
+  <meta name="keywords" content="MySQL,命令," />
 
 
 
@@ -89,7 +89,7 @@
 
 
 <meta name="description" content="工作中常用的 MySQL 命令">
-<meta name="keywords" content="命令,MySQL">
+<meta name="keywords" content="MySQL,命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL常用命令">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;22&#x2F;MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
@@ -97,7 +97,7 @@
 <meta property="og:description" content="工作中常用的 MySQL 命令">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
-<meta property="og:updated_time" content="2019-11-08T06:48:39.079Z">
+<meta property="og:updated_time" content="2019-11-11T07:07:11.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
 
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.2k
+                  1.3k
                 </span>
               
 
@@ -449,8 +449,12 @@ show databases;  use youke;  show tables;  desc 表名;  exit;
 order by：排序 默认升序即A-Z 降序需指定DESC。且order by可指定多个值，先排一次序再排一次
 limit：限制输出，可指定n，也可为n,m  从n开始取m个
 
-MySQL语法顺序：SELECT[DISTINCT] =&gt; FROM =&gt; WHERE =&gt; GROUP BY =&gt; HAVING =&gt; UNION =&gt; ORDER BY =&gt; limit
-执行顺序：FROM =&gt; WHERE =&gt; GROUP BY =&gt; HAVING =&gt; SELECT =&gt; DISTINCT =&gt; UNION =&gt; ORDER BY</code></pre><h5 id="针对表"><a href="#针对表" class="headerlink" title="针对表"></a>针对表</h5><p>创建表 node这个数据库里面创建一个user表</p>
+MySQL语法顺序：SELECT[DISTINCT] =&gt; FROM =&gt; WHERE =&gt; GROUP BY =&gt; HAVING =&gt; UNION =&gt; 
+ORDER BY =&gt; limit
+
+执行顺序：FROM =&gt; JOIN =&gt; ON =&gt; WHERE =&gt; GROUP BY(开始使用select中的别名，后面的语句中都可以使用) =&gt;
+avg,sum... =&gt; HAVING =&gt; SELECT =&gt; DISTINCT =&gt; UNION =&gt; ORDER BY =&gt; LIMIT
+从from开始</code></pre><h5 id="针对表"><a href="#针对表" class="headerlink" title="针对表"></a>针对表</h5><p>创建表 node这个数据库里面创建一个user表</p>
 <pre><code>创建：
 CREATE TABLE `node`.`nodeuser`(
     `id` INT(11) NOT NULL AUTO_INCREMENT,  # id字段 int(11)数据类型，最大的值为11位 id自动增长
@@ -465,10 +469,13 @@ ENGINE = InnoDB CHARSET = utf8;
 字段增加长度：alter table 表名 modify column 列名 类型(要修改的长度);</code></pre><h5 id="针对数据"><a href="#针对数据" class="headerlink" title="针对数据"></a>针对数据</h5><pre><code>INSERT INTO &#39;user&#39; (`id`, &#39;username&#39;, &#39;pass&#39;) values (1, &#39;goudan&#39;, &#39;123&#39;);  # 增 固定代码 哪个表
 DELETE FROM user where id = 0  # 删 删article表的数据 因为id是唯一的
 update `xxx` set `username`=`1234` where `id`=6666;  # 改
-SELECT *FORM `shuoshuo` WHERE `id`=?  # 查
+SELECT * FORM `shuoshuo` WHERE `id`=?  # 查
 查询：
-    过滤：加distinct，如select distinct roomid from audio_pos;
-    区间查找：between and，如：select * from audio_pos where id between 2600 and 2650;</code></pre><h5 id="常用操作总结"><a href="#常用操作总结" class="headerlink" title="常用操作总结"></a>常用操作总结</h5><ul>
+    过滤：加 distinct，如 select distinct roomid from audio_pos;
+    区间查找：between and，如：select * from audio_pos where id between 2600 and 2650;</code></pre><h5 id="针对索引"><a href="#针对索引" class="headerlink" title="针对索引"></a>针对索引</h5><pre><code>查询：show index from table_name
+新增索引：ALTER TABLE table_name ADD INDEX index_name (column_list)
+删除索引：DROP INDEX index_name ON talbe_name
+</code></pre><h5 id="常用操作总结"><a href="#常用操作总结" class="headerlink" title="常用操作总结"></a>常用操作总结</h5><ul>
 <li>让别人访问自己的MySQL<pre><code>登录MySQL：mysql -u root -pvmwaremysql&gt;use mysql;
 mysql&gt;update user set host = &#39;%&#39; where user = &#39;root&#39;;
 mysql&gt;select host, user from user;
@@ -539,7 +546,7 @@ insert on duplicate key update 比 replace快，原因是索引方面
   <p><span>本文标题:</span><a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">MySQL常用命令</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年10月22日 - 17:10</p>
-  <p><span>最后更新:</span>2019年11月08日 - 14:11</p>
+  <p><span>最后更新:</span>2019年11月11日 - 15:11</p>
   <p><span>原始链接:</span><a href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="MySQL常用命令">http://yoursite.com/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"  aria-label="复制成功！"></i></span>
   </p>
@@ -572,9 +579,9 @@ insert on duplicate key update 比 replace快，原因是索引方面
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
-          
             <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          
+            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
           
         </div>
       
@@ -600,8 +607,8 @@ insert on duplicate key update 比 replace快，原因是索引方面
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/" rel="next" title="pm2工作使用">
-                <i class="fa fa-chevron-left"></i> pm2工作使用
+              <a href="/2019/10/22/%E5%B7%A5%E5%85%B7&%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" rel="next" title="工具&网站推荐">
+                <i class="fa fa-chevron-left"></i> 工具&网站推荐
               </a>
             
           </div>
@@ -610,8 +617,8 @@ insert on duplicate key update 比 replace快，原因是索引方面
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="多媒体&FFmpeg命令">
-                多媒体&FFmpeg命令 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/" rel="prev" title="pm2工作使用">
+                pm2工作使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -721,7 +728,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -743,7 +750,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -850,7 +857,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本命令"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对表"><span class="nav-number">1.0.2.</span> <span class="nav-text">针对表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对数据"><span class="nav-number">1.0.3.</span> <span class="nav-text">针对数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用操作总结"><span class="nav-number">1.0.4.</span> <span class="nav-text">常用操作总结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他操作"><span class="nav-number">1.0.5.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关知识"><span class="nav-number">1.0.6.</span> <span class="nav-text">相关知识</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点链接"><span class="nav-number">2.</span> <span class="nav-text">重点链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作常用"><span class="nav-number">1.</span> <span class="nav-text">工作常用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本命令"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对表"><span class="nav-number">1.0.2.</span> <span class="nav-text">针对表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对数据"><span class="nav-number">1.0.3.</span> <span class="nav-text">针对数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#针对索引"><span class="nav-number">1.0.4.</span> <span class="nav-text">针对索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用操作总结"><span class="nav-number">1.0.5.</span> <span class="nav-text">常用操作总结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他操作"><span class="nav-number">1.0.6.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关知识"><span class="nav-number">1.0.7.</span> <span class="nav-text">相关知识</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点链接"><span class="nav-number">2.</span> <span class="nav-text">重点链接</span></a></li></ol></div>
             
 
           </div>
@@ -887,7 +894,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">12.4k</span>
+    <span title="Site words total count">15.5k</span>
   
 </div>
 
