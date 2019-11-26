@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;myblog-1258623898.cos.ap-chengdu.myqcloud.com&#x2F;%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81&#x2F;%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png">
-<meta property="og:updated_time" content="2019-11-07T13:27:59.532Z">
+<meta property="og:updated_time" content="2019-11-21T03:49:29.610Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;myblog-1258623898.cos.ap-chengdu.myqcloud.com&#x2F;%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81&#x2F;%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png">
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.2k
+                  1.8k
                 </span>
               
 
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  6
                 </span>
               
             </div>
@@ -448,13 +448,20 @@
 <li>KB，MB：1024byte = 1KB，1024KB = 1MB。往上还有GB，TB。</li>
 </ul>
 <p>PS：数据传输大多以 bit 为单位，比如我们常说的网速100M/s，M/s其实Mbit/s，也就是兆比特每秒，我们还可以写成100Mbps。<br>    实际上对于档案大小来说为100M/8 每秒的速度</p>
-<h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><h5 id="为什么需要字符编码？"><a href="#为什么需要字符编码？" class="headerlink" title="为什么需要字符编码？"></a>为什么需要字符编码？</h5><ul>
+<h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><h3 id="为什么需要字符编码？"><a href="#为什么需要字符编码？" class="headerlink" title="为什么需要字符编码？"></a>为什么需要字符编码？</h3><ul>
 <li>计算机只能理解0和1，无法理解英文、字母、汉字和其他特殊字符，这些字符需要经过编码才能成为计算机可以理解的二进制数。</li>
 <li>由字符到二进制数称为编码，反过来则是解码。</li>
 <li>从字符到二进制数，需要有一个一一对应的映射，这个映射通过编码规则来实现。</li>
 <li>通常所说的编码其实包括编码+字符集（即字符的集合体），比如 Unicode 字符集，就有 UTF-8，UTF-16 等多种编码。</li>
 </ul>
-<h5 id="编码规则的演变"><a href="#编码规则的演变" class="headerlink" title="编码规则的演变"></a>编码规则的演变</h5><ul>
+<h3 id="utf-8-base64"><a href="#utf-8-base64" class="headerlink" title="utf-8 base64"></a>utf-8 base64</h3><ul>
+<li><p>UTF-8（8-bit Unicode Transformation Format）是一种针对Unicode的可变长度字符编码，又称万国码。</p>
+</li>
+<li><p>Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一</p>
+</li>
+</ul>
+<p>base64的话，不是底层存储格式，只是为了数据交换用有。比如图片变成字符格式，这是一种应用格式</p>
+<h3 id="编码规则的演变"><a href="#编码规则的演变" class="headerlink" title="编码规则的演变"></a>编码规则的演变</h3><ul>
 <li><p>ASCII：</p>
 <ol>
 <li>/ˈæski/，即 American Standard Code for Information Interchange，美国信息交换标准代码。本来一个字节有8位，每一位有0和1两种状态，则一个字节共有2^8=256种状态，可以表示256种字符。但是美国佬比较自私，觉得只要可以表示自己的字母和一些特殊字符就足够了，所以 ASCII 没有占用最高位（而是固定为0），实际只用到了后面7位，它可以表示 2^7=128 种状态，也就是表示128个字符。</li>
@@ -481,6 +488,29 @@
 </li>
 </ul>
 <p>i&gt;. 对于 128 个 ASCII 字符只需一个字节表示，字节的第一位补 0，后面 7 位为这个字符的 ASCII 二进制数。Unicode 范围为 U+0000 至U+007F。<br>ii&gt;. 对于 n 字节的符号（n&gt;1），第一个字节的前 n 位都设为 1，第 n+1 位设为 0，后面字节的前两位一律设为 10。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码二进制数。Unicode 范围由 U+0080 起。</p>
+<h2 id="原码、反码、补码知识详细讲解"><a href="#原码、反码、补码知识详细讲解" class="headerlink" title="原码、反码、补码知识详细讲解"></a>原码、反码、补码知识详细讲解</h2><p><a href="https://blog.csdn.net/zl10086111/article/details/80907428" target="_blank" rel="noopener">参考</a></p>
+<h3 id="机器数和真值"><a href="#机器数和真值" class="headerlink" title="机器数和真值"></a>机器数和真值</h3><ul>
+<li>机器数</li>
+</ul>
+<p>一个数在计算机中的二进制表示形式,  叫做这个数的机器数。机器数是带符号的，在计算机用一个数的最高位存放符号, 正数为0, 负数为1.</p>
+<ul>
+<li>真值</li>
+</ul>
+<p>因为第一位是符号位，所以机器数的形式值就不等于真正的数值。例如上面的有符号数 10000011，其最高位1代表负，其真正数值是 -3 而不是形式值131（10000011转换成十进制等于131）。所以，为区别起见，将带符号位的机器数对应的真正数值称为机器数的真值。</p>
+<h3 id="原码-反码-补码的基础概念和计算方法"><a href="#原码-反码-补码的基础概念和计算方法" class="headerlink" title="原码, 反码, 补码的基础概念和计算方法"></a>原码, 反码, 补码的基础概念和计算方法</h3><p>对于一个数, 计算机要使用一定的编码方式进行存储. 原码, 反码, 补码是机器存储一个具体数字的编码方式.</p>
+<h4 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h4><p>原码就是符号位加上真值的绝对值, 即用第一位表示符号, 其余位表示值. 比如如果是8位二进制:</p>
+<p><code>[+1]原 = 0000 0001</code><br><code>[-1]原 = 1000 0001</code></p>
+<h4 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h4><p>正数的反码是其本身</p>
+<p>负数的反码是在其原码的基础上, 符号位不变，其余各个位取反.</p>
+<p><code>[+1] = [00000001]原 = [00000001]反</code><br><code>[-1] = [10000001]原 = [11111110]反</code></p>
+<h4 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h4><p>补码的表示方法是:</p>
+<p>正数的补码就是其本身</p>
+<p>负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1. (即在反码的基础上+1)</p>
+<p><code>[+1] = [00000001]原 = [00000001]反 = [00000001]补</code><br><code>[-1] = [10000001]原 = [11111110]反 = [11111111]补</code></p>
+<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><h3 id="异或（-）运算"><a href="#异或（-）运算" class="headerlink" title="异或（^）运算"></a>异或（^）运算</h3><p>异或运算通俗地讲就是一句话<br>同为假，异为真<br>所以它是这样的算法:</p>
+<blockquote>
+<p>0^0=0,0^1=1,1^0=1,1^1=0</p>
+</blockquote>
 
       
     </div>
@@ -501,6 +531,35 @@
     <div>
       
         
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">计算机系统基础知识</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
+  <p><span>发布时间:</span>2019年11月05日 - 15:11</p>
+  <p><span>最后更新:</span>2019年11月21日 - 11:11</p>
+  <p><span>原始链接:</span><a href="/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="计算机系统基础知识">http://yoursite.com/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
       
     </div>
 
@@ -552,8 +611,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/11/sql%E4%BC%98%E5%8C%96/" rel="prev" title="SQL优化">
-                SQL优化 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/05/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97&CMQ/" rel="prev" title="消息队列&CMQ">
+                消息队列&CMQ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -663,7 +722,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -674,7 +733,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -685,7 +744,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -792,7 +851,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储单位"><span class="nav-number">1.</span> <span class="nav-text">存储单位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符编码"><span class="nav-number">2.</span> <span class="nav-text">字符编码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么需要字符编码？"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">为什么需要字符编码？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编码规则的演变"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">编码规则的演变</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储单位"><span class="nav-number">1.</span> <span class="nav-text">存储单位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符编码"><span class="nav-number">2.</span> <span class="nav-text">字符编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要字符编码？"><span class="nav-number">2.1.</span> <span class="nav-text">为什么需要字符编码？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#utf-8-base64"><span class="nav-number">2.2.</span> <span class="nav-text">utf-8 base64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码规则的演变"><span class="nav-number">2.3.</span> <span class="nav-text">编码规则的演变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原码、反码、补码知识详细讲解"><span class="nav-number">3.</span> <span class="nav-text">原码、反码、补码知识详细讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器数和真值"><span class="nav-number">3.1.</span> <span class="nav-text">机器数和真值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原码-反码-补码的基础概念和计算方法"><span class="nav-number">3.2.</span> <span class="nav-text">原码, 反码, 补码的基础概念和计算方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原码"><span class="nav-number">3.2.1.</span> <span class="nav-text">原码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反码"><span class="nav-number">3.2.2.</span> <span class="nav-text">反码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补码"><span class="nav-number">3.2.3.</span> <span class="nav-text">补码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑运算符"><span class="nav-number">4.</span> <span class="nav-text">逻辑运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异或（-）运算"><span class="nav-number">4.1.</span> <span class="nav-text">异或（^）运算</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -829,7 +888,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">15.5k</span>
+    <span title="Site words total count">26.1k</span>
   
 </div>
 

@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="命令,Linux," />
+  <meta name="keywords" content="Linux,命令," />
 
 
 
@@ -89,14 +89,14 @@
 
 
 <meta name="description" content="git  工作常用命令">
-<meta name="keywords" content="命令,Linux">
+<meta name="keywords" content="Linux,命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux常用命令">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;30&#x2F;Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:description" content="git  工作常用命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-06T02:36:00.522Z">
+<meta property="og:updated_time" content="2019-11-22T06:21:33.544Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -379,7 +379,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.2k
+                  1.3k
                 </span>
               
 
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -420,10 +420,14 @@
 <a id="more"></a>
 
 <h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><p><a href="http://linux.51yip.com/" target="_blank" rel="noopener">Linux 在线手册</a><br><a href="https://www.cnblogs.com/peida/archive/2012/12/05/2803591.html" target="_blank" rel="noopener">Linux 命令学习</a></p>
-<pre><code>md5sum 计算文件md5值，对比文件是否一样
+<pre><code>查看磁盘占用：df -h 查看当前文件夹大小（包含子目录）：du -sh
+查看目录下目录多少：ls -l |grep &quot;^d&quot;|wc -l
+查看目录下文件多少：ls -l |grep &quot;^-&quot;|wc -l
+查看目录剩余磁盘大小：df -hl 目录path
+
+ctrl+r：搜索之前用过的命令
 实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）
 du可以查看文件及文件夹的大小。  // du -h file_path
-查看磁盘占用：df -h 查看当前文件夹大小（包含子目录）：du -sh
 mv file1 file2：移动文件，若file2不存在则为改名字
 查看进程：ps -ef | prep name
 解包：tar xvf FileName.tar　　unzip filename.zip
@@ -436,7 +440,7 @@ curl:用来请求web服务器，== postman。
     get：参数加url后面.
     POST：--data &quot;data&quot;,-X 动作，默认get,
     -d POST自动带上Content-Type : application/x-www-form-urlencoded 
-</code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
+md5sum 计算文件md5值，对比文件是否一样</code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
 拥有者-属组用户-其他用户
 x-可执行r-可读w-可写
 rwx = 111 = 7
@@ -489,7 +493,10 @@ S：表示不统计子目录，s：表示不要显示其下子目录和文件占
 4、重启  // ubuntu系统：service ssh restart  // debian系统：/etc/init.d/ssh restart
 
 可能出错：
-    目录权限问题：Linux家目录设为700，.ssh为700，authorized_keys为600 即可解决</code></pre>
+    目录权限问题：Linux家目录设为700，.ssh为700，authorized_keys为600 即可解决</code></pre><p>linux .o,.a,.so<br>    .o,是目标文件,相当于windows中的.obj文件 </p>
+<pre><code>.so 为共享库,是shared object,用于动态连接的,相当于windows下的dll 
+
+.a为静态库,是好多个.o合在一起,用于静态连接 </code></pre>
       
     </div>
     
@@ -518,7 +525,7 @@ S：表示不统计子目录，s：表示不要显示其下子目录和文件占
   <p><span>本文标题:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Linux常用命令</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年10月30日 - 09:10</p>
-  <p><span>最后更新:</span>2019年11月06日 - 10:11</p>
+  <p><span>最后更新:</span>2019年11月22日 - 14:11</p>
   <p><span>原始链接:</span><a href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"  aria-label="复制成功！"></i></span>
   </p>
@@ -551,9 +558,9 @@ S：表示不统计子目录，s：表示不要显示其下子目录和文件占
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
-          
             <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          
+            <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
           
         </div>
       
@@ -700,7 +707,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -711,7 +718,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -722,7 +729,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -866,7 +873,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">15.5k</span>
+    <span title="Site words total count">26.1k</span>
   
 </div>
 

@@ -1,982 +1,719 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>MySQL常见问题</title>
-    <url>/2019/11/11/MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-<h2 id="为什么大多数生产环境不用外键"><a href="#为什么大多数生产环境不用外键" class="headerlink" title="为什么大多数生产环境不用外键"></a>为什么大多数生产环境不用外键</h2><p>其实这个话题是老生常谈，很多人在工作中确实也不会使用外键。包括在阿里的JAVA规范中也有下面这一条</p>
-<ul>
-<li>【强制】不得使用外键与级联，一切外键概念必须在应用层解决。</li>
-</ul>
-<p>但是呢，询问他们原因，大多是这么回答的</p>
-<ul>
-<li>每次做DELETE 或者UPDATE都必须考虑外键约束，会导致开发的时候很痛苦,测试数据极为不方便。</li>
-</ul>
-<ol>
-<li>性能损耗</li>
-<li>迁移数据时候的一致性维护</li>
-</ol>
-<p>这么说也是对的。下面详细说明</p>
-<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>首先我们明确一点，外键约束是一种约束，这个约束的存在，会保证表间数据的关系“始终完整”。因此，外键约束的存在，并非全然没有优点。<br>比如使用外键，可以</p>
-<ul>
-<li>保证数据的完整性和一致性</li>
-<li>级联操作方便</li>
-<li>将数据完整性判断托付给了数据库完成，减少了程序的代码量</li>
-</ul>
-<p>然而，鱼和熊掌不可兼得。外键是能够保证数据的完整性，但是会给系统带来很多缺陷。正是因为这些缺陷，才导致我们不推荐使用外键，具体如下：</p>
-<h4 id="性能问题"><a href="#性能问题" class="headerlink" title="性能问题"></a>性能问题</h4><p>假设一张表名为user_tb。那么这张表里有两个外键字段，指向两张表。那么，每次往user_tb表里插入数据，就必须往两个外键对应的表里查询是否有对应数据。如果交由程序控制，这种查询过程就可以控制在我们手里，可以省略一些不必要的查询过程。但是如果由数据库控制，则是必须要去这两张表里判断。</p>
-<h4 id="并发问题"><a href="#并发问题" class="headerlink" title="并发问题"></a>并发问题</h4><p>在使用外键的情况下，每次修改数据都需要去另外一个表检查数据,需要获取额外的锁。若是在高并发大流量事务场景，使用外键更容易造成死锁。</p>
-<h4 id="扩展性问题"><a href="#扩展性问题" class="headerlink" title="扩展性问题"></a>扩展性问题</h4><p>这里主要是分为两点</p>
-<p>做平台迁移方便，比如你从Mysql迁移到Oracle，像触发器、外键这种东西，都可以利用框架本身的特性来实现，而不用依赖于数据库本身的特性，做迁移更加方便。<br>分库分表方便，在水平拆分和分库的情况下，外键是无法生效的。将数据间关系的维护，放入应用程序中，为将来的分库分表省去很多的麻烦。<br>技术问题<br>使用外键，其实将应用程序应该执行的判断逻辑转移到了数据库上。那么这意味着一点，数据库的性能开销变大了，那么这就对DBA的要求就更高了。很多中小型公司由于资金问题，并没有聘用专业的DBA，因此他们会选择不用外键，降低数据库的消耗。<br>相反的，如果该约束逻辑在应用程序中，发现应用服务器性能不够，可以加机器，做水平扩展。如果是在数据库服务器上，数据库服务器会成为性能瓶颈，做水平扩展比较困难。</p>
-<h2 id="为什么一定要设一个主键？"><a href="#为什么一定要设一个主键？" class="headerlink" title="为什么一定要设一个主键？"></a>为什么一定要设一个主键？</h2><p><strong>回答：</strong> 因为你不设主键的情况下，innodb也会帮你生成一个隐藏列，作为自增主键。所以啦，反正都要生成一个主键，那你还不如自己指定一个主键，在有些情况下，就能显式的用上主键索引，提高查询效率！</p>
-<h2 id="主键是用自增还是UUID"><a href="#主键是用自增还是UUID" class="headerlink" title="主键是用自增还是UUID?"></a>主键是用自增还是UUID?</h2><p><strong>回答：</strong> 肯定答自增啊。innodb 中的主键是聚簇索引。如果主键是自增的，那么每次插入新的记录，记录就会顺序添加到当前索引节点的后续位置，当一页写满，就会自动开辟一个新的页。如果不是自增主键，那么可能会在中间插入，就会引发页的分裂，产生很多表碎片！  <strong>简单说用自增插入性能好！</strong></p>
-<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>UUID缺点： </p>
-<ol>
-<li>影响插入速度， 并且造成硬盘使用率低</li>
-<li>uuid之间比较大小相对于自增id比较大小要慢很多， 影响查询速度。</li>
-<li>uuid占空间大， 如果你建的索引越多， 影响越严重</li>
-</ol>
-<p>UUID优点：出现数据拆分、合并存储的时候，能达到全局的唯一性（比如：历史数据表的主键id会与数据表的id重复，两张自增id做主键的表合并时，id一定会有冲突，但如果各自的id还关联了其他表，这就很不好操作。而使用UUID，生成的ID不仅是表独立的，而且是库独立的。）</p>
-<ul>
-<li>在分布式环境下可使用UUID，自增合并表时会发生id重复的问题，但也可设置自增的间隔</li>
-</ul>
-<h5 id="自增ID用完怎么办？"><a href="#自增ID用完怎么办？" class="headerlink" title="自增ID用完怎么办？"></a>自增ID用完怎么办？</h5><p><strong>回答：</strong> 戳 =&gt; <a href="https://www.cnblogs.com/rjzheng/p/10669043.html" target="_blank" rel="noopener">this</a></p>
-<h2 id="主键为什么不推荐有业务含义"><a href="#主键为什么不推荐有业务含义" class="headerlink" title="主键为什么不推荐有业务含义?"></a>主键为什么不推荐有业务含义?</h2><p><strong>回答：</strong> 有如下两个原因</p>
-<p>(1)因为任何有业务含义的列都有改变的可能性,主键一旦带上了业务含义，那么主键就有可能发生变更。主键一旦发生变更，该数据在磁盘上的存储位置就会发生变更，有可能会引发页分裂，产生空间碎片。</p>
-<p>(2)带有业务含义的主键，不一定是顺序自增的。那么就会导致数据的插入顺序，并不能保证后面插入数据的主键一定比前面的数据大。如果出现了，后面插入数据的主键比前面的小，就有可能引发页分裂，产生空间碎片。</p>
-<h2 id="表示枚举的字段为什么不用enum类型？"><a href="#表示枚举的字段为什么不用enum类型？" class="headerlink" title="表示枚举的字段为什么不用enum类型？"></a>表示枚举的字段为什么不用enum类型？</h2><p><strong>回答：</strong> 在工作中表示枚举的字段，一般用tinyint类型。<br>那为什么不用enum类型呢？下面两个原因</p>
-<p>(1)ENUM类型的ORDER BY操作效率低，需要额外操作<br>(2)如果枚举值是数值，有陷阱</p>
-<h2 id="货币字段用什么类型"><a href="#货币字段用什么类型" class="headerlink" title="货币字段用什么类型?"></a>货币字段用什么类型?</h2><p><strong>回答：</strong> 如果货币单位是分，可以用Int类型。如果坚持用元，用Decimal。<br>千万不要答float和double，因为float和double是以二进制存储的，所以有一定的误差。</p>
-<h2 id="时间字段用什么类型"><a href="#时间字段用什么类型" class="headerlink" title="时间字段用什么类型?"></a>时间字段用什么类型?</h2><p><strong>回答：</strong> 此题无固定答案，应结合自己项目背景来答！把理由讲清楚就行！</p>
-<p>(1)varchar，如果用varchar类型来存时间，优点在于显示直观。但是坑的地方也是挺多的。比如，插入的数据没有校验，你可能某天就发现一条数据为2013111的数据，请问这是代表2013年1月11日，还是2013年11月1日？<br>其次，做时间比较运算，你需要用STR_TO_DATE等函数将其转化为时间类型，你会发现这么写是无法命中索引的。数据量一大，是个坑！</p>
-<p>(2)timestamp，该类型是四个字节的整数，它能表示的时间范围为1970-01-01 08:00:01到2038-01-19 11:14:07。2038年以后的时间，是无法用timestamp类型存储的。<br>但是它有一个优势，timestamp类型是带有时区信息的。一旦你系统中的时区发生改变，例如你修改了时区</p>
-<p>SET TIME_ZONE = “america/new_york”;<br>你会发现，项目中的该字段的值自己会发生变更。这个特性用来做一些国际化大项目，跨时区的应用时，特别注意！</p>
-<p>(3)datetime，datetime储存占用8个字节，它存储的时间范围为1000-01-01 00:00:00 ~ 9999-12-31 23:59:59。显然，存储时间范围更大。但是它坑的地方在于，他存储的是时间绝对值，不带有时区信息。如果你改变数据库的时区，该项的值不会自己发生变更！</p>
-<p>(4)bigint，也是8个字节，自己维护一个时间戳，表示范围比timestamp大多了，就是要自己维护，不大方便。</p>
-<h2 id="为什么不直接存储图片、音频、视频等大容量内容"><a href="#为什么不直接存储图片、音频、视频等大容量内容" class="headerlink" title="为什么不直接存储图片、音频、视频等大容量内容?"></a>为什么不直接存储图片、音频、视频等大容量内容?</h2><p><strong>回答：</strong> 我们在实际应用中，都是用HDFS来存储文件。然后mysql中，只存文件的存放路径。mysql中有两个字段类型被用来设计存放大容量文件，也就是text和blob类型。但是，我们在生产中，基本不用这两个类型！<br>主要原因有如下两点</p>
-<p>(1)Mysql内存临时表不支持TEXT、BLOB这样的大数据类型，如果查询中包含这样的数据，在排序等操作时，就不能使用内存临时表，必须使用磁盘临时表进行。导致查询效率缓慢<br>(2)binlog内容太多。因为你数据内容比较大，就会造成binlog内容比较多。大家也知道，主从同步是靠binlog进行同步，binlog太大了，就会导致主从同步效率问题！<br>因此，不推荐使用text和blob类型！</p>
-<h2 id="字段为什么要定义为NOT-NULL"><a href="#字段为什么要定义为NOT-NULL" class="headerlink" title="字段为什么要定义为NOT NULL?"></a>字段为什么要定义为NOT NULL?</h2><p><strong>回答：</strong> OK，这问题从两个角度来答</p>
-<p>(1)索引性能不好<br>Mysql难以优化引用可空列查询，它会使索引、索引统计和值更加复杂。可空列需要更多的存储空间，还需要mysql内部进行特殊处理。可空列被索引后，每条记录都需要一个额外的字节，还能导致MYisam 中固定大小的索引变成可变大小的索引。<br>—— 出自《高性能mysql第二版》</p>
-<p>(2)查询会出现一些不可预料的结果<br>这里举一个例子，大家就懂了。假设，表结构如下</p>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>计算机专有名词.md</title>
+      <link href="/2019/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/"/>
+      <url>/2019/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p>CVM：云服务器（Cloud Virtual Machine）<br>IPC（Inter-Process Communication，进程间通信）</p>]]></content>
+      
+      
       <categories>
-        <category>MySQL</category>
+          
+          <category> 计算机 </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL优化</title>
-    <url>/2019/11/11/sql%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-<h2 id="连接查询-联合查询-子查询"><a href="#连接查询-联合查询-子查询" class="headerlink" title="连接查询 联合查询 子查询"></a>连接查询 联合查询 子查询</h2><ul>
-<li>连接查询</li>
-</ul>
-<p>连接查询就是将多个表联合起来查询，连接查询方式有内连接、外连接、自然连接、交叉连接。连接查询使得可以同时查看多张表中数据。</p>
-<pre><code>- 内连接：有条件连接，多个表之间依据指定条件连接，匹配结果是保留符合匹配结果的记录。
-- 外连接：与内连接不同的是不管匹配符不符合都保留，根据外连接连接方式来决定保留哪张表，比如保留左表的话，那么左表无法匹配右表时，保留左表数据，然后置右表字段数据为null.
-- 自然连接：有条件连接，自动依据“同名字段”连接（多个同名字段就都作为条件）。
-- 交叉连接cross join：无条件连接，将每一条记录与另外一个表的每一条记录连接（笛卡尔积），结果是字段数等于原来字段数之和，记录数等于之前各个表记录数之乘积。</code></pre><p>补充：在多个表中，为了区分每个表，以及简便使用，可以使用表别名。</p>
-<ul>
-<li>联合查询</li>
-</ul>
-<p>联合查询是将多个查询结果在记录上进行拼接。（相当于将其他表的查询记录结果连接到第一个表的后面）【因为是拼接，所以<strong>多个查询结果的字段数必须相同</strong>】【拼接不在意数据类型，比如第一个表的第一个字段是int,但后面的表中的varchar依然可以拼接到第一列中】</p>
-<p>语法：select语句 union select语句…;</p>
-<p>补充：union可以有选项，加在union 后面，all选项是不对相同去重，distinct是去重。</p>
-<ul>
-<li>子查询</li>
-</ul>
-<p>子查询是嵌套在查询语句中的查询。<br>可以分为三类：</p>
-<p>from子查询：子查询跟在from之后的；一般用在“先查出二维表，再处理”的情况。<br>如：select cid,cname from (select * from class where cname=”python”) as c;</p>
-<p>where子查询：子查询跟在where条件中；一般用在“先查询出指定条件再查询”的情况<br>如：select * from student where cid=(select cid from class where cname=”python”);</p>
-<p>exist子查询：子查询在exist语句里面；一般用作“存在才做”的情况<br>如：select * from class where exists(select * from  student where cid=1) and cid=1;</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 计算机 </tag>
+            
+            <tag> 英语 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>工作问题记录</title>
+      <link href="/2019/11/15/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+      <url>/2019/11/15/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p>URL特殊字符转译问题：<br>在拼接url的时候，需将特殊字符转译，<a href="https://blog.csdn.net/p312011150/article/details/78928003" target="_blank" rel="noopener">参考</a><br>提取图片里的文字：可以使用OCR 光学字符识别（英語：Optical Character Recognition）</p>]]></content>
+      
+      
       <categories>
-        <category>MySQL</category>
+          
+          <category> 问题 </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>SQL优化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机系统基础知识</title>
-    <url>/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
-    <content><![CDATA[<p><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png" alt="hh"></p>
-<a id="more"></a>
-
-<h2 id="存储单位"><a href="#存储单位" class="headerlink" title="存储单位"></a>存储单位</h2><ul>
-<li>位：即 bit，表示二进制位，要么是 0 ，要么是 1。它是计算机内部数据存储的最小单位。比如 11010100 共有8个二进制位，是一个8位二进制数。</li>
-<li>字节：即 byte，它由8个二进制位构成，即 1byte=8bit，是计算机内部计量的基本单位。一个英文字符占1个字节（8位），一个汉字占2个字节（16位）</li>
-<li>字：即word，它由若干个字节构成，是计算机内部进行数据处理和运算的基本单位。字的总的位数称为字长，不同档次的计算机字长是不一样的，比如32位机，它的1个字由4个字节构成，字长为32位，也就是说其CPU一次操作处理的实际位数是32位。同理，64位机可以处理64位。由此可见，计算机的字长越大，其性能越优越。</li>
-<li>KB，MB：1024byte = 1KB，1024KB = 1MB。往上还有GB，TB。</li>
-</ul>
-<p>PS：数据传输大多以 bit 为单位，比如我们常说的网速100M/s，M/s其实Mbit/s，也就是兆比特每秒，我们还可以写成100Mbps。<br>    实际上对于档案大小来说为100M/8 每秒的速度</p>
-<h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><h5 id="为什么需要字符编码？"><a href="#为什么需要字符编码？" class="headerlink" title="为什么需要字符编码？"></a>为什么需要字符编码？</h5><ul>
-<li>计算机只能理解0和1，无法理解英文、字母、汉字和其他特殊字符，这些字符需要经过编码才能成为计算机可以理解的二进制数。</li>
-<li>由字符到二进制数称为编码，反过来则是解码。</li>
-<li>从字符到二进制数，需要有一个一一对应的映射，这个映射通过编码规则来实现。</li>
-<li>通常所说的编码其实包括编码+字符集（即字符的集合体），比如 Unicode 字符集，就有 UTF-8，UTF-16 等多种编码。</li>
-</ul>
-<h5 id="编码规则的演变"><a href="#编码规则的演变" class="headerlink" title="编码规则的演变"></a>编码规则的演变</h5><ul>
-<li><p>ASCII：</p>
-<ol>
-<li>/ˈæski/，即 American Standard Code for Information Interchange，美国信息交换标准代码。本来一个字节有8位，每一位有0和1两种状态，则一个字节共有2^8=256种状态，可以表示256种字符。但是美国佬比较自私，觉得只要可以表示自己的字母和一些特殊字符就足够了，所以 ASCII 没有占用最高位（而是固定为0），实际只用到了后面7位，它可以表示 2^7=128 种状态，也就是表示128个字符。</li>
-<li>很显然，这用来表示字母是足够的，但要想表示其它语言的字符，128还是太少了。</li>
-</ol>
-</li>
-<li><p>GB2312：</p>
-<ol>
-<li>既然美国佬只解决了字母和特殊符号的编码问题，那么我们中国人只好实现自己的编码，从而来表示汉字了。所以这时候出现了 GB2312 编码（国标码）。</li>
-<li>问题：不幸的是，各个国家都是这么想的，所以小日本有了 Shift_JIS 编码，棒子有了 Euc-kr 编码…..一时之间各国都有了自己的标准，那么对于一个多语言混合的文本来说，存在着不同的编码规则，最终必然导致乱码。</li>
-</ol>
-</li>
-<li><p>Unicode:</p>
-<ol>
-<li>Unicode 解决了编码统一的问题。每种语言的每个字符在 Unicode 的规则下，都只有统一且唯一的对应二进制编码。它的表示方法是U+[16进制数]。例如，大写字母 A 编码为 U+0041，汉字“严”编码为 U+4E25。</li>
-<li>问题：Unicode 一般用2个字节（也就是16位）表示一个字符，这在表示 ASCII 字符的时候会出现问题。我们知道，ASCII 字符实际只需要一个字节就够了，并且最高位甚至都还不需要用到，但是 Unicode 又规定表示一个字符至少需要2个字节，那么一个 ASCII 字符前面就必须要补0以满足这个规则，例如字母 A 就需要用 00000000 01000001 表示，这些多余的0是一个极大的资源浪费。</li>
-</ol>
-</li>
-<li><p>UTF-8：</p>
-<ol>
-<li>UTF：实际传输过程中，基于不同的系统平台，对 Unicode 会有不不同的实现方式，其实现方式称为 Unicode Transformation Format，即 UTF。</li>
-<li>作为 Unicode 的一种实现方式，UTF-8 展现了一定的灵活性——它是一种变长编码，会根据具体字符来改变所需要的表示字节。其编码规则只有两条：</li>
-</ol>
-</li>
-</ul>
-<p>i&gt;. 对于 128 个 ASCII 字符只需一个字节表示，字节的第一位补 0，后面 7 位为这个字符的 ASCII 二进制数。Unicode 范围为 U+0000 至U+007F。<br>ii&gt;. 对于 n 字节的符号（n&gt;1），第一个字节的前 n 位都设为 1，第 n+1 位设为 0，后面字节的前两位一律设为 10。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码二进制数。Unicode 范围由 U+0080 起。</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 工作 </tag>
+            
+            <tag> 问题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ROM&amp;RAM&amp;FLASH</title>
+      <link href="/2019/11/13/ROM&amp;RAM&amp;FLASH/"/>
+      <url>/2019/11/13/ROM&amp;RAM&amp;FLASH/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"><br>初学MCU的人，经常会看到ROM, RAM, FLASH，而且会被这些词汇搞得晕头转向。本文对这些概念进行了厘清，并介绍了这些Memory的区别</p><p><strong>备注</strong>：MCU-单片机，微型计算机</p><a id="more"></a><h2 id="ROM-Read-Only-Memory-程序存储器"><a href="#ROM-Read-Only-Memory-程序存储器" class="headerlink" title="ROM (Read Only Memory)程序存储器"></a>ROM (Read Only Memory)程序存储器</h2><p>它是一种只能读出事先所存的数据的固态半导体存储器。ROM中所存数据稳定，一旦存储数据就再也无法将之改变或者删除，断电后所存数据也不会消失。其结构简单，因而常用于存储各种固化程序和数据。</p><h2 id="RAM-Random-Access-Memory-随机访问存储器"><a href="#RAM-Random-Access-Memory-随机访问存储器" class="headerlink" title="RAM (Random Access Memory)随机访问存储器"></a>RAM (Random Access Memory)随机访问存储器</h2><p>RAM又称随机存取存储器，存储单元的内容可按照需要随机取出或存入，且存取的速度与存储单元的位置无关。这种存储器在断电时，将丢失其存储内容，所以主要用于存储短时间使用的程序。</p><p>它主要用来存储程序中用到的变量。凡是整个程序中，所用到的需要被改写的量（包括全局变量、局部变量、堆栈段等），都存储在RAM中。</p><h2 id="ROM-amp-RAM区别"><a href="#ROM-amp-RAM区别" class="headerlink" title="ROM&amp;RAM区别"></a>ROM&amp;RAM区别</h2><p><a href="https://blog.csdn.net/szupjz/article/details/51842242" target="_blank" rel="noopener">参考</a></p><p>通俗的说，比如在电脑中，大家都知道有内存和硬盘之说，其实内存就是一种RAM技术，而ROM则类似于硬盘技术，两者都是存储器，只是RAM的速度要远远高于ROM的速度。</p><p>在电脑日常操作中，很多程序都将临时运行的程序命令，存放在内存中，但一旦关机或者停电，内存里原本临时存储的程序信息将全部被清空，也就是内存只能临时存储东西，不能长久保存，而ROM则可以存储，即使掉电后也可以找到之前存储的文件，这也就是硬盘了。</p><h2 id="FLASH-存储器"><a href="#FLASH-存储器" class="headerlink" title="FLASH 存储器"></a>FLASH 存储器</h2><p>Flash 存储器（FLASH EEPROM）又称闪存，快闪。它是EEPROM的一种。它结合了ROM和RAM的长处。不仅具备电子可擦除可编辑（EEPROM）的性能，还不会断电丢失数据同时可以快速读取数据。它于EEPROM的最大区别是，FLASH按扇区（block）操作，而EEPROM按照字节操作。FLASH的电路结构较简单，同样容量占芯片面积较小，成本自然比EEPROM低，因此适合用于做程序存储器。</p>]]></content>
+      
+      
       <categories>
-        <category>MySQL</category>
+          
+          <category> 计算机 </category>
+          
       </categories>
-      <tags>
-        <tag>计算机系统</tag>
-        <tag>编码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>node学习</title>
-    <url>/2019/11/05/node%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>关于面试的点点滴滴</p>
-<a id="more"></a>
-
-<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><h2 id="Promise对象"><a href="#Promise对象" class="headerlink" title="Promise对象"></a>Promise对象</h2><h2 id="async-amp-await"><a href="#async-amp-await" class="headerlink" title="async&amp;await"></a>async&amp;await</h2><h2 id="常用模块"><a href="#常用模块" class="headerlink" title="常用模块"></a>常用模块</h2><h5 id="koa2"><a href="#koa2" class="headerlink" title="koa2"></a>koa2</h5><p>web框架。koa中间件，中间件的通过next函数联系,执行next()后会将控制权交给下一个中间件,如果没有中间件没有执行next后将会沿路折返,将控制权交换给前一个中间件。<br>ctx封装了request 和response对象<br>ctx.state  推荐的命名空间，用于通过中间件传递信息和你的前端视图</p>
-<ul>
-<li>get请求参数获取：</li>
-</ul>
-<p>1.是从上下文中直接获取<br>请求对象ctx.query，返回如 { a:1, b:2 }<br>请求字符串 ctx.querystring，返回如 a=1&amp;b=2<br>2.是从上下文的request对象中获取<br>请求对象ctx.request.query，返回如 { a:1, b:2 }<br>请求字符串 ctx.request.querystring，返回如 a=1&amp;b=2</p>
-<ul>
-<li>POST请求参数获取：</li>
-</ul>
-<p>注意：ctx.request是context经过封装的请求对象，ctx.req是context提供的node.js原生HTTP请求对象，<br>同理ctx.response是context经过封装的响应对象，ctx.res是context提供的node.js原生HTTP请求对象。</p>
-<h5 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h5><p>Buffer是node的核心模块，开发者可以利用它来处理二进制数据，比如文件流的读写、网络请求数据的处理等。</p>
-<p>创建：<br>new Buffer(array)<br>Buffer.alloc(length)<br>Buffer.allocUnsafe(length)<br>Buffer.from(array)</p>
-<h5 id="bluebird"><a href="#bluebird" class="headerlink" title="bluebird"></a>bluebird</h5><p>Bluebird 的 Promise.promisifyAll 方法可以为一个对象的属性中的所有方法创建一个对应的使用 Promise 的版本。这些新创建方法的名称在已有方法的名称后加上”Async”后缀。</p>
-<ul>
-<li>用法：<br>const bluebird = require(‘bluebird’)<br>bluebird.promisifyAll(fs)</li>
-</ul>
-<p>如果不希望把一个对象的所有方法都自动转换成使用 Promise 的形式，可以使用 Promise.promisify 来转换单个方法，如 Promise.promisify(require(“fs”).readFile)。</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 计算机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SQL优化</title>
+      <link href="/2019/11/11/sentos%E7%9B%B8%E5%85%B3/"/>
+      <url>/2019/11/11/sentos%E7%9B%B8%E5%85%B3/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看位数：getconf LONG_BIT<br>查看版本：cat /etc/redhat-release</p><h2 id="rpm和yum的关系以及基本用法"><a href="#rpm和yum的关系以及基本用法" class="headerlink" title="rpm和yum的关系以及基本用法"></a>rpm和yum的关系以及基本用法</h2><h3 id="rpm"><a href="#rpm" class="headerlink" title="rpm"></a>rpm</h3><p>RPM是RedHat Package Manager（RedHat软件包管理工具）类似Windows里面的“添加/删除程序”<br>rpm 执行安装包<br>二进制包（Binary）以及源代码包（Source）两种。二进制包可以直接安装在计算机中，而源代码包将会由RPM自动编译、安装。源代码包经常以src.rpm作为后缀名。</p><h4 id="解压-rpm-包"><a href="#解压-rpm-包" class="headerlink" title="解压 rpm 包"></a>解压 rpm 包</h4><p>RPM包括是使用cpio格式打包的，因此可以先转成cpio然后解压，如下所示：<br>rpm2cpio xxx.rpm | cpio -div<br>解压后 里面会有 .spec 文件，是该包的描述文件</p><h3 id="Yum"><a href="#Yum" class="headerlink" title="Yum"></a>Yum</h3><p>Yum（全称为 Yellow dog Updater, Modified）是一个在Fedora中的Shell前端软件包管理器。基於RPM包管理，能够从指定的服务器自动下载RPM包并且安装，可以自动处理 依赖性关系，并且一次安装所有依赖的软体包，无须繁琐地一次次下载、安装。</p><p>yum会查询数据库，有无这一软件包，如果有，则检查其依赖冲突关系，如果没有依赖冲突，下载安装;如果有，则会给出提示，询问是否要同时安装依赖，或删除冲突的包，你可以自己作出判断。</p><h2 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h2><ul><li>源码安装<br>源码的安装一般由3个步骤组成：配置(configure)、编译(make)、安装(make install)。</li></ul><pre><code>$ tar zxvf XXXX.tar.gz (or tar jxvf XXXX.tar.bz2)$ cd XXXX$ ./configure$ make$ make install</code></pre><p>清理安装后的临时文件：</p><blockquote><p>$ make clean</p></blockquote><p>卸载软件</p><blockquote><p>make uninstall</p></blockquote><h4 id="步骤如下"><a href="#步骤如下" class="headerlink" title="步骤如下"></a>步骤如下</h4><p>1、 下载源码包<br>2、 解压包<br>3、 设置软件的安装目录：$ ./configure –prefix=/opt/XXX<br>检查configure返回结果，为0代表运行成功：</p><blockquote><p>$ echo $?<br>0</p></blockquote><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.kancloud.cn/chandler/bc-linux/55602" target="_blank" rel="noopener">linux笔记</a><br><a href="https://www.ibm.com/developerworks/cn/linux/l-rpm/index.html" target="_blank" rel="noopener">RPM 打包技术与典型 SPEC 文件分析</a><br><a href="https://blog.csdn.net/huangfei711/article/details/53044539" target="_blank" rel="noopener">添加环境变量</a></p>]]></content>
+      
+      
       <categories>
-        <category>node</category>
+          
+          <category> Linux </category>
+          
       </categories>
-      <tags>
-        <tag>node</tag>
-        <tag>语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记录一次小程序开发</title>
-    <url>/2019/10/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>记录一次小程序开发，出现的坑以及一些知识</p>
-<a id="more"></a>
-
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
-<li><p>openID：不同APP不同openID。用户唯一标识，跟人一一对应，小程序分配给每个人的ID  OpenID = 用户微信号 &amp; 公众平台APPID（两个数据加密得到的字符串）  不同公众号不同ID</p>
-</li>
-<li><p>unionID：即使不同应用，ID一样。通过获取用户基本信息接口，开发者可通过OpenID来获取用户基本信息</p>
-</li>
-<li><p>appID(小程序ID):它其实就是小程序的「身份证号码」</p>
-</li>
-<li><p>AppSecret(小程序密钥)</p>
-</li>
-<li><p>PV：分享给了多少人</p>
-</li>
-<li><p>UV：分享的课程被多少人打开</p>
-</li>
-<li><p>openGid：小程序的群唯一标识的id</p>
-</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> centos </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SQL优化</title>
+      <link href="/2019/11/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
+      <url>/2019/11/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a>]]></content>
+      
+      
       <categories>
-        <category>小程序</category>
+          
+          <category> MySQL </category>
+          
       </categories>
-      <tags>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL深入浅出索引</title>
-    <url>/2019/10/30/MySQL%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<p>一句话简单来说，<strong>索引的出现其实就是为了提高数据查询的效率</strong>，就像书的目录一样。<br>一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。</p>
-<a id="more"></a>
-
-<h2 id="索引优缺点"><a href="#索引优缺点" class="headerlink" title="索引优缺点"></a>索引优缺点</h2><p>虽然索引可以提高数据查询的速度，但是任何事物都是双刃剑，它也有一些缺点： 索引占据一定磁盘空间，就 像 有 按 笔画查找的目录的书会比没有这种目录的书页数要多一些。</p>
-<p>索引减慢了数据插入和删除的速度。因为每次插入和删除的时候都需要更新索引，一个 表拥 有的索引越多，则写操作的平均性能下降就越大。 </p>
-<h2 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h2><p>索引的出现是为了提高查询效率，但是实现索引的方式却有很多种，所以这里也就引入了索引模型的概念。可以用于提高读写效率的数据结构很多，这里介绍三种常见、也比较简单的数据结构，它们分别是哈希表、有序数组和搜索树。</p>
-<ul>
-<li>哈希表</li>
-</ul>
-<p>哈希表这种结构<strong>适用于只有等值查询</strong>的场景，比如 Memcached 及其他一些 NoSQL 引擎</p>
-<ul>
-<li>有序数组</li>
-</ul>
-<p>在<strong>等值查询和范围查询</strong>场景中的性能就都非常优秀</p>
-<p>如果仅仅看查询效率，有序数组就是最好的数据结构了。但是，在需要更新数据的时候就麻烦了，你往中间插入一个记录就必须得挪动后面所有的记录，成本太高。</p>
-<p>所以，有序数组索引<strong>只适用于静态存储引擎</strong>，比如你要保存的是 2017 年某个城市的所有人口信息，这类不会再修改的数据。</p>
-<ul>
-<li>二叉搜索树</li>
-</ul>
-<p>特点：每个节点的左儿子小于父节点，父节点又小于右儿子。</p>
-<p>当然为了维持 O(log(N)) 的查询复杂度，你就需要保持这棵树是平衡二叉树。为了做这个保证，<strong>更新的时间复杂度</strong>也是 O(log(N))。</p>
-<p>树可以有二叉，也可以有多叉。多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉树是搜索效率最高的，但是实际上大多数的数据库存储却并不使用二叉树。其原因是，索引不止存在内存中，还要写到磁盘上。</p>
-<p>你可以想象一下一棵 100 万节点的平衡二叉树，树高 20。一次查询可能需要访问 20 个数据块。在机械硬盘时代，从磁盘随机读一个数据块需要 10 ms 左右的寻址时间。也就是说，对于一个 100 万行的表，如果使用二叉树来存储，单独访问一个行可能需要 20 个 10 ms 的时间，这个查询可真够慢的。</p>
-<p>为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。</p>
-<p>以 InnoDB 的一个整数字段索引为例，<strong>这个 N 差不多是 1200</strong>。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
-<h2 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h2><p>在 InnoDB 中，表都是根据主键顺序以索引的形式存放的，这种存储方式的表称为索引组织表。又因为前面我们提到的，InnoDB 使用了 B+ 树索引模型，所以数据都是存储在 B+ 树中的。</p>
-<p>每一个索引在 InnoDB 里面对应一棵 B+ 树。</p>
-<p>假设，我们有一个主键列为 ID 的表，表中有字段 k，并且在 k 上有索引。</p>
-<p>这个表的建表语句是：</p>
-<pre><code>mysql&gt; create table T(
-id int primary key, 
-k int not null, 
-name varchar(16),
-index (k))engine=InnoDB;</code></pre>]]></content>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> SQL优化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>bash学习</title>
+      <link href="/2019/11/11/bash%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2019/11/11/bash%E5%AD%A6%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="profile、bashrc、bash-profile之间的区别和联系"><a href="#profile、bashrc、bash-profile之间的区别和联系" class="headerlink" title="profile、bashrc、bash_profile之间的区别和联系"></a>profile、bashrc、bash_profile之间的区别和联系</h2><ul><li><strong>/etc/profile</strong></li></ul><p>系统的每个用户设置环境信息,当用户第一次登录时,该文件被执行并从/etc/profile.d目录的配置文件中搜集shell的设置.<br>所以如果你有对/etc/profile有修改的话必须得重启你的修改才会生效，此修改对每个用户都生效。</p><ul><li><strong>/etc/bashrc</strong></li></ul><p>为每一个运行bash shell的用户执行此文件.当bash shell被打开时,该文件被读取.<br>如果你想对所有的使用bash的用户修改某个配置并在以后打开的bash都生效的话可以修改这个文件，修改这个文件不用重启，重新打开一个bash即可生效。</p><ul><li><strong>~/.bash_profile</strong></li></ul><p>每个用户都可使用该文件输入专用于自己使用的shell信息,当用户登录时,该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件.</p><p>此文件类似于/etc/profile，也是需要需要重启才会生效，/etc/profile对所有用户生效，~/.bash_profile只对当前用户生效。</p><ul><li><strong>~/.bashrc</strong></li></ul><p>该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取.（每个用户都有一个.bashrc文件，在用户目录下）</p><p>此文件类似于/etc/bashrc，不需要重启生效，重新打开一个bash即可生效，  /etc/bashrc对所有用户新打开的bash都生效，但~/.bashrc只对当前用户新打开的bash生效。</p><ul><li><strong>~/.bash_logout</strong></li></ul><p>当每次退出系统(退出bash shell)时,执行该文件. </p><p>另外,/etc/profile中设定的变量(全局)的可以作用于任何用户,而~/.bashrc等中设定的变量(局部)只能继承/etc/profile中的变量,他们是”父子”关系.</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>~/.bash_profile 是交互式、login 方式进入bash 运行的；<br>~/.bashrc 是交互式 non-login 方式进入bash 运行的；<br>通常二者设置大致相同，所以通常前者会调用后者。</p><p><strong>执行顺序</strong>为：/etc/profile -&gt; (~/.bash_profile | ~/.bash_login | ~/.profile) -&gt; ~/.bashrc -&gt; /etc/bashrc -&gt; ~/.bash_logout</p><h2 id="SHELL的交互式和非交互式、登录和非登录的区别"><a href="#SHELL的交互式和非交互式、登录和非登录的区别" class="headerlink" title="SHELL的交互式和非交互式、登录和非登录的区别"></a>SHELL的交互式和非交互式、登录和非登录的区别</h2><p>交互式shell和非交互式shell、登录shell和非登录shell的区别。<br>首先，这是两个不同的维度来划分的，一个是是否交互式，另一个是是否登录。</p><h3 id="交互式和非交互式"><a href="#交互式和非交互式" class="headerlink" title="交互式和非交互式"></a>交互式和非交互式</h3><ul><li>交互式</li></ul><p>交互式模式就是在终端上执行，shell等待你的输入，并且立即执行你提交的命令。这种模式被称作交互式是因为shell与用户进行交互。这种模式也是大多数用户非常熟悉的：登录、执行一些命令、退出。当你退出后，shell也终止了。</p><ul><li>非交互式</li></ul><p>以shell script(非交互)方式执行。在这种模式 下，shell不与你进行交互，而是读取存放在文件中的命令,并且执行它们。当它读到文件的结尾EOF，shell也就终止了。</p><p>1.3 测试逻辑表达式<br>基本格式<br>-a : 逻辑与,操作符两边均为真,结果为真,否则为假。<br>-o : 逻辑或,操作符两边一边为真,结果为真,否则为假。<br>! : 逻辑否,条件为假,结果为真。</p>]]></content>
+      
+      
       <categories>
-        <category>MySQL</category>
+          
+          <category> bash </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>索引</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>面试总结</title>
-    <url>/2019/10/30/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>关于面试的点点滴滴</p>
-<a id="more"></a>
-
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/coding-round-overview" target="_blank" rel="noopener">如何准备编程面试</a></li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/cheatsheet" target="_blank" rel="noopener">面试备忘录</a>：涉及面试前需要准备的问题，收到面试题的考虑方式、编程测试准备流程、面试总结</li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/algorithms/algorithms-introduction" target="_blank" rel="noopener">算法小贴士</a>：各类算法小贴士，以及按主题分类过的最容易考到的问题</li>
-<li><a href="https://github.com/yangshun/front-end-interview-handbook" target="_blank" rel="noopener">前端求职面试问题答案</a></li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/company-interview-formats" target="_blank" rel="noopener">互联网大厂的面试形式解析</a></li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/behavioral-questions" target="_blank" rel="noopener">科技巨头们的通用常见问题，以及几个大厂的常见通用非技术问题</a></li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/questions-to-ask" target="_blank" rel="noopener">适合在面试结束时问考官的好问题！</a></li>
-<li><a href="https://yangshun.github.io/tech-interview-handbook/resume" target="_blank" rel="noopener">做简历注意事项，让你的简历更能引起面试官注意</a></li>
-<li><a href="http://www.cjjjs.com/page/topicinfo?id_topic=63" target="_blank" rel="noopener">面试题</a></li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+            <tag> bash </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SQL优化</title>
+      <link href="/2019/11/11/SQL%E4%BC%98%E5%8C%96/"/>
+      <url>/2019/11/11/SQL%E4%BC%98%E5%8C%96/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="连接查询-联合查询-子查询"><a href="#连接查询-联合查询-子查询" class="headerlink" title="连接查询 联合查询 子查询"></a>连接查询 联合查询 子查询</h2><ul><li>连接查询</li></ul><p>连接查询就是将多个表联合起来查询，连接查询方式有内连接、外连接、自然连接、交叉连接。连接查询使得可以同时查看多张表中数据。</p><pre><code>- 内连接：有条件连接，多个表之间依据指定条件连接，匹配结果是保留符合匹配结果的记录。- 外连接：与内连接不同的是不管匹配符不符合都保留，根据外连接连接方式来决定保留哪张表，比如保留左表的话，那么左表无法匹配右表时，保留左表数据，然后置右表字段数据为null.- 自然连接：有条件连接，自动依据“同名字段”连接（多个同名字段就都作为条件）。- 交叉连接cross join：无条件连接，将每一条记录与另外一个表的每一条记录连接（笛卡尔积），结果是字段数等于原来字段数之和，记录数等于之前各个表记录数之乘积。</code></pre><p>补充：在多个表中，为了区分每个表，以及简便使用，可以使用表别名。</p><ul><li>联合查询</li></ul><p>联合查询是将多个查询结果在记录上进行拼接。（相当于将其他表的查询记录结果连接到第一个表的后面）【因为是拼接，所以<strong>多个查询结果的字段数必须相同</strong>】【拼接不在意数据类型，比如第一个表的第一个字段是int,但后面的表中的varchar依然可以拼接到第一列中】</p><p>语法：select语句 union select语句…;</p><p>补充：union可以有选项，加在union 后面，all选项是不对相同去重，distinct是去重。</p><ul><li>子查询</li></ul><p>子查询是嵌套在查询语句中的查询。<br>可以分为三类：</p><p>from子查询：子查询跟在from之后的；一般用在“先查出二维表，再处理”的情况。<br>如：select cid,cname from (select * from class where cname=”python”) as c;</p><p>where子查询：子查询跟在where条件中；一般用在“先查询出指定条件再查询”的情况<br>如：select * from student where cid=(select cid from class where cname=”python”);</p><p>exist子查询：子查询在exist语句里面；一般用作“存在才做”的情况<br>如：select * from class where exists(select * from  student where cid=1) and cid=1;</p><h2 id="explain-优化神器"><a href="#explain-优化神器" class="headerlink" title="explain 优化神器"></a>explain 优化神器</h2><p><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">参考</a></p><h3 id="EXPLAIN-输出格式"><a href="#EXPLAIN-输出格式" class="headerlink" title="EXPLAIN 输出格式"></a>EXPLAIN 输出格式</h3><pre><code>mysql&gt; explain select * from user_info where id = 2\G*************************** 1. row ***************************           id: 1  select_type: SIMPLE        table: user_info   partitions: NULL         type: constpossible_keys: PRIMARY          key: PRIMARY      key_len: 8          ref: const         rows: 1     filtered: 100.00        Extra: NULL1 row in set, 1 warning (0.00 sec)</code></pre><p>各列的含义如下:</p><ul><li><strong>id: SELECT 查询的标识符. 每个 SELECT 都会自动分配一个唯一的标识符.</strong></li><li><strong>select_type: SELECT 查询的类型.</strong></li><li><strong>table: 查询涉及的表或衍生表</strong></li><li><strong>partitions: 匹配的分区</strong></li><li><strong>type: join 类型</strong></li><li><strong>possible_keys: 此次查询中可能选用的索引</strong></li><li><strong>key: 此次查询中确切使用到的索引.</strong></li><li><strong>ref: 哪个字段或常数与 key 一起被使用</strong></li><li><strong>key_len：表示查询优化器使用了索引的字节数. 这个字段可以评估组合索引是否完全被使用, 或只有最左部分字段被使用到.</strong></li><li><strong>rows: 显示此查询一共扫描了多少行. 这个是一个估计值.直观显示 SQL 的效率好坏, 原则上 rows 越少越好</strong></li><li><strong>filtered: 表示此查询条件所过滤的数据的百分比</strong></li><li><strong>extra: 额外的信息</strong></li></ul><p>下面是几个重要字段</p><h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>type 字段比较重要, 它提供了判断查询是否高效的重要依据依据. 通过 type 字段, 我们判断此次查询是 全表扫描 还是 索引扫描 等.</p><p>常见取值：</p><ul><li><strong>const:</strong> 针对主键或唯一索引的等值查询扫描, 最多只返回一行数据. const 查询速度非常快, 因为它仅仅读取一次即可</li><li><strong>eq_ref:</strong> 此类型通常出现在多表的 join 查询, 表示对于前表的每一个结果, 都只能匹配到后表的一行结果. 并且查询的比较操作通常是 =, 查询效率较高. </li><li><strong>ref:</strong> 此类型通常出现在多表的 join 查询, 针对于非唯一或非主键索引, 或者是使用了 最左前缀 规则索引的查询.</li><li><strong>range:</strong> 表示使用索引范围查询, 通过索引字段范围获取表中部分数据记录. 这个类型通常出现在 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN() 操作中.<br>当 type 是 range 时, 那么 EXPLAIN 输出的 ref 字段为 NULL, 并且 key_len 字段是此次查询中使用到的索引的最长的那个.</li><li><strong>index:</strong> 表示全索引扫描(full index scan), 和 ALL 类型类似, 只不过 ALL 类型是全表扫描, 而 index 类型则仅仅扫描所有的索引, 而不扫描数据.<br>index 类型通常出现在: 所要查询的数据直接在索引树中就可以获取到, 而不需要扫描数据. 当是这种情况时, Extra 字段 会显示 Using index.</li><li><strong>ALL:</strong> 表示全表扫描, 这个类型的查询是性能最差的查询之一. 通常来说, 我们的查询不应该出现 ALL 类型的查询, 因为这样的查询在数据量大的情况下, 对数据库的性能是巨大的灾难. 如一个查询是 ALL 类型查询, 那么一般来说可以对相应的字段添加索引来避免.</li></ul><p>通常来说, 不同的 type 类型的<strong>性能关系</strong>如下:</p><blockquote><blockquote><blockquote><p>ALL &lt; index &lt; range ~ index_merge &lt; ref &lt; eq_ref &lt; const &lt; system</p></blockquote></blockquote></blockquote><h4 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h4><p>EXplain 中的很多额外的信息会在 Extra 字段显示, 常见的有以下几种内容:</p><ul><li>Using filesort</li></ul><p>当 Extra 中有 Using filesort 时, 表示 MySQL 需额外的排序操作, 不能通过索引顺序达到排序效果. 一般有 Using filesort, 都建议优化去掉, 因为这样的查询 CPU 资源消耗大.</p><ul><li>Using index</li></ul><p>“覆盖索引扫描”, 表示查询在索引树中就可查找所需数据, 不用扫描表数据文件, 往往说明性能不错</p><ul><li>Using temporary</li></ul><p>查询有使用临时表, 一般出现于排序, 分组和多表 join 的情况, 查询效率不高, 建议优化.</p>]]></content>
+      
+      
       <categories>
-        <category>面试</category>
+          
+          <category> MySQL </category>
+          
       </categories>
-      <tags>
-        <tag>面试</tag>
-        <tag>总结</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>腾讯COS项目记录</title>
-    <url>/2019/10/30/%E8%85%BE%E8%AE%AFCOS/</url>
-    <content><![CDATA[<h2 id="https-github-com-tencentyun-qcloud-cos-sts-sdk-tree-master-nodejs"><a href="#https-github-com-tencentyun-qcloud-cos-sts-sdk-tree-master-nodejs" class="headerlink" title="https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs"></a><a href="https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs" target="_blank" rel="noopener">https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs</a></h2>]]></content>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> SQL优化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>bash学习</title>
+      <link href="/2019/11/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+      <url>/2019/11/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p><a href="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191126033120%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E6%80%BB%E8%A7%88%E5%9B%BE.jpg" target="_blank" rel="noopener">总览图</a></p><h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><ol><li>数据结构是指一组数据的存储结构</li><li>算法就是操作数据的方法</li><li>数据结构和算法是相辅相成的，数据结构是为算法服务的，而算法要作用在特定的数据结构之上</li></ol><p>从广义上讲，数据结构就是指一组数据的存储结构。算法就是操作数据的一组方法。<br>从狭义上讲，指某些著名的数据结构和算法，比如队列、栈、堆、二分查找、动态规划等。<br>数据结构和算法是相辅相成的。数据结构是为算法服务的，算法要作用在特定的数据结构之上。</p><ol><li>数据结构和算法学习的精髓-复杂度分析</li><li>最常用的、最基础的数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树</li><li>最常用的算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法<h2 id="为什么学"><a href="#为什么学" class="headerlink" title="为什么学"></a>为什么学</h2></li><li>直接好处是能够有写出性能更优的代码。</li><li>算法，是一种解决问题的思路和方法，有机会应用到生活和事业的其他方面。</li><li>长期来看，大脑思考能力是个人最重要的核心竞争力，而算法是为数不多的能够有效训练大脑思考能力的途径之一。</li></ol><h2 id="如何学"><a href="#如何学" class="headerlink" title="如何学"></a>如何学</h2><ol><li>一定要动手写</li><li>千万不要被动地记忆，要多辩证地思考，多问为什么。</li><li>边学边练，适度刷题</li><li>知识需要沉淀，不要想试图一下子掌握所有</li><li>结合实际：排个队想到队列，火车进站想到堆栈，看到树上开花想到树的某些指标，导航想到贪心，将生活场景与算法和数据结构的场景结合起来。</li></ol><h3 id="重点学习"><a href="#重点学习" class="headerlink" title="重点学习"></a>重点学习</h3><p>20 个最常用的、最基础数据结构与算法，不管是应付面试还是工作需要，只要集中精力逐一攻克这 20 个知识点就足够了。<br>这里面有 10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；<br>10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。</p><p><strong>复杂度分析</strong>是整个算法学习的精髓，只要掌握了它，数据结构和算法的内容基本上就掌握了一半。</p><h2 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h2><p>时间复杂度又称<strong>渐进时间复杂度</strong>：表示算法的执行时间与数据规模之间的增长关系</p><p>空间复杂度全称就是渐进空间复杂度（asymptotic space complexity），表示算法的<strong>存储空间与数据规模</strong>之间的增长关系。</p><h3 id="时间复杂度（重中之中）"><a href="#时间复杂度（重中之中）" class="headerlink" title="时间复杂度（重中之中）"></a>时间复杂度（重中之中）</h3><p>大 O 时间复杂度实际上并不具体表示代码真正的执行时间，而是表示代码执行时间随数据规模增长的<strong>变化趋势</strong>，所以，也叫作<strong>渐进时间复杂度</strong>（asymptotic time complexity），简称时间复杂度。</p><p>PS：即使一段代码循环 10000 次、100000 次，只要是一个已知的数，跟 n 无关，照样也是常量级的执行时间。当 n 无限大的时候，就可以忽略。</p><p>尽管对代码的执行时间会有很大影响，但是回到时间复杂度的概念来说，它表示的是一个算法执行效率与数据规模增长的变化趋势，所以不管常量的执行时间多大，我们都可以忽略掉。因为它本身对增长趋势并没有影响。</p><h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><ol><li>只关注循环执行次数最多的一段代码</li><li>加法法则：总复杂度等于量级最大的那段代码的复杂度<br>如果 T1(n)=O(f(n))，T2(n)=O(g(n))；那么 T(n)=T1(n)+T2(n)=max(O(f(n)), O(g(n))) =O(max(f(n), g(n))).</li><li>乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积<br>如果 T1(n)=O(f(n))，T2(n)=O(g(n))；那么 T(n)=T1(n)<em>T2(n)=O(f(n))</em>O(g(n))=O(f(n)*g(n)).</li></ol><h4 id="常见的复杂度量级"><a href="#常见的复杂度量级" class="headerlink" title="常见的复杂度量级"></a>常见的复杂度量级</h4><p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191126035226%E5%B8%B8%E8%A7%81%E5%A4%8D%E6%9D%82%E5%BA%A6%E9%87%8F%E7%BA%A7.jpg" alt="常见的复杂度量级"><br>我们可以粗略地分为两类，多项式量级和非多项式量级。其中，非多项式量级只有两个：O(2n) 和 O(n!)。</p><p>当数据规模 n 越来越大时，非多项式量级算法的执行时间会急剧增加，求解问题的执行时间会无限增长。所以，非多项式时间复杂度的算法其实是非常低效的算法。</p><p>主要来看几种常见的多项式时间复杂度。</p><h5 id="O-1"><a href="#O-1" class="headerlink" title="O(1)"></a>O(1)</h5><p>首先你必须明确一个概念，O(1) 只是常量级时间复杂度的一种表示方法，并不是指只执行了一行代码。比如这段代码，即便有 3 行，它的时间复杂度也是 O(1），而不是 O(3)。</p><p>一般情况下，只要算法中不存在循环语句、递归语句，即使有成千上万行的代码，其时间复杂度也是Ο(1)。</p><h5 id="O-logn-、O-nlogn"><a href="#O-logn-、O-nlogn" class="headerlink" title="O(logn)、O(nlogn)"></a>O(logn)、O(nlogn)</h5><pre><code>i=1;while (i &lt;= n)  {    i = i * 2;  可为2 3 4 时间复杂度就是 O(log2n) O(log3n)}</code></pre><p>对数之间是可以互相转换的，log3n 就等于 log32 * log2n，所以 O(log3n) = O(C *  log2n)，其中 C=log32 是一个常量。</p><p>基于我们前面的一个理论：在采用大 O 标记复杂度的时候，可以忽略系数，即 O(Cf(n)) = O(f(n))。</p><p>因此，在对数阶时间复杂度的表示方法里，我们忽略对数的“底”，统一表示为 O(logn)。</p><h5 id="O-m-n-、O-m-n"><a href="#O-m-n-、O-m-n" class="headerlink" title="O(m+n)、O(m*n)"></a>O(m+n)、O(m*n)</h5><p>代码的复杂度由两个数据的规模来决定,从代码中可以看出，m 和 n 是表示两个数据规模。</p><p>我们无法事先评估 m 和 n 谁的量级大，所以我们在表示复杂度的时候，就不能简单地利用加法法则，省略掉其中一个。所以，上面代码的时间复杂度就是 O(m+n)。</p><h3 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h3><p>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的<strong>存储空间与数据规模</strong>之间的增长关系。</p><pre><code>void print(int n) {  int i = 0;  int[] a = new int[n];  for (i; i &lt;n; ++i) {    a[i] = i * i;  }  for (i = n-1; i &gt;= 0; --i) {    print out a[i]  }}</code></pre><p>第 2 行代码中，我们申请了一个空间存储变量 i，但是它是常量阶的，跟数据规模 n 没有关系，所以我们可以忽略。</p><p>第 3 行申请了一个大小为 n 的 int 类型数组，除此之外，剩下的代码都没有占用更多的空间，所以整段代码的空间复杂度就是 O(n)。</p><p>空间复杂度就是 O(1)、O(n)、O(n2)，像 O(logn)、O(nlogn) 这样的对数阶复杂度平时都用不到。</p><h3 id="复杂度分类"><a href="#复杂度分类" class="headerlink" title="复杂度分类"></a>复杂度分类</h3><p>四个复杂度分析方面的知识点</p><ul><li>最好情况时间复杂度（best case time complexity）</li><li>最坏情况时间复杂度（worst case time complexity）</li><li>平均情况时间复杂度（average case time complexity）</li><li>均摊时间复杂度（amortized time complexity）</li></ul><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>复杂度也叫渐进复杂度，包括时间复杂度和空间复杂度，用来分析算法执行效率与数据规模之间的增长关系，可以粗略地表示，</p><p>越高阶复杂度的算法，执行效率越低。常见的复杂度并不多，从低阶到高阶有：O(1)、O(logn)、O(n)、O(nlogn)、O(n2)。</p><p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191126062213%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%95%88%E7%8E%87%E5%88%86%E6%9E%90.jpg" alt="复杂度分析"></p>]]></content>
+      
+      
       <categories>
-        <category>小程序</category>
+          
+          <category> bash </category>
+          
       </categories>
-      <tags>
-        <tag>多媒体</tag>
-        <tag>FFmpeg</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vim常用操作</title>
-    <url>/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<p>vim  工作常用命令</p>
-<a id="more"></a>
-<p><a href="https://vimsky.com/wp-content/uploads/2015/03/131.jpg" target="_blank" rel="noopener">vim 常用总结图片</a></p>
-<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><ul>
-<li>查找替换<pre><code>/text　　查找text，n下一个，N前一个
-?text　　查找text，反向查找，n下一个，N前一个
-</code></pre></li>
-</ul>
-<p>ra 将当前字符替换为a，当期字符即光标所在字符。<br>:s/old/new/ 用old替换new，替换当前行的第一个匹配<br>:s/old/new/g 用old替换new，替换当前行的所有匹配<br>:%s/old/new/ 用old替换new，替换所有行的第一个匹配<br>:%s/old/new/g 用old替换new，替换整个文件的所有匹配</p>
-<pre><code>
-- 复制粘贴</code></pre><p>dd    删除光标所在行<br>x    删除当前字符<br>yy    复制一行，此命令前可跟数字，标识复制多行，如6yy，表示从当前行开始复制6行<br>p    粘贴粘贴板的内容到当前行的下面  大P 为上面</p>
-<pre><code>- 移动光标</code></pre><p>h,j,k,l    上，下，左，右<br>gg → 到第一行<br>G → 到最后一行</p>
-<pre><code>
-## 常见用法</code></pre><p>i → Insert 模式，按 ESC 回到 Normal 模式.<br>x → 删当前光标所在的一个字符。<br>dd → 删除当前行，并把删除的行存到剪贴板里<br>p → 粘贴剪贴板</p>
-<p>normal模式下：<br>插入：a → 在光标后插入  o → 在当前行后插入一个新行  O → 在当前行前插入一个新行  cw → 替换从光标所在位置后到一个单词结尾的字符<br>移动光标：0 → 数字零，到行头    ^ → 到本行第一个不是blank字符的位置（所谓blank字符就是空格，tab，换行，回车等）<br>$ → 到本行行尾    g_ → 到本行最后一个不是blank字符的位置。<br>/pattern → 搜索 pattern 的字符串（陈皓注：如果搜索出多个匹配，可按n键到下一个）<br>拷贝/粘贴：P → 粘贴  p是表示在当前位置之后，P表示在当前位置之前<br>w → 到下一个单词的开头。<br>e → 到下一个单词的结尾。</p>
-<p>撤销与重做<br>u           撤销（Undo）<br>U           撤销对整行的操作<br>Ctrl + r    重做（Redo），即撤销的撤销</p>
-<p>ZZ 保存并退出<br>:q! 强制退出并忽略所有更改<br>:e! 放弃所有修改，并打开原来文件</p>
-<pre><code></code></pre>]]></content>
-      <tags>
-        <tag>命令</tag>
-        <tag>vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux常用命令</title>
-    <url>/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>git  工作常用命令</p>
-<a id="more"></a>
-
-<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><p><a href="http://linux.51yip.com/" target="_blank" rel="noopener">Linux 在线手册</a><br><a href="https://www.cnblogs.com/peida/archive/2012/12/05/2803591.html" target="_blank" rel="noopener">Linux 命令学习</a></p>
-<pre><code>md5sum 计算文件md5值，对比文件是否一样
-实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）
-du可以查看文件及文件夹的大小。  // du -h file_path
-查看磁盘占用：df -h 查看当前文件夹大小（包含子目录）：du -sh
-mv file1 file2：移动文件，若file2不存在则为改名字
-查看进程：ps -ef | prep name
-解包：tar xvf FileName.tar　　unzip filename.zip
-打包：tar cvf FileName.tar DirName
-cp -r dir1 dir2
-远程传输  
-    上传$scp -r local_folder remote_username@remote_ip:remote_folder
-    下载$scp remote_username@remote_ip:remote_folder local_folder
-curl:用来请求web服务器，== postman。
-    get：参数加url后面.
-    POST：--data &quot;data&quot;,-X 动作，默认get,
-    -d POST自动带上Content-Type : application/x-www-form-urlencoded 
-</code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file
-拥有者-属组用户-其他用户
-x-可执行r-可读w-可写
-rwx = 111 = 7
-rw- = 110 = 6
-r-x = 101 = 5
-r-- = 100 = 4
--wx = 011 = 3
--w- = 010 = 2
---x = 001 = 1
---- = 000 = 0
-ll 关于第一位最高位的解释：
-    d代表的是目录(directroy)
-    -代表的是文件(regular file)
-    s代表的是套字文件(socket)
-    p代表的管道文件(pipe)或命名管道文件(named pipe)
-    l代表的是符号链接文件(symbolic link)
-    b代表的是该文件是面向块的设备文件(block-oriented device file)
-    c代表的是该文件是面向字符的设备文件(charcter-oriented device file)</code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装
-Linux 查看环境变量 echo $PATH 
-    临时设置：export env=xxx
-    永久设置：# vi /etc/profile 
-            export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib
-查看一个文件夹中所有文件的大小（不含子目录中的文件）：du -Sh或du -Ssh
-查看一个文件夹中所有文件的大小（包含子目录中的文件）：du -h或者du -sh
-S：表示不统计子目录，s：表示不要显示其下子目录和文件占用的磁盘空间大小信息，只显示总的占用空间大小
-查看文件夹中每一个文件的大小：du -ah 或者ls -lRh</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。
-/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
-/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
-/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
-/root：该目录为系统管理员，也称作超级权限者的用户主目录。
-/tmp：这个目录是用来存放一些临时文件的。
-/usr： 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。
-/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。
-/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
-/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
-/media：linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
-/mnt：让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
-/usr/bin：系统用户使用的应用程序。
-/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。
-/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</code></pre><h2 id="文件颜色"><a href="#文件颜色" class="headerlink" title="文件颜色"></a>文件颜色</h2><pre><code>白色：表示普通文件
-浅蓝色：表示链接文件； 
-灰色：表示其他文件； 
-绿色：表示可执行文件； 
-红色：表示压缩文件； 
-蓝色：表示目录； 
-红色闪烁：表示链接的文件有问题了； 
-黄色：表示设备文件，包括block,char,fifo。 </code></pre><h2 id="实现ssh免密登录"><a href="#实现ssh免密登录" class="headerlink" title="实现ssh免密登录"></a>实现ssh免密登录</h2><pre><code>1、生成自己的公钥：$ ssh-keygen (一路回车)
-2、将公钥放到 对方.ssh/authorized_keys 下，没有则创建文件夹
-3、chmod 700 ~/.ssh   chmod 600 ~/.ssh/authorized_keys
-4、重启  // ubuntu系统：service ssh restart  // debian系统：/etc/init.d/ssh restart
-
-可能出错：
-    目录权限问题：Linux家目录设为700，.ssh为700，authorized_keys为600 即可解决</code></pre>]]></content>
-      <tags>
-        <tag>命令</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多媒体&FFmpeg命令</title>
-    <url>/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p>
-<a id="more"></a>
-
-<h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。
-流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。
-帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。
-编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）
-复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）
-把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)
-
-采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。
-
-采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。
-
-声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。
-单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。
-
-码率：码率 = 采样率 * 采样位数 * 声道数
-如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。
-
-音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。
-
-编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。
-音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。
-
-解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。
-
-帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。
-
-分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播
-HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：
-        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。
-        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版
-MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重
-AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小
-ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。
-无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
--f 输出hls格式。
-
-hls协议流媒体网络传输协议：
-hls_list_size 3:HLS播放的列表，FFmpeg默认5。
--hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。
--hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环
--ar freq 设置音频采样率 
--ac channels 设置通道 缺省为与输入相同 
--acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul>
-<li>合并多段音频</li>
-</ul>
-<p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p>
-<ul>
-<li>aac =&gt; mp3</li>
-</ul>
-<p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p>
-<ul>
-<li>一段音频剪切中间一段</li>
-</ul>
-<p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+            <tag> bash </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL常见问题</title>
+      <link href="/2019/11/11/MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"/>
+      <url>/2019/11/11/MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="innodb-自增主键不连续"><a href="#innodb-自增主键不连续" class="headerlink" title="innodb 自增主键不连续"></a>innodb 自增主键不连续</h2><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>参数innodb_autoinc_lock_mode = 1时，每次会“预申请”多余的id(handler.cc:compute_next_insert_id)，而insert执行完成后，会特别将这些预留的id空出，就是特意将预申请后的当前最大id回写到表中</p><p>所以导致ID不连续的原因是因为innodb_autoinc_lock_mode = 1时，会多申请id。好处是：一次性分配足够的auto_increment id，只会将整个分配的过程锁住。</p><h2 id="为什么大多数生产环境不用外键"><a href="#为什么大多数生产环境不用外键" class="headerlink" title="为什么大多数生产环境不用外键"></a>为什么大多数生产环境不用外键</h2><p>其实这个话题是老生常谈，很多人在工作中确实也不会使用外键。包括在阿里的JAVA规范中也有下面这一条</p><ul><li>【强制】不得使用外键与级联，一切外键概念必须在应用层解决。</li></ul><p>但是呢，询问他们原因，大多是这么回答的</p><ul><li>每次做DELETE 或者UPDATE都必须考虑外键约束，会导致开发的时候很痛苦,测试数据极为不方便。</li></ul><ol><li>性能损耗</li><li>迁移数据时候的一致性维护</li></ol><p>这么说也是对的。下面详细说明</p><h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>首先我们明确一点，外键约束是一种约束，这个约束的存在，会保证表间数据的关系“始终完整”。因此，外键约束的存在，并非全然没有优点。<br>比如使用外键，可以</p><ul><li>保证数据的完整性和一致性</li><li>级联操作方便</li><li>将数据完整性判断托付给了数据库完成，减少了程序的代码量</li></ul><p>然而，鱼和熊掌不可兼得。外键是能够保证数据的完整性，但是会给系统带来很多缺陷。正是因为这些缺陷，才导致我们不推荐使用外键，具体如下：</p><h4 id="性能问题"><a href="#性能问题" class="headerlink" title="性能问题"></a>性能问题</h4><p>假设一张表名为user_tb。那么这张表里有两个外键字段，指向两张表。那么，每次往user_tb表里插入数据，就必须往两个外键对应的表里查询是否有对应数据。如果交由程序控制，这种查询过程就可以控制在我们手里，可以省略一些不必要的查询过程。但是如果由数据库控制，则是必须要去这两张表里判断。</p><h4 id="并发问题"><a href="#并发问题" class="headerlink" title="并发问题"></a>并发问题</h4><p>在使用外键的情况下，每次修改数据都需要去另外一个表检查数据,需要获取额外的锁。若是在高并发大流量事务场景，使用外键更容易造成死锁。</p><h4 id="扩展性问题"><a href="#扩展性问题" class="headerlink" title="扩展性问题"></a>扩展性问题</h4><p>这里主要是分为两点</p><p>做平台迁移方便，比如你从Mysql迁移到Oracle，像触发器、外键这种东西，都可以利用框架本身的特性来实现，而不用依赖于数据库本身的特性，做迁移更加方便。<br>分库分表方便，在水平拆分和分库的情况下，外键是无法生效的。将数据间关系的维护，放入应用程序中，为将来的分库分表省去很多的麻烦。<br>技术问题<br>使用外键，其实将应用程序应该执行的判断逻辑转移到了数据库上。那么这意味着一点，数据库的性能开销变大了，那么这就对DBA的要求就更高了。很多中小型公司由于资金问题，并没有聘用专业的DBA，因此他们会选择不用外键，降低数据库的消耗。<br>相反的，如果该约束逻辑在应用程序中，发现应用服务器性能不够，可以加机器，做水平扩展。如果是在数据库服务器上，数据库服务器会成为性能瓶颈，做水平扩展比较困难。</p><h2 id="为什么一定要设一个主键？"><a href="#为什么一定要设一个主键？" class="headerlink" title="为什么一定要设一个主键？"></a>为什么一定要设一个主键？</h2><p><strong>回答：</strong> 因为你不设主键的情况下，innodb也会帮你生成一个隐藏列，作为自增主键。所以啦，反正都要生成一个主键，那你还不如自己指定一个主键，在有些情况下，就能显式的用上主键索引，提高查询效率！</p><h2 id="主键是用自增还是UUID"><a href="#主键是用自增还是UUID" class="headerlink" title="主键是用自增还是UUID?"></a>主键是用自增还是UUID?</h2><p><strong>回答：</strong> 肯定答自增啊。innodb 中的主键是聚簇索引。如果主键是自增的，那么每次插入新的记录，记录就会顺序添加到当前索引节点的后续位置，当一页写满，就会自动开辟一个新的页。如果不是自增主键，那么可能会在中间插入，就会引发页的分裂，产生很多表碎片！  <strong>简单说用自增插入性能好！</strong></p><h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>UUID缺点： </p><ol><li>影响插入速度， 并且造成硬盘使用率低</li><li>uuid之间比较大小相对于自增id比较大小要慢很多， 影响查询速度。</li><li>uuid占空间大， 如果你建的索引越多， 影响越严重</li></ol><p>UUID优点：出现数据拆分、合并存储的时候，能达到全局的唯一性（比如：历史数据表的主键id会与数据表的id重复，两张自增id做主键的表合并时，id一定会有冲突，但如果各自的id还关联了其他表，这就很不好操作。而使用UUID，生成的ID不仅是表独立的，而且是库独立的。）</p><ul><li>在分布式环境下可使用UUID，自增合并表时会发生id重复的问题，但也可设置自增的间隔</li></ul><h5 id="自增ID用完怎么办？"><a href="#自增ID用完怎么办？" class="headerlink" title="自增ID用完怎么办？"></a>自增ID用完怎么办？</h5><p><strong>回答：</strong> 戳 =&gt; <a href="https://www.cnblogs.com/rjzheng/p/10669043.html" target="_blank" rel="noopener">this</a></p><h2 id="主键为什么不推荐有业务含义"><a href="#主键为什么不推荐有业务含义" class="headerlink" title="主键为什么不推荐有业务含义?"></a>主键为什么不推荐有业务含义?</h2><p><strong>回答：</strong> 有如下两个原因</p><p>(1)因为任何有业务含义的列都有改变的可能性,主键一旦带上了业务含义，那么主键就有可能发生变更。主键一旦发生变更，该数据在磁盘上的存储位置就会发生变更，有可能会引发页分裂，产生空间碎片。</p><p>(2)带有业务含义的主键，不一定是顺序自增的。那么就会导致数据的插入顺序，并不能保证后面插入数据的主键一定比前面的数据大。如果出现了，后面插入数据的主键比前面的小，就有可能引发页分裂，产生空间碎片。</p><h2 id="表示枚举的字段为什么不用enum类型？"><a href="#表示枚举的字段为什么不用enum类型？" class="headerlink" title="表示枚举的字段为什么不用enum类型？"></a>表示枚举的字段为什么不用enum类型？</h2><p><strong>回答：</strong> 在工作中表示枚举的字段，一般用tinyint类型。<br>那为什么不用enum类型呢？下面两个原因</p><p>(1)ENUM类型的ORDER BY操作效率低，需要额外操作<br>(2)如果枚举值是数值，有陷阱</p><h2 id="货币字段用什么类型"><a href="#货币字段用什么类型" class="headerlink" title="货币字段用什么类型?"></a>货币字段用什么类型?</h2><p><strong>回答：</strong> 如果货币单位是分，可以用Int类型。如果坚持用元，用Decimal。<br>千万不要答float和double，因为float和double是以二进制存储的，所以有一定的误差。</p><h2 id="时间字段用什么类型"><a href="#时间字段用什么类型" class="headerlink" title="时间字段用什么类型?"></a>时间字段用什么类型?</h2><p><strong>回答：</strong> 此题无固定答案，应结合自己项目背景来答！把理由讲清楚就行！</p><p>(1)varchar，如果用varchar类型来存时间，优点在于显示直观。但是坑的地方也是挺多的。比如，插入的数据没有校验，你可能某天就发现一条数据为2013111的数据，请问这是代表2013年1月11日，还是2013年11月1日？<br>其次，做时间比较运算，你需要用STR_TO_DATE等函数将其转化为时间类型，你会发现这么写是无法命中索引的。数据量一大，是个坑！</p><p>(2)timestamp，该类型是四个字节的整数，它能表示的时间范围为1970-01-01 08:00:01到2038-01-19 11:14:07。2038年以后的时间，是无法用timestamp类型存储的。<br>但是它有一个优势，timestamp类型是带有时区信息的。一旦你系统中的时区发生改变，例如你修改了时区</p><p>SET TIME_ZONE = “america/new_york”;<br>你会发现，项目中的该字段的值自己会发生变更。这个特性用来做一些国际化大项目，跨时区的应用时，特别注意！</p><p>(3)datetime，datetime储存占用8个字节，它存储的时间范围为1000-01-01 00:00:00 ~ 9999-12-31 23:59:59。显然，存储时间范围更大。但是它坑的地方在于，他存储的是时间绝对值，不带有时区信息。如果你改变数据库的时区，该项的值不会自己发生变更！</p><p>(4)bigint，也是8个字节，自己维护一个时间戳，表示范围比timestamp大多了，就是要自己维护，不大方便。</p><h2 id="为什么不直接存储图片、音频、视频等大容量内容"><a href="#为什么不直接存储图片、音频、视频等大容量内容" class="headerlink" title="为什么不直接存储图片、音频、视频等大容量内容?"></a>为什么不直接存储图片、音频、视频等大容量内容?</h2><p><strong>回答：</strong> 我们在实际应用中，都是用HDFS来存储文件。然后mysql中，只存文件的存放路径。mysql中有两个字段类型被用来设计存放大容量文件，也就是text和blob类型。但是，我们在生产中，基本不用这两个类型！<br>主要原因有如下两点</p><p>(1)Mysql内存临时表不支持TEXT、BLOB这样的大数据类型，如果查询中包含这样的数据，在排序等操作时，就不能使用内存临时表，必须使用磁盘临时表进行。导致查询效率缓慢<br>(2)binlog内容太多。因为你数据内容比较大，就会造成binlog内容比较多。大家也知道，主从同步是靠binlog进行同步，binlog太大了，就会导致主从同步效率问题！<br>因此，不推荐使用text和blob类型！</p><h2 id="字段为什么要定义为NOT-NULL"><a href="#字段为什么要定义为NOT-NULL" class="headerlink" title="字段为什么要定义为NOT NULL?"></a>字段为什么要定义为NOT NULL?</h2><p><strong>回答：</strong><br>(1)索引性能不好<br>Mysql难以优化引用可空列查询，它会使索引、索引统计和值更加复杂。可空列需要更多的存储空间，还需要mysql内部进行特殊处理。可空列被索引后，每条记录都需要一个额外的字节，还能导致MYisam 中固定大小的索引变成可变大小的索引。<br>—— 出自《高性能mysql第二版》</p><p>(2)查询会出现一些不可预料的结果<br>这里举一个例子，大家就懂了。假设，表结构如下</p>]]></content>
+      
+      
       <categories>
-        <category>多媒体</category>
+          
+          <category> MySQL </category>
+          
       </categories>
-      <tags>
-        <tag>多媒体</tag>
-        <tag>FFmpeg</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pm2工作使用</title>
-    <url>/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>pm2 基本知识及常用命令</p>
-<a id="more"></a>
-<h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>PM2是node进程管理工具，可以利用它来简化很多node应用管理的繁琐任务，如性能监控、自动重启、负载均衡等，而且使用非常简单。</p>
-<h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><pre><code>配置文件里的设置项，跟命令行参数基本是一一对应的。
-可以选择yaml或者json文件，就看个人洗好了。
-json格式的配置文件，pm2当作普通的js文件来处理，所以可以在里面添加注释或者编写代码，这对于动态调整配置很有好处。
-如果启动的时候指定了配置文件，那么命令行参数会被忽略。（个别参数除外，比如--env）
-
-PM2配置文件夹结构    一旦PM2启动，自动创建这些文件夹：
-$HOME/.pm2 将包含所有与PM2相关的文件
-$HOME/.pm2/logs 将包含所有应用程序日志  // out标准输出  error 错误输出
-$HOME/.pm2/pids 将包含所有应用程序pid
-$HOME/.pm2/pm2.log PM2日志  // pm2自身日志，如谁用了那个命令
-$HOME/.pm2/pm2.pid PM2 pid
-$HOME/.pm2/rpc.sock 远程命令的套接字文件
-$HOME/.pm2/pub.sock 用于可发布事件的套接字文件
-$HOME/.pm2/conf.js PM2配置</code></pre><h5 id="启动文件"><a href="#启动文件" class="headerlink" title="启动文件"></a>启动文件</h5><pre><code>配置pm2启动文件  
-生成示例生态系统.json文件，其中列出了进程和部署环境
-$ pm2 ecosystem；这将生成一个示例ecosystem.config.js
-根据需要再次编辑文件
-{
-  &quot;apps&quot;: [  // json结构，apps是一个数组，每一个数组成员就是对应一个pm2中运行的应用
-    {
-      &quot;name&quot;: &quot;mywork&quot;,  // 应用程序名称
-      &quot;cwd&quot;: &quot;/srv/node-app/current&quot;,  // 应用程序所在的目录
-      &quot;script&quot;: &quot;bin/www&quot;,  // 应用程序的脚本路径
-      &quot;log_date_format&quot;: &quot;YYYY-MM-DD HH:mm Z&quot;,  
-      &quot;error_file&quot;: &quot;/var/log/node-app/node-app.stderr.log&quot;,  // 错误日志
-      &quot;out_file&quot;: &quot;log/node-app.stdout.log&quot;,  //  自定义应用程序日志文件
-      &quot;pid_file&quot;: &quot;pids/node-geo-api.pid&quot;,  // 自定义应用程序的pid文件
-      &quot;instances&quot;: 6,
-      &quot;min_uptime&quot;: &quot;200s&quot;,  // 最小运行时间，这里设置的是60s即如果应用程序在60s内退出，pm2会认为程序异常退出，此时触发重启max_restarts设置数量
-      &quot;max_restarts&quot;: 10,    // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）
-      &quot;max_memory_restart&quot;: &quot;1M&quot;,  // 服务内存超过1M，会自动重启
-      &quot;cron_restart&quot;: &quot;1 0 * * *&quot;,  // 定时启动，解决重启能解决的问题
-      &quot;watch&quot;: false,  // 监听重启，启用情况下，文件夹或子文件夹下变化应用自动重启；
-      &quot;merge_logs&quot;: true,
-      &quot;exec_interpreter&quot;: &quot;node&quot;,
-      &quot;exec_mode&quot;: &quot;fork&quot;,  // 应用启动模式，支持fork和cluster模式；
-      &quot;autorestart&quot;: false,  // 默认为true, 发生异常的情况下自动重启；
-      &quot;vizion&quot;: false
-    }
-  ]
-}</code></pre><h3 id="工作常用命令"><a href="#工作常用命令" class="headerlink" title="工作常用命令"></a>工作常用命令</h3><pre><code>启动项目：pm2 start ecosystem.config.js--env development
-实时日志打印：pm2 logs youke
-查看项目状态：pm2 show youke
-停止项目：pm2 stop youke</code></pre><h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><pre><code>重启：pm2 restart ecosystem.config.js
-pm2 reload；与restart杀死并重新启动进程的相对，reload实现了0秒的停机时间重载。
-pm2 [list|ls|l|status]
-查看启动程序的详细信息：pm2 describe id
-pm2 monit：可以得到进程(以及集群)的CPU的使用率和内存占用(ctrl +c 退出)
-
-启动项目：pm2 start ecosystem.config.js --watch
---watch：监听应用目录的变化，一旦发生变化，自动重启。如果要精确监听、不见听的目录，最好通过配置文件。
--i --instances：启用多少个实例，可用于负载均衡。如果-i 0或者-i max，则根据当前机器核数确定实例数目。
---ignore-watch：排除监听的目录/文件，可以是特定的文件名，也可以是正则。
-        比如--ignore-watch=&quot;test node_modules &quot;some scripts&quot;&quot;
--n --name：应用的名称。查看应用信息的时候可以用到。
--o --output &lt;path&gt;：标准输出日志文件的路径。
--e --error &lt;path&gt;：错误输出日志文件的路径。</code></pre><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://wohugb.gitbooks.io/pm2/content/bu_shu.html" target="_blank" rel="noopener">pm2教程</a></p>
-]]></content>
-      <tags>
-        <tag>node</tag>
-        <tag>pm2</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL常用命令</title>
-    <url>/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>工作中常用的 MySQL 命令<br><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><h5 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h5><pre><code>登录：mysql -h -uroot -p
-show databases;  use youke;  show tables;  desc 表名;  exit;
-查看MySQL版本，进到MySQL命令行执行：select @@version;
-order by：排序 默认升序即A-Z 降序需指定DESC。且order by可指定多个值，先排一次序再排一次
-limit：限制输出，可指定n，也可为n,m  从n开始取m个
-
-MySQL语法顺序：SELECT[DISTINCT] =&gt; FROM =&gt; WHERE =&gt; GROUP BY =&gt; HAVING =&gt; UNION =&gt; 
-ORDER BY =&gt; limit
-
-执行顺序：FROM =&gt; JOIN =&gt; ON =&gt; WHERE =&gt; GROUP BY(开始使用select中的别名，后面的语句中都可以使用) =&gt;
-avg,sum... =&gt; HAVING =&gt; SELECT =&gt; DISTINCT =&gt; UNION =&gt; ORDER BY =&gt; LIMIT
-从from开始</code></pre><h5 id="针对表"><a href="#针对表" class="headerlink" title="针对表"></a>针对表</h5><p>创建表 node这个数据库里面创建一个user表</p>
-<pre><code>创建：
-CREATE TABLE `node`.`nodeuser`(
-    `id` INT(11) NOT NULL AUTO_INCREMENT,  # id字段 int(11)数据类型，最大的值为11位 id自动增长
-    `username` varchar(64) NOT NULL,
-    `pass` varchar(64) NOT NULL,
-    PRIMARY KEY(`id`)  # 重要 主键
-)
-ENGINE = InnoDB CHARSET = utf8;
-增加字段：ALTER TABLE account ADD status int(11) NOT NULL DEFAULT 0;
-删除字段：ALTER TABLE &lt;表名&gt; DROP &lt;字段名称&gt;
-修改表名称：ALTER TABLE &lt;表名&gt; RENAME &lt;新表名&gt;
-字段增加长度：alter table 表名 modify column 列名 类型(要修改的长度);</code></pre><h5 id="针对数据"><a href="#针对数据" class="headerlink" title="针对数据"></a>针对数据</h5><pre><code>INSERT INTO &#39;user&#39; (`id`, &#39;username&#39;, &#39;pass&#39;) values (1, &#39;goudan&#39;, &#39;123&#39;);  # 增 固定代码 哪个表
-DELETE FROM user where id = 0  # 删 删article表的数据 因为id是唯一的
-update `xxx` set `username`=`1234` where `id`=6666;  # 改
-SELECT * FORM `shuoshuo` WHERE `id`=?  # 查
-查询：
-    过滤：加 distinct，如 select distinct roomid from audio_pos;
-    区间查找：between and，如：select * from audio_pos where id between 2600 and 2650;</code></pre><h5 id="针对索引"><a href="#针对索引" class="headerlink" title="针对索引"></a>针对索引</h5><pre><code>查询：show index from table_name
-新增索引：ALTER TABLE table_name ADD INDEX index_name (column_list)
-删除索引：DROP INDEX index_name ON talbe_name
-</code></pre><h5 id="常用操作总结"><a href="#常用操作总结" class="headerlink" title="常用操作总结"></a>常用操作总结</h5><ul>
-<li>让别人访问自己的MySQL<pre><code>登录MySQL：mysql -u root -pvmwaremysql&gt;use mysql;
-mysql&gt;update user set host = &#39;%&#39; where user = &#39;root&#39;;
-mysql&gt;select host, user from user;
-重启MySQL服务：Windows可从服务重启</code></pre></li>
-<li>存在既更新，不存在就添加<pre><code>INSERT 语句的一部分,如果指定 ON DUPLICATE KEY UPDATE ，并且插入行后会导致在一个**UNIQUE索引或PRIMARY KEY中出现重复值**，则在出现重复值的行执行UPDATE，如果不会导致唯一值列重复的问题，则插入新行
-sql 语句原型：
-insert into audio_favor(openid, audioid, status) values(?, ?, ?) on duplicate key update status=status+?</code></pre></li>
-<li>if 判断</li>
-</ul>
-<p>语法：IF(expr1,expr2,expr3)  expr1 是TRUE则返回2 否则返回3<br>update audio_pos set favor_cnt=if(favor_cnt=0, 0, favor_cnt-1) where id=?</p>
-<ul>
-<li>导入导出表数据</li>
-</ul>
-<p>导出整个数据库结构和数据(-p 密码一般不输入，后面再输入)<br>mysqldunp  参数：-d 不导出任何数据，只导出数据库表结构。-t 只导出数据，而不添加CREATE TABLE 语句。<br>mysqldump -h localhost -uroot -p123456 database &gt; dump.sql</p>
-<p>导出单个数据表结构和数据<br>mysqldump -h localhost -uroot -p123456  database table &gt; dump.sql</p>
-<p>导出整个数据库结构（不包含数据）<br>mysqldump -h localhost -uroot -p123456  -d database &gt; dump.sql</p>
-<p>导出单个数据表结构（不包含数据）<br>mysqldump -h localhost -uroot -p123456  -d database table &gt; dump.sql</p>
-<p>导入数据<br>mysql -uroot -p123456 -d database &lt; database.sql</p>
-<h5 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h5><pre><code>$ ./mysqldump -uyouke_write -p -h 10.66.92.228 -d youke &gt; /home/lyy/db.sql  # 导出表结构
-导入表结构，进入数据库，进入某一库，执行 source xxx.sql
-查看索引：show index from tblname; 等同于show keys from tblname;
-select version();  查看MySQL版本
-show create table audio_pos;查看创建table的SQL
-
-当更新某一字段状态，位操作：如何将一个变量其中一位清0，置1
-MySQL：
-    第一位为1 val=(val |= (1&lt;&lt;0))  取消 val=(val &amp; ~(1&lt;&lt;0))
-    第二位为1 val=(val |= (1&lt;&lt;1))  取消 val=(val &amp; ~(1&lt;&lt;1))
-JS：
-    第一位为1 val |= (1&lt;&lt;0)  取消 val &amp;= ~(1&lt;&lt;0)
-    第二位为1 val |= (1&lt;&lt;1)  取消 val &amp;= ~(1&lt;&lt;1)</code></pre><h5 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h5><pre><code>MySQL字段类型：-2 147 483 648 ～ 2 147 483 647， INT UNSIGNED的范围类型就是0 ～ 4 294 967 295。
-insert on duplicate key update 比 replace快，原因是索引方面
-
-1. 如果Key是空的, 那么该列值的可以重复, 表示该列没有索引, 或者是一个非唯一的复合索引的非前导列
-2. 如果Key是PRI,  那么该列是主键的组成部分
-3. 如果Key是UNI,  那么该列是一个唯一值索引的第一列(前导列),并别不能含有空值(NULL)
-4. 如果Key是MUL,  那么该列的值可以重复, 该列是一个非唯一索引的前导列(第一列)
-或者是一个唯一性索引的组成部分但是可以含有空值NULL
-如果对于一个列的定义，同时满足上述4种情况的多种，比如一个列既是PRI,又是UNI
-那么&quot;desc 表名&quot;的时候，显示的Key值按照优先级来显示 PRI-&gt;UNI-&gt;MUL
-那么此时，显示PRI</code></pre><h3 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h3><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>堆栈详解</title>
+      <link href="/2019/11/11/%E5%A0%86%E6%A0%88%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2019/11/11/%E5%A0%86%E6%A0%88%E8%AF%A6%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="简介堆栈"><a href="#简介堆栈" class="headerlink" title="简介堆栈"></a>简介堆栈</h2><p>内存空间在逻辑上分为三部分：代码区、静态数据区和动态数据区，动态数据区又分为栈区和堆区。</p><p><strong>代码区</strong>：存储方法体的二进制代码。高级调度（作业调度）、中级调度（内存调度）、低级调度（进程调度）控制代码区执行代码的切换。</p><p><strong>静态数据区</strong>：存储全局变量、静态变量、常量，常量包括final修饰的常量和String常量。系统自动分配和回收。</p><p>内存中的堆栈和数据结构堆栈不是一个概念，可以说内存中的堆栈是真实存在的物理区，数据结构中的堆栈是抽象的数据存储结构。</p><h3 id="内存中的堆栈"><a href="#内存中的堆栈" class="headerlink" title="内存中的堆栈"></a>内存中的堆栈</h3><h4 id="堆栈空间分配"><a href="#堆栈空间分配" class="headerlink" title="堆栈空间分配"></a>堆栈空间分配</h4><p><strong>栈</strong>（操作系统）：由操作系统自动分配释放 ，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。</p><p><strong>堆</strong>（操作系统）： 一般由程序员分配释放， 若程序员不释放，程序结束时可能由OS回收，分配方式倒是类似于链表。</p><h4 id="堆栈缓存方式"><a href="#堆栈缓存方式" class="headerlink" title="堆栈缓存方式"></a>堆栈缓存方式</h4><p>栈使用的是一级缓存， 他们通常都是被调用时处于存储空间中，调用完毕立即释放。</p><p>堆则是存放在二级缓存中，生命周期由虚拟机的垃圾回收算法来决定（并不是一旦成为孤儿对象就能被回收）。所以调用这些对象的速度要相对来得低一些。</p><p>以上概念如下所示：</p><pre><code>//main.cppint a = 0; //全局初始化区int a = 0; //全局初始化区char *p1; //全局未初始化区main() {    int b; //栈    char s[] = &quot;abc&quot;; //栈    char *p2; //栈    char *p3 = &quot;123456&quot;; //123456\0在常量区，p3在栈上。    static int c = 0; //全局（静态）初始化区    p1 = (char *)malloc(10);    p2 = (char *)malloc(20);    //分配得来得10和20字节的区域就在堆区。    strcpy(p1, &quot;123456&quot;); //123456\0放在常量区，编译器可能会将它与p3所指向的&quot;123456&quot;优化成一个地方。}</code></pre><h3 id="数据结构中的堆栈"><a href="#数据结构中的堆栈" class="headerlink" title="数据结构中的堆栈"></a>数据结构中的堆栈</h3><p>栈：是一种连续存储的数据结构，特点是存储的数据先进后出。</p><p>堆：是一棵完全二叉树结构，特点是父节点的值大于（小于）两个子节点的值（分别称为大顶堆和小顶堆）。它常用于管理算法执行过程中的信息，应用场景包括堆排序，优先队列等。</p><h2 id="栈-stack"><a href="#栈-stack" class="headerlink" title="栈  stack"></a>栈  stack</h2><p><a href="http://www.ruanyifeng.com/blog/2013/11/stack.html" target="_blank" rel="noopener">参考</a><br>这个词其实有三种含义，适用于不同的场合</p><h3 id="1、-数据结构"><a href="#1、-数据结构" class="headerlink" title="1、 数据结构"></a>1、 数据结构</h3><p>stack的第一种含义是一组数据的存放方式，特点为LIFO，即后进先出（Last in, first out）。<br>在这种数据结构中，数据像积木那样一层层堆起来，后面加入的数据就放在最上层。使用的时候，最上层的数据第一个被用掉，这就叫做”后进先出”。</p><p>与这种结构配套的，是一些特定的方法，主要为下面这些。</p><ul><li>push：在最顶层加入数据。</li><li>pop：返回并移除最顶层的数据。</li><li>top：返回最顶层数据的值，但不移除它。</li><li>isempty：返回一个布尔值，表示当前stack是否为空栈。</li></ul><h3 id="2、-代码运行方式"><a href="#2、-代码运行方式" class="headerlink" title="2、 代码运行方式"></a>2、 代码运行方式</h3><p>stack的第二种含义是”调用栈”（call stack），表示函数或子例程像堆积木一样存放，以实现层层调用。</p><p>程序运行的时候，总是先完成最上层的调用，然后将它的值返回到下一层调用，直至完成整个调用栈，返回最后的结果。</p><h3 id="3、-内存区域"><a href="#3、-内存区域" class="headerlink" title="3、 内存区域"></a>3、 内存区域</h3><p>stack的第三种含义是存放数据的一种内存区域。程序运行的时候，需要内存空间存放数据。一般来说，系统会划分出两种不同的内存空间：一种叫做stack（栈），另一种叫做heap（堆）。</p><p>它们的主要区别是：stack是有结构的，每个区块按照一定次序存放，可以明确知道每个区块的大小；heap是没有结构的，数据可以任意存放。因此，stack的寻址速度要快于heap。</p><p>其他的区别还有，一般来说，<strong>每个线程分配一个stack，每个进程分配一个heap</strong>，也就是说，stack是线程独占的，heap是线程共用的。此外，stack创建的时候，大小是确定的，数据超过这个大小，就发生stack overflow错误，而heap的大小是不确定的，需要的话可以不断增加。</p><p>根据上面这些区别，数据存放的规则是：只要是局部的、占用空间确定的数据，一般都存放在stack里面，否则就放在heap里面。请看下面这段代码（来源）。</p><h2 id="堆与栈的区别"><a href="#堆与栈的区别" class="headerlink" title="堆与栈的区别"></a>堆与栈的区别</h2><p><a href="https://blog.csdn.net/pt666/article/details/70876410" target="_blank" rel="noopener">参考</a></p><ol><li>栈内存存储的是局部变量而堆内存存储的是实体；</li><li>栈内存的更新速度要快于堆内存，因为局部变量的生命周期很短；</li><li>栈内存存放的变量生命周期一旦结束就会被释放，而堆内存存放的实体会被垃圾回收机制不定时的回收。</li><li>管理方式不同。栈由操作系统自动分配释放，无需我们手动控制；堆的申请和释放工作由程序员控制，容易产生内存泄漏；</li><li>空间大小不同。每个进程拥有的栈的大小要远远小于堆的大小。理论上，程序员可申请的堆大小为虚拟内存的大小，进程栈的大小 64bits 的 Windows 默认 1MB，64bits 的 Linux 默认 10MB；</li><li>生长方向不同。堆的生长方向向上，内存地址由低到高；栈的生长方向向下，内存地址由高到低。</li><li>分配方式不同。堆都是动态分配的，没有静态分配的堆。栈有2种分配方式：静态分配和动态分配。静态分配是由操作系统完成的，比如局部变量的分配。动态分配由alloca函数进行分配，但是栈的动态分配和堆是不同的，他的动态分配是由操作系统进行释放，无需我们手工实现。</li></ol>]]></content>
+      
+      
       <categories>
-        <category>MySQL</category>
+          
+          <category> 计算机 </category>
+          
       </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>工具&网站推荐</title>
-    <url>/2019/10/22/%E5%B7%A5%E5%85%B7&amp;%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/</url>
-    <content><![CDATA[<p>工作常用软件推荐</p>
-<a id="more"></a>
-<h3 id="工作常用软件"><a href="#工作常用软件" class="headerlink" title="工作常用软件"></a>工作常用软件</h3><p>思维导图 MindMaster<br>截图工具 Snipaste<br>服务器之间文件传输用 sftp,filezilla<br>连接服务器用 cmder, MobaXterm_Personal，putty</p>
-<h3 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h3><p><a href="https://fontawesome.com/icons?d=gallery" target="_blank" rel="noopener">字体图标库</a><br><a href="https://blog.csdn.net/weixin_40845165/article/details/84076958" target="_blank" rel="noopener">Navicat 破解版</a><br><a href="https://www.staticgen.com/" target="_blank" rel="noopener">静态网页技术栈</a></p>
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git工作常用命令</title>
-    <url>/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/</url>
-    <content><![CDATA[<p>git  工作常用命令</p>
-<a id="more"></a>
-
-<h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p>
-<pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略
-$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h5 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h5><h5 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h5><p>当master领先自己本地一个分支时，即其他同事合并了代码，而我本地也做了修改<br>git:(dev) git rebase master</p>
-<p>git 所做操作：首先，git 会把 dev 分支里面的每个 commit 取消掉；<br>其次，把上面的操作临时保存成 patch 文件，存在 .git/rebase 目录下；<br>然后，把 dev 分支更新到最新的 master 分支；<br>最后，把上面保存的 patch 文件应用到 dev 分支上；</p>
-<p><strong>提醒</strong></p>
-<pre><code>在 rebase 的过程中，也许会出现冲突 conflict。在这种情况，git 会停止 rebase 并会让你去解决冲突。在解决完冲突后，用 git add 命令去更新这些内容。
-[注意]此步骤你无需执行 git-commit，只要执行 continue
-git rebase --continue
-这样 git 会继续应用余下的 patch 补丁文件。
-当然，在任何时候，我们都可以用 --abort 参数来终止 rebase 的行动，并且分支会回到 rebase 开始前的状态。
-git rebase —abort</code></pre><h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p>
-<p>Git 管理项目时，文件流转的三个工作区域： </p>
-<ul>
-<li>Git 的工作目录</li>
-<li>暂存区域</li>
-<li>以及本地仓库</li>
-</ul>
-<p>基本的 Git 工作流程如下：</p>
-<ol>
-<li>在工作目录中修改某些文件。 </li>
-<li>对修改后的文件进行快照，然后保存到暂存区域。 </li>
-<li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li>
-</ol>
-<p>分为俩种情况：</p>
-<ol>
-<li>在工作目录中初始化新仓库</li>
-</ol>
-<p>$ git init  # 初始化;产生一个 .git 文件<br>$ git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</p>
-<ol start="2">
-<li>从现有仓库克隆</li>
-</ol>
-<p>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</p>
-<h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接
-$ git branch：不加参数 列出本地
-    -r                      # 列出远程分支
-    -a                      # all
-    -name                   # 新建分支
-    -track                  # 本地/远程（创建分支并且关联远程）
-    -v                      # verbose详细信息
-    -d/-D name              # 删除指定分支
-    -m old_name new_name    # 修改分支名
-$ git push origin --delete branch_name # 删除远程分支
-$ git checkout -b branch_name [branch/commit] # 创建并切换分支</code></pre><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>$ git remote add name git_address   # 关联远程库
-$ git stash # 储藏当前工作，接着到另一分支处理问题
-$ git stash list # 查看储藏栈
-$ git stash pop # 提取最新工作并从栈删除
-$ git cherry-pick # 可以理解为”挑拣”提交，它会获取某一个分支的单笔提交，
-                                    并作为一个新的提交引入到你当前分支上。
-$ git diff 具体修改了那些地方 git diff &lt;local branch&gt; &lt;remote&gt;/&lt;remote branch&gt;对比远程分支
-$ git remote：管理主机名
-    不带参数 -列出所有远程主机
-    -v 参看远程主机的网址
-    -show &lt;主机名&gt;查看详细信息
-忽略文件：创建一个名为 .gitignore的文件，列出要忽略的文件模式。
-如：*.a       #忽略所有 .a 结尾的文件    !lib.a    #但 lib.a 除外</code></pre><h3 id="常见误操作处理方法"><a href="#常见误操作处理方法" class="headerlink" title="常见误操作处理方法"></a>常见误操作处理方法</h3><pre><code>撤销 add：git reset HEAD
-合并 commit：
-    1. 追加至上一个 commit ：git commit --amend；commit 的时间是不会变的；可加上--no-edit
-    2. 合并多个：git rebase -i commit(-i 后参数可写commitHSAH值即你想合并至哪一个commit
-        或者-i HEAD~n(HEAD将它看做 你的上一次提交 的别名)HEAD~1 上个版本 HEAD~n 上n个版本)
-        - 紧接着进入vim界面：pick为保留，s或者squash为删除commit
-        - 又另一个vim界面：commit msg 保留自己需要的或者修改，用#删除别的commit msg
-
-如何重置某个文件到未修改的状态？  # git checkout -- &lt;filepath&gt;
-如何重置所有文件到未修改的状态？  # git reset --hard
-如何重置到某个 commit？          # git reset &lt;commit SHA&gt;
-
-git reset用于撤销未被提交到remote的改动，即撤销local的修改。除了移动当前分支的HEAD，
-还可以更改workspace和index：
-git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：
-    --soft：修改HEAD，不修改index和workspace。
-    --mixed：修改HEAD和index，不修改workspace。默认行为。
-    --hard：修改HEAD、index、workspace。把index和workspace的修改全部撤销。</code></pre><h3 id="常见错误处理方法"><a href="#常见错误处理方法" class="headerlink" title="常见错误处理方法"></a>常见错误处理方法</h3><ul>
-<li>git pull or push报错：fatal: refusing to merge unrelated histories （拒绝合并不相关的历史）</li>
-</ul>
-<p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>
-]]></content>
-      <tags>
-        <tag>命令</tag>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2019/10/17/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-      <tags>
-        <tag>helllo</tag>
-        <tag>world</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记录如何使用hexo搭建博客</title>
-    <url>/2018/12/17/%E8%AE%B0%E5%BD%95%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>hexo + GitHub pages 搭建博客流程</p>
-<a id="more"></a>
-<h3 id="一、hexo-amp-node-安装"><a href="#一、hexo-amp-node-安装" class="headerlink" title="一、hexo &amp; node 安装"></a>一、hexo &amp; node 安装</h3><p>npm install hexo-cli -g<br>npm install hexo-deployer-git –save<br>or 使用yarn</p>
-<h3 id="二、-Hexo初始化配置"><a href="#二、-Hexo初始化配置" class="headerlink" title="二、 Hexo初始化配置"></a>二、 Hexo初始化配置</h3><h5 id="创建Hexo文件夹"><a href="#创建Hexo文件夹" class="headerlink" title="创建Hexo文件夹"></a>创建Hexo文件夹</h5><p>安装完成后，根据自己喜好建立目录（如F:\Blog\Hexo），直接进入F:\Blog\Hexo文件夹下右键鼠标，点击Git Bash Here，进入Git命令框，执行以下操作。</p>
-<blockquote>
-<p>$ hexo init</p>
-</blockquote>
-<h5 id="项目文件介绍"><a href="#项目文件介绍" class="headerlink" title="项目文件介绍"></a>项目文件介绍</h5><p><img src="https://www.cnblogs.com/images/cnblogs_com/luoyangyang/1573981/t_hexo_mulu.png" alt="hexo目录"></p>
-<ul>
-<li>deploy：执行hexo deploy命令部署到GitHub上的内容目录</li>
-<li>public：执行hexo generate命令，输出的静态网页内容目录</li>
-<li>scaffolds：layout模板文件目录，其中的md文件可以添加编辑</li>
-<li>scripts：扩展脚本目录，这里可以自定义一些javascript脚本</li>
-<li>source：文章源码目录，该目录下的markdown和html文件均会被hexo处理。该页面对应repo的根目录，404文件、favicon.ico文件，CNAME文件等都应该放这里，该目录下可新建页面目录。 <ul>
-<li>drafts：草稿文章</li>
-<li>posts：发布文章</li>
-</ul>
-</li>
-<li>themes：主题文件目录</li>
-<li>_config.yml：全局配置文件，大多数的设置都在这里</li>
-<li>package.json：应用程序数据，指明hexo的版本等信息，类似于一般软件中的关于按钮</li>
-</ul>
-<h5 id="本地查看效果"><a href="#本地查看效果" class="headerlink" title="本地查看效果"></a>本地查看效果</h5><p>执行下面语句，执行完即可登录localhost:4000查看效果</p>
-<blockquote>
-<p>hexo generate<br>hexo server</p>
-</blockquote>
-<h3 id="三、-将博客部署到Github-Pages上"><a href="#三、-将博客部署到Github-Pages上" class="headerlink" title="三、 将博客部署到Github Pages上"></a>三、 将博客部署到Github Pages上</h3><h5 id="创建项目代码库"><a href="#创建项目代码库" class="headerlink" title="创建项目代码库"></a>创建项目代码库</h5><ol>
-<li>注册完登陆后，我们就创建一个我们自己的Github Pages项目。点击New repository。</li>
-<li>创建要点如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c7492a1849?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></li>
-</ol>
-<h5 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h5><ol>
-<li>创建一对新的SSH密钥(keys)</li>
-</ol>
-<blockquote>
-<p>$ssh-keygen -t rsa -C “<a href="mailto:your_email@example.com" target="_blank" rel="noopener">your_email@example.com</a>“<br>#这将按照你提供的邮箱地址，创建一对密钥<br>Generating public/private rsa key pair.<br>Enter file in which to save the key (/c/Users/you/.ssh/id_rsa): [Press enter]</p>
-</blockquote>
-<p>直接回车，则将密钥按默认文件进行存储。此时也可以输入特定的文件名，比如/c/Users/you/.ssh/github_rsa</p>
-<ol start="2">
-<li>在GitHub账户中添加你的公钥</li>
-<li>测试</li>
-</ol>
-<p>可以输入下面的命令，看看设置是否成功，<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>的部分不要修改：</p>
-<blockquote>
-<p>$ ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a></p>
-</blockquote>
-<p>出现 yes/no ？ 输入yes</p>
-<ol start="4">
-<li>设置用户信息</li>
-</ol>
-<blockquote>
-<p>$ git config –global user.name “username” //用户名</p>
-</blockquote>
-<blockquote>
-<p>$ git config –global user.email  “<a href="mailto:liji.anchang@163.com" target="_blank" rel="noopener">liji.anchang@163.com</a>“ //填写自己的邮箱</p>
-</blockquote>
-<h3 id="四、-将本地的Hexo文件更新到Github的库中"><a href="#四、-将本地的Hexo文件更新到Github的库中" class="headerlink" title="四、 将本地的Hexo文件更新到Github的库中"></a>四、 将本地的Hexo文件更新到Github的库中</h3><ol>
-<li>复制项目 GitHub 地址</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c77a882a00?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></p>
-<ol start="2">
-<li><p>打开你一开始创建的Hexo文件夹（如F:\Blog\Hexo），用记事本打开刚文件夹下的_config.yml文件</p>
-</li>
-<li><p>在配置文件里作如下修改，保存</p>
-</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c78dc8dca4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></p>
-<ol start="4">
-<li>在Hexo文件夹下执行<blockquote>
-<p>hexo g<br>hexo d</p>
-</blockquote>
-</li>
-</ol>
-<p>或者</p>
-<blockquote>
-<p>hexo g -d</p>
-</blockquote>
-<p>执行完之后会让你输入github的账号和密码，输入完后就可以登录我们自己的部署在Github Pages服务器上的博客了。对应的地址是 username.github.io(我的是：luoyangyang369.github.io)。</p>
-<p>假如这时候，报错 ERROR Deployer not found: git，那么就是你的deployer没有安装成功，你需要执行如下命令再安装一次：</p>
-<blockquote>
-<p>npm install hexo-deployer-git –save</p>
-</blockquote>
-<p>这样，你再执行hexo g -d，你的博客就部署到Github上了。</p>
-<ol start="5">
-<li>在浏览器上输入自己的主页地址即可访问</li>
-</ol>
-<h3 id="五、美化自己博客"><a href="#五、美化自己博客" class="headerlink" title="五、美化自己博客"></a>五、美化自己博客</h3><ol>
-<li>进入<a href="https://hexo.io/themes/" target="_blank" rel="noopener">Hexo的官网主题专栏</a></li>
-<li>克隆主题<br>再打开Hexo文件夹下的themes目录（F:\Blog\hexo\themes），右键Git Bash，在命令行输入:<blockquote>
-<p>git clone <a href="https://github.com/iissnan/hexo-theme-next(此处地址替换成你需要使用的主题的地址)" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next(此处地址替换成你需要使用的主题的地址)</a> </p>
-</blockquote>
-</li>
-<li>修改Hexo配置文件</li>
-</ol>
-<p>下载完成后，打开Hexo文件夹下的配置文件_config.yml<br>修改参数为：theme: hexo-theme-next</p>
-<ol start="4">
-<li><p>部署主题，本地查看效果</p>
-<blockquote>
-<p>hexo -g =&gt; hexo -s<br>简写：hexo server -g</p>
-</blockquote>
-</li>
-<li><p>如果效果满意，将它部署到Github上</p>
-</li>
-</ol>
-<blockquote>
-<p>hexo clean   (必须要，不然有时因为缓存问题，服务器更新不了主题)<br>hexo g -d</p>
-</blockquote>
-<h3 id="六、-在博客写文章"><a href="#六、-在博客写文章" class="headerlink" title="六、 在博客写文章"></a>六、 在博客写文章</h3><ol>
-<li>用hexo发表新文章<blockquote>
-<p>$ hexo n “文章标题”</p>
-</blockquote>
-</li>
-</ol>
-<p>其中 我的家 为文章标题，执行命令 hexo n “我的家” 后，会在项目 \Hexo\source_posts 中生成 我的家.md文件，用编辑器打开编写即可。</p>
-<p>当然，也可以直接在\Hexo\source_posts中新建一个md文件，我就是这么做的。<br>写完后，推送到服务器上，执行以下命令即可在我们的站点看到新的文章。</p>
-<blockquote>
-<p>$ hexo g #生成</p>
-</blockquote>
-<blockquote>
-<p>$ hexo d #部署 # 可与hexo g合并为 hexo d -g</p>
-</blockquote>
-<ol start="2">
-<li>用 <a href="https://www.jianshu.com/p/191d1e21f7ed" target="_blank" rel="noopener">Markdown</a> 写文章</li>
-</ol>
-<p>我们注意到在 \Hexo\source_posts 文件夹下存放着我们的文章，它们的格式都是以.md格式结尾的，没错，Hexo也是支持Markdown语法的，所以当我们需要写具有格式化的文章时，我们可以使用支持Markdown语法的编辑器进行文章编译，然后保存文件到 \Hexo\source_posts 文件夹下即可。</p>
-<p>找一篇自己写过的 markdown 文章复制进去之后，只要执行</p>
-<blockquote>
-<p>$ hexo d -g</p>
-</blockquote>
-<p>推送至我们的Github仓库即可。</p>
-<h3 id="七、-将自己的域名关联到Github-Pages上"><a href="#七、-将自己的域名关联到Github-Pages上" class="headerlink" title="七、 将自己的域名关联到Github Pages上"></a>七、 将自己的域名关联到Github Pages上</h3><p><a href="https://www.aliyun.com/" target="_blank" rel="noopener">域名网址</a><br><a href="https://account.aliyun.com/login/login.htm?oauth_callback=http%3A%2F%2Fdc.console.aliyun.com%2Fnext%2Findex#/domain/list/all-domain" target="_blank" rel="noopener">域名控制台</a></p>
-<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p><a href="https://juejin.im/entry/5a574864f265da3e3c6c1217" target="_blank" rel="noopener">2018，你该搭建自己的博客了！</a><br><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/" target="_blank" rel="noopener">使用指南</a></p>
-]]></content>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo&markdown常用命令</title>
-    <url>/2018/01/21/hexo&amp;markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>hexo &amp; markdown 常用命令</p>
-<a id="more"></a>
-<h2 id="hexo常用命令笔记"><a href="#hexo常用命令笔记" class="headerlink" title="hexo常用命令笔记"></a>hexo常用命令笔记</h2><h5 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h5><pre><code>hexo n  # 写文章
-hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令
-hexo g  # 生成
-hexo d  # 部署 # 可与hexo g 合并为 hexo d -g</code></pre><h5 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h5><pre><code>npm install hexo -g # 安装  
-npm update hexo -g # 升级  
-hexo init # 初始化</code></pre><h5 id="简写"><a href="#简写" class="headerlink" title="简写"></a>简写</h5><pre><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章
-hexo p == hexo publish
-hexo g == hexo generate # 生成
-hexo s == hexo server  # 启动服务预览
-hexo d == hexo deploy  # 部署</code></pre><h5 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h5><pre><code>hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。
-hexo server -s  # 静态模式
-hexo server -p 5000  # 更改端口
-hexo server -i 192.168.1.1  # 自定义 IP
-
-hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令
-hexo g  # 生成静态网页
-hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#markdown-基础语法" class="headerlink" title="markdown 基础语法"></a>markdown 基础语法</h2><h5 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h5><p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p>
-<h5 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h5><ul>
-<li>加粗： 要加粗的文字左右分别用两个*号包起来</li>
-<li>斜体： 要倾斜的文字左右分别用一个*号包起来</li>
-<li>斜体加粗：  要倾斜和加粗的文字左右分别用三个*号包起来</li>
-<li>删除线：  要加删除线的文字左右分别用两个~~号包起来</li>
-</ul>
-<p><strong>效果：</strong><br><strong>这是加粗的文字</strong><br><em>这是倾斜的文字</em>`<br><strong><em>这是斜体加粗的文字</em></strong><br><del>这是加删除线的文字</del></p>
-<h5 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h5><pre><code>&gt;这是引用的内容
-&gt;&gt;这是引用的内容
-&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;这是引用的内容</code></pre><p><strong>效果：</strong></p>
-<blockquote>
-<p>这是引用的内容</p>
-</blockquote>
-<h5 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h5><p>三个或者三个以上的 - 或者 * 都可以。<br><strong>效果：</strong></p>
-<hr>
-<h5 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h5><pre><code>![图片alt](图片地址 &#39;&#39;图片title&#39;&#39;)
-
-图片alt就是显示在图片下面的文字，相当于对图片内容的解释。
-图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加</code></pre><p>示例：</p>
-<blockquote>
-<p>![blockchain](<a href="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/" target="_blank" rel="noopener">https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/</a> u=702257389,1274025419&amp;fm=27&amp;gp=0.jpg “区块链”)</p>
-</blockquote>
-<p><strong>效果：</strong><br><img src="https://upload-images.jianshu.io/upload_images/6860761-fd2f51090a890873.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/550/format/webp" alt="blockchain" title="区块链"></p>
-<h5 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h5><blockquote>
-<p>语法：<a href="超链接地址" title="超链接title">超链接名</a><br>title可加可不加</p>
-</blockquote>
-<p><strong>效果：</strong><br><a href="luoyangyang.pub">洋洋的博客</a></p>
-<h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><p>语法：</p>
-<ul>
-<li>无序列表：</li>
-</ul>
-<p>用 - + * 任何一种都可以<br>注意：- + * 跟内容之间都要有一个空格<br><strong>效果：</strong></p>
-<ul>
-<li>列表内容</li>
-</ul>
-<ul>
-<li>列表内容</li>
-</ul>
-<ul>
-<li>列表内容</li>
-</ul>
-<ul>
-<li>有序列表：</li>
-</ul>
-<p>用数字加点</p>
-<ol>
-<li>列表内容</li>
-<li>列表内容</li>
-<li>列表内容</li>
-</ol>
-<ul>
-<li>列表嵌套</li>
-</ul>
-<p>上一级和下一级之间敲三个空格即可</p>
-<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>单行代码：代码之间分别用一个反引号包起来<br>代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>
-]]></content>
-      <tags>
-        <tag>命令</tag>
-        <tag>Hexo</tag>
-        <tag>markdown</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> 计算机 </tag>
+            
+            <tag> 数据结构 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>小知识总结</title>
+      <link href="/2019/11/11/%E5%B0%8F%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/"/>
+      <url>/2019/11/11/%E5%B0%8F%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p>PNG 比 JPEG 格式质量好，占空间，同一张图片 PNG 26M，JPEG 为 4 M<br>可移植性就是可以在多个系统运使用行<br>request 请求接口时，发起一个带证书的请求，用法如下所示：</p><pre><code>let opt = {        url:&quot;https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers&quot;,        body:sendData,        key: fs.readFileSync(&#39;./config/apiclient_key.pem&#39;), // 将微信生成的证书放入 cert目录下        cert: fs.readFileSync(&#39;./config/apiclient_cert.pem&#39;),        // ca:fs.readFileSync(&#39;./config/apiclient_cert.p12&#39;)    }</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+            <tag> 小知识 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>学习重点</title>
+      <link href="/2019/11/11/%E5%AD%A6%E4%B9%A0%E9%87%8D%E7%82%B9/"/>
+      <url>/2019/11/11/%E5%AD%A6%E4%B9%A0%E9%87%8D%E7%82%B9/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="重点学习"><a href="#重点学习" class="headerlink" title="重点学习"></a>重点学习</h2><p><a href="https://github.com/justjavac/free-programming-books-zh_CN" target="_blank" rel="noopener">计算机编程类中文书籍</a><br><a href="http://cn.linux.vbird.org/" target="_blank" rel="noopener">鸟哥的Linux私房菜2</a></p><h2 id="正在学习"><a href="#正在学习" class="headerlink" title="正在学习"></a>正在学习</h2><p><a href="https://blog.csdn.net/hguisu/article/details/6122513" target="_blank" rel="noopener">Linux系统结构详解</a></p><h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p><a href="https://www.kancloud.cn/chandler/bc-linux/167673" target="_blank" rel="noopener">Linux笔记</a><br><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html#" target="_blank" rel="noopener">Linux工具快速教程</a><br><a href="https://www.zhihu.com/question/23834032/answer/695582133" target="_blank" rel="noopener">Linux</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzU3NTgyODQ1Nw==&mid=100001442&idx=1&sn=a55159ef053b3de9981392dfa3fbdc55&chksm=7d1c7e244a6bf732b3db64e1c6a8faadfc7b70220ab83594ffbec2c0b45de98876290bd15956&mpshare=1&scene=1&srcid=&sharer_sharetime=1574219162639&sharer_shareid=b10a18feaf6602ba28d0ac434169dfed#rd" target="_blank" rel="noopener">良许Linux</a></p><h2 id="书籍推荐"><a href="#书籍推荐" class="headerlink" title="书籍推荐"></a>书籍推荐</h2><ul><li>操作系统<br><a href="https://linux.vbird.org/linux_basic/centos7/" target="_blank" rel="noopener">鸟哥的Linux私房菜</a><br>深入理解计算机系统（第三版）<br>unix网络编程(比较难，后期看)<br>Linux从入门到精通<br>Linux命令行大全<br>Linux就该这么学</li></ul><ul><li>MySQL</li></ul><p>MySQL必知必会<br>深入浅出MySQL(尤其是将)</p><ul><li>Python</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+            <tag> 书籍 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>消息队列&amp;CMQ</title>
+      <link href="/2019/11/05/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97&amp;CMQ/"/>
+      <url>/2019/11/05/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97&amp;CMQ/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png" alt="hh"></p><a id="more"></a><h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p><strong>QPS</strong>： Queries Per Second意思是“每秒查询率”，是一台服务器每秒能够相应的查询次数，是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准。</p><p><strong>TPS</strong>： 是TransactionsPerSecond的缩写，也就是事务数/秒。它是软件测试结果的测量单位。一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，以此来计算使用的时间和完成的事务个数。</p><p><strong>吞吐量</strong>： 一个系统的吞度量（承压能力）与request对CPU的消耗、外部接口、IO等等紧密关联。单个reqeust 对CPU消耗越高，外部系统接口、IO影响速度越慢，系统吞吐能力越低，反之越高。</p><p>是指在一次性能测试过程中网络上传输的数据量的总和。但一般指指系统在单位时间内处理请求的数量</p><p><strong>吞吐率</strong>: 特指Web服务器单位时间内处理的请求数。</p><p>系统吞吐量几个重要参数：</p><ul><li>QPS（TPS）：每秒钟request/事务 数量</li><li>并发数： 系统同时处理的request/事务数</li><li>响应时间：  一般取平均响应时间</li></ul><p>理解了上面三个要素的意义之后，就能推算出它们之间的关系：<br>QPS（TPS）= 并发数/平均响应时间    或者   并发数 = QPS*平均响应时间</p><h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>消息队列的主要特点是异步处理，主要目的是减少请求响应时间和解耦。所以主要的使用场景就是将比较耗时而且不需要即时（同步）返回结果的操作作为消息放入消息队列。</p><p>同时由于使用了消息队列，只要保证消息格式不变，消息的发送方和接收方并不需要彼此联系，也不需要受对方的影响，即解耦和。</p><p>CMQ/CKafka/MQ for IoT本质上都属于分布式消息中间件，分布式消息系统的最大特点是可扩展性。核心理念是多个节点协同工作完成单个节点无法完成的任务，不允许出现单节点故障服务不可用（RTO）和数据丢失（RPO）情况。归根结底是解决CAP问题, CMQ作为金融级别服务要求数据高可靠强一致（CP）, CKafka以大数据领域为主要服务对象，更偏重于AP,同时允许用户通过配置在CAP之间进行权衡</p><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul><li><strong>服务解耦</strong>： 多应用间通过消息队列对同一消息进行处理，避免调用接口失败导致整个过程失败；</li><li><strong>异步处理</strong>： 多应用对消息队列中同一消息进行处理，应用间并发处理消息，相比串行处理，减少处理时间。如用户注册后，需要发送注册邮件和发送注册信息，传统的做法有两种：串行方式、并行方式</li><li><strong>削峰限流</strong>： 广泛应用于秒杀或抢购活动中，避免流量过大导致应用系统挂掉的情况；</li><li><strong>广播订阅</strong>： 发送方不关心谁订阅这个消息，只管发出来，拓展方便；</li><li>流式数据过滤： 消费者通过类似SQL语句来筛选自己感兴趣的数据；</li><li>两阶段消息： 通过两阶段消息与本地数据库事务相结合达到简单分布式事务。</li></ul><h3 id="两种消息模型"><a href="#两种消息模型" class="headerlink" title="两种消息模型"></a>两种消息模型</h3><h4 id="P2P（Point-to-Point）"><a href="#P2P（Point-to-Point）" class="headerlink" title="P2P（Point to Point）"></a>P2P（Point to Point）</h4><p>P2P模式包含三个角色：消息队列（Queue），发送者(Sender)，接收者(Receiver)。每个消息都被发送到一个特定的队列，接收者从队列中获取消息。队列保留着消息，直到他们被消费或超时。</p><p>P2P的特点：</p><ul><li>每个消息只有一个消费者（Consumer）(即一旦被消费，消息就不再在消息队列中)</li><li>发送者和接收者之间在时间上没有依赖性，也就是说当发送者发送了消息之后，不管接收者有没有正在运行，它不会影响到消息被发送到队列</li><li>接收者在成功接收消息之后需向队列应答成功</li></ul><h4 id="Publish-Subscribe-Pub-Sub"><a href="#Publish-Subscribe-Pub-Sub" class="headerlink" title="Publish/Subscribe(Pub/Sub)"></a>Publish/Subscribe(Pub/Sub)</h4><p>包含三个角色：主题（Topic），发布者（Publisher），订阅者（Subscriber） 。多个发布者将消息发送到Topic,系统将这些消息传递给多个订阅者。</p><p>Pub/Sub的特点:</p><ul><li>每个消息可以有多个消费者</li><li>发布者和订阅者之间有时间上的依赖性。针对某个主题（Topic）的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。</li><li>为了消费消息，订阅者必须保持运行的状态。</li><li>为了缓和这样严格的时间相关性，JMS允许订阅者创建一个可持久化的订阅。这样，即使订阅者没有被激活（运行），它也能接收到发布者的消息。</li><li>如果希望发送的消息可以不被做任何处理、或者只被一个消息者处理、或者可以被多个消费者处理的话，那么可以采用Pub/Sub模型。</li></ul><h2 id="CMQ"><a href="#CMQ" class="headerlink" title="CMQ"></a>CMQ</h2><p>消息队列 CMQ 支持 Pull（队列） 和 Push（主题） 两种方式：</p><ul><li>Push 模型：当 Producer 发出的消息到达后，服务端马上将这条消息投递给 Consumer。</li><li>Pull 模型：当服务端收到这条消息后什么也不做，只是等着 Consumer 主动到自己这里来读，即 Consumer 这里有一个“拉取”的动作。<h3 id=""><a href="#" class="headerlink" title=""></a></h3></li></ul><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://ruby-china.org/topics/26221" target="_blank" rel="noopener">吞吐量、QPS、TPS</a><br><a href="https://www.jianshu.com/p/689ce4205021" target="_blank" rel="noopener">消息队列简介</a><br><a href="https://cloud.tencent.com/document/api/406/5851" target="_blank" rel="noopener">CMQ API</a><br><a href="https://cloud.tencent.com/document/product/406" target="_blank" rel="noopener">CMQ 文档中心</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 消息队列 </tag>
+            
+            <tag> CMQ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>计算机系统基础知识</title>
+      <link href="/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+      <url>/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png" alt="hh"></p><a id="more"></a><h2 id="存储单位"><a href="#存储单位" class="headerlink" title="存储单位"></a>存储单位</h2><ul><li>位：即 bit，表示二进制位，要么是 0 ，要么是 1。它是计算机内部数据存储的最小单位。比如 11010100 共有8个二进制位，是一个8位二进制数。</li><li>字节：即 byte，它由8个二进制位构成，即 1byte=8bit，是计算机内部计量的基本单位。一个英文字符占1个字节（8位），一个汉字占2个字节（16位）</li><li>字：即word，它由若干个字节构成，是计算机内部进行数据处理和运算的基本单位。字的总的位数称为字长，不同档次的计算机字长是不一样的，比如32位机，它的1个字由4个字节构成，字长为32位，也就是说其CPU一次操作处理的实际位数是32位。同理，64位机可以处理64位。由此可见，计算机的字长越大，其性能越优越。</li><li>KB，MB：1024byte = 1KB，1024KB = 1MB。往上还有GB，TB。</li></ul><p>PS：数据传输大多以 bit 为单位，比如我们常说的网速100M/s，M/s其实Mbit/s，也就是兆比特每秒，我们还可以写成100Mbps。<br>    实际上对于档案大小来说为100M/8 每秒的速度</p><h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><h3 id="为什么需要字符编码？"><a href="#为什么需要字符编码？" class="headerlink" title="为什么需要字符编码？"></a>为什么需要字符编码？</h3><ul><li>计算机只能理解0和1，无法理解英文、字母、汉字和其他特殊字符，这些字符需要经过编码才能成为计算机可以理解的二进制数。</li><li>由字符到二进制数称为编码，反过来则是解码。</li><li>从字符到二进制数，需要有一个一一对应的映射，这个映射通过编码规则来实现。</li><li>通常所说的编码其实包括编码+字符集（即字符的集合体），比如 Unicode 字符集，就有 UTF-8，UTF-16 等多种编码。</li></ul><h3 id="utf-8-base64"><a href="#utf-8-base64" class="headerlink" title="utf-8 base64"></a>utf-8 base64</h3><ul><li><p>UTF-8（8-bit Unicode Transformation Format）是一种针对Unicode的可变长度字符编码，又称万国码。</p></li><li><p>Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一</p></li></ul><p>base64的话，不是底层存储格式，只是为了数据交换用有。比如图片变成字符格式，这是一种应用格式</p><h3 id="编码规则的演变"><a href="#编码规则的演变" class="headerlink" title="编码规则的演变"></a>编码规则的演变</h3><ul><li><p>ASCII：</p><ol><li>/ˈæski/，即 American Standard Code for Information Interchange，美国信息交换标准代码。本来一个字节有8位，每一位有0和1两种状态，则一个字节共有2^8=256种状态，可以表示256种字符。但是美国佬比较自私，觉得只要可以表示自己的字母和一些特殊字符就足够了，所以 ASCII 没有占用最高位（而是固定为0），实际只用到了后面7位，它可以表示 2^7=128 种状态，也就是表示128个字符。</li><li>很显然，这用来表示字母是足够的，但要想表示其它语言的字符，128还是太少了。</li></ol></li><li><p>GB2312：</p><ol><li>既然美国佬只解决了字母和特殊符号的编码问题，那么我们中国人只好实现自己的编码，从而来表示汉字了。所以这时候出现了 GB2312 编码（国标码）。</li><li>问题：不幸的是，各个国家都是这么想的，所以小日本有了 Shift_JIS 编码，棒子有了 Euc-kr 编码…..一时之间各国都有了自己的标准，那么对于一个多语言混合的文本来说，存在着不同的编码规则，最终必然导致乱码。</li></ol></li><li><p>Unicode:</p><ol><li>Unicode 解决了编码统一的问题。每种语言的每个字符在 Unicode 的规则下，都只有统一且唯一的对应二进制编码。它的表示方法是U+[16进制数]。例如，大写字母 A 编码为 U+0041，汉字“严”编码为 U+4E25。</li><li>问题：Unicode 一般用2个字节（也就是16位）表示一个字符，这在表示 ASCII 字符的时候会出现问题。我们知道，ASCII 字符实际只需要一个字节就够了，并且最高位甚至都还不需要用到，但是 Unicode 又规定表示一个字符至少需要2个字节，那么一个 ASCII 字符前面就必须要补0以满足这个规则，例如字母 A 就需要用 00000000 01000001 表示，这些多余的0是一个极大的资源浪费。</li></ol></li><li><p>UTF-8：</p><ol><li>UTF：实际传输过程中，基于不同的系统平台，对 Unicode 会有不不同的实现方式，其实现方式称为 Unicode Transformation Format，即 UTF。</li><li>作为 Unicode 的一种实现方式，UTF-8 展现了一定的灵活性——它是一种变长编码，会根据具体字符来改变所需要的表示字节。其编码规则只有两条：</li></ol></li></ul><p>i&gt;. 对于 128 个 ASCII 字符只需一个字节表示，字节的第一位补 0，后面 7 位为这个字符的 ASCII 二进制数。Unicode 范围为 U+0000 至U+007F。<br>ii&gt;. 对于 n 字节的符号（n&gt;1），第一个字节的前 n 位都设为 1，第 n+1 位设为 0，后面字节的前两位一律设为 10。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码二进制数。Unicode 范围由 U+0080 起。</p><h2 id="原码、反码、补码知识详细讲解"><a href="#原码、反码、补码知识详细讲解" class="headerlink" title="原码、反码、补码知识详细讲解"></a>原码、反码、补码知识详细讲解</h2><p><a href="https://blog.csdn.net/zl10086111/article/details/80907428" target="_blank" rel="noopener">参考</a></p><h3 id="机器数和真值"><a href="#机器数和真值" class="headerlink" title="机器数和真值"></a>机器数和真值</h3><ul><li>机器数</li></ul><p>一个数在计算机中的二进制表示形式,  叫做这个数的机器数。机器数是带符号的，在计算机用一个数的最高位存放符号, 正数为0, 负数为1.</p><ul><li>真值</li></ul><p>因为第一位是符号位，所以机器数的形式值就不等于真正的数值。例如上面的有符号数 10000011，其最高位1代表负，其真正数值是 -3 而不是形式值131（10000011转换成十进制等于131）。所以，为区别起见，将带符号位的机器数对应的真正数值称为机器数的真值。</p><h3 id="原码-反码-补码的基础概念和计算方法"><a href="#原码-反码-补码的基础概念和计算方法" class="headerlink" title="原码, 反码, 补码的基础概念和计算方法"></a>原码, 反码, 补码的基础概念和计算方法</h3><p>对于一个数, 计算机要使用一定的编码方式进行存储. 原码, 反码, 补码是机器存储一个具体数字的编码方式.</p><h4 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h4><p>原码就是符号位加上真值的绝对值, 即用第一位表示符号, 其余位表示值. 比如如果是8位二进制:</p><p><code>[+1]原 = 0000 0001</code><br><code>[-1]原 = 1000 0001</code></p><h4 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h4><p>正数的反码是其本身</p><p>负数的反码是在其原码的基础上, 符号位不变，其余各个位取反.</p><p><code>[+1] = [00000001]原 = [00000001]反</code><br><code>[-1] = [10000001]原 = [11111110]反</code></p><h4 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h4><p>补码的表示方法是:</p><p>正数的补码就是其本身</p><p>负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1. (即在反码的基础上+1)</p><p><code>[+1] = [00000001]原 = [00000001]反 = [00000001]补</code><br><code>[-1] = [10000001]原 = [11111110]反 = [11111111]补</code></p><h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><h3 id="异或（-）运算"><a href="#异或（-）运算" class="headerlink" title="异或（^）运算"></a>异或（^）运算</h3><p>异或运算通俗地讲就是一句话<br>同为假，异为真<br>所以它是这样的算法:</p><blockquote><p>0^0=0,0^1=1,1^0=1,1^1=0</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 计算机系统 </tag>
+            
+            <tag> 编码 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>node学习</title>
+      <link href="/2019/11/05/node%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2019/11/05/node%E5%AD%A6%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<p>关于面试的点点滴滴</p><a id="more"></a><p>a.getFullYear() + “-“ + (a.getMonth() &lt; 10 ? ‘0’ + (a.getMonth()+1) : (a.getMonth()+1)) + “-“ + (a.getDate() &lt; 10 ? ‘0’ + a.getDate() : a.getDate()) ;</p><h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><ul><li><p>for 或者 foreach 进行循环获取数组值<br>var array = [‘a’, ‘b’, ‘c’, ‘d’];<br>for (var i = 0; i &lt; array.length; i++)<br>array.forEach(function (element)</p></li><li><p>for..in 遍历对象属性（或索引）<br>for (var key in array)</p></li></ul><h2 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h2><p><a href="https://blog.csdn.net/cvper/article/details/79543262" target="_blank" rel="noopener">查看包版本</a><br>假设现在我们已经成功下载了jquery，过了一段时间，我忘记了下载的jquery的版本信息</p><p>第一种方式：npm ls jquery 即可（查看本地安装的jQuery），下面我的本地没有安装jquery，<br>第二种方式：npm ls jquery -g    (查看全局安装的jquery)</p><h2 id="Promise对象"><a href="#Promise对象" class="headerlink" title="Promise对象"></a>Promise对象</h2><p>参考：<br><a href="https://itbilu.com/nodejs/npm/VJHw6ScNb.html" target="_blank" rel="noopener">bluebird与原生Promise对象及bluebird模块的中文API文档</a><br><a href="http://liubin.org/promises-book/" target="_blank" rel="noopener">Promise迷你书</a></p><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果</p><p>从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。Promise 提供统一的 API，各种异步操作都可以用同样的方法进行处理。</p><p>俩个特点：</p><ul><li>对象的状态不受外界影响，只有异步操作的结果可决定状态，pending（进行中）、fulfilled（已成功）和rejected（已失败）。</li><li>一旦状态改变，就不会再变，任何时候都可以得到这个结果。</li></ul><p>在NodeJS中用于替代回调函数，在使用NodeJS的KOA框架时可使用Promise来代替回调函数。</p><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><h4 id="new-Promise-创建实例"><a href="#new-Promise-创建实例" class="headerlink" title="new Promise - 创建实例"></a>new Promise - 创建实例</h4><p>new Promise(function(function resolve, function reject) resolver) -&gt; Promise</p><h2 id="async-amp-await"><a href="#async-amp-await" class="headerlink" title="async&amp;await"></a>async&amp;await</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>await:表示等待 Promise 返回结果，在继续执行。<br>async:由于nodejs是异步编程模型，有一些在同步编程中很容易做到的事情，现在却变得很麻烦。async的流程控制就是为了简化这些操作。</p><p>返回值是一个Promise对象，使用then方法添加回调函数<br>当函数执行的时候，一旦遇到await就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。<br>async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。<br>async函数完全可以看作多个异步操作，包装成的一个 Promise 对象，而await命令就是内部then命令的语法糖。</p><ul><li>在函数体前通过关键字async可以将函数变为async函数</li><li>在async函数中对需要异步执行的函数前需加await关键字</li><li>await后的函数必须使用Promise对象封装</li><li>async函数执行后返回的是一个Promise对象</li></ul><h2 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h2><h3 id="Node-js时间戳和日期互相转换"><a href="#Node-js时间戳和日期互相转换" class="headerlink" title="Node.js时间戳和日期互相转换"></a>Node.js时间戳和日期互相转换</h3><ul><li><p>日期转时间戳<br>var date = new Date(“2018-11-20 18:08:00”);<br>var time = date.getTime()/1000;//转换成秒；  getTime() =&gt; 转化为时间戳</p></li><li><p>时间戳转日期<br>var time = 1542708681;<br>// 也可以获取当前的毫秒级时间戳<br>var time2 = Date.now();<br>var date = new Date(time * 1000);<br>var dt = date.getFullYear() + “-“ + (date.getMonth() &lt; 10 ? ‘0’ + (date.getMonth()+1) : (date.getMonth()+1)) + “-“ + (date.getDate() &lt; 10 ? ‘0’ + date.getDate() : date.getDate()) ;</p></li></ul><h2 id="常用模块"><a href="#常用模块" class="headerlink" title="常用模块"></a>常用模块</h2><h3 id="request"><a href="#request" class="headerlink" title="request"></a>request</h3><p><a href="https://www.jianshu.com/p/b240051784ab" target="_blank" rel="noopener">node-request模块</a></p><pre><code>request({    url: url,    type: &#39;post&#39;    encoding: &#39;utf-8&#39;,  // utf-8则 body为string，为null则为buffer，}, async function(error, response, body) {    resolve(body)})</code></pre><h3 id="xml2js-xml-json-相互转化"><a href="#xml2js-xml-json-相互转化" class="headerlink" title="xml2js - xml json 相互转化"></a>xml2js - xml json 相互转化</h3><p>安装：npm install xml2js</p><p>使用：</p><p>  var xml2js = require(‘xml2js’);</p><p>  var builder = new xml2js.Builder();  // JSON-&gt;xml<br>  var parser = new xml2js.Parser();   //xml -&gt; json</p><p>  var json =  parser.parseString（xml）;</p><p>  。。。。。</p><p>  xml =  builder.buildObject（json）;</p><h3 id="koa2"><a href="#koa2" class="headerlink" title="koa2"></a>koa2</h3><p>web框架。koa中间件，中间件的通过next函数联系,执行next()后会将控制权交给下一个中间件,如果没有中间件没有执行next后将会沿路折返,将控制权交换给前一个中间件。<br>ctx封装了request 和response对象<br>ctx.state  推荐的命名空间，用于通过中间件传递信息和你的前端视图</p><ul><li>get请求参数获取：</li></ul><p>1.是从上下文中直接获取<br>请求对象ctx.query，返回如 { a:1, b:2 }<br>请求字符串 ctx.querystring，返回如 a=1&amp;b=2<br>2.是从上下文的request对象中获取<br>请求对象ctx.request.query，返回如 { a:1, b:2 }<br>请求字符串 ctx.request.querystring，返回如 a=1&amp;b=2</p><ul><li>POST请求参数获取：</li></ul><p>注意：ctx.request是context经过封装的请求对象，ctx.req是context提供的node.js原生HTTP请求对象，<br>同理ctx.response是context经过封装的响应对象，ctx.res是context提供的node.js原生HTTP请求对象。</p><h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><p>Buffer是node的核心模块，开发者可以利用它来处理二进制数据，比如文件流的读写、网络请求数据的处理等。</p><p>创建：<br>new Buffer(array)<br>Buffer.alloc(length)<br>Buffer.allocUnsafe(length)<br>Buffer.from(array)</p><h3 id="bluebird"><a href="#bluebird" class="headerlink" title="bluebird"></a>bluebird</h3><p>Bluebird 的 Promise.promisifyAll 方法可以为一个对象的属性中的所有方法创建一个对应的使用 Promise 的版本。这些新创建方法的名称在已有方法的名称后加上”Async”后缀。</p><ul><li>用法：<br>const bluebird = require(‘bluebird’)<br>bluebird.promisifyAll(fs)</li></ul><p>如果不希望把一个对象的所有方法都自动转换成使用 Promise 的形式，可以使用 Promise.promisify 来转换单个方法，如 Promise.promisify(require(“fs”).readFile)。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> node </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> node </tag>
+            
+            <tag> 语言 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记录一次小程序开发</title>
+      <link href="/2019/10/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/"/>
+      <url>/2019/10/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<p>记录一次小程序开发，出现的坑以及一些知识</p><a id="more"></a><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul><li><p>openID：不同APP不同openID。用户唯一标识，跟人一一对应，小程序分配给每个人的ID  OpenID = 用户微信号 &amp; 公众平台APPID（两个数据加密得到的字符串）  不同公众号不同ID</p></li><li><p>unionID：即使不同应用，ID一样。通过获取用户基本信息接口，开发者可通过OpenID来获取用户基本信息</p></li><li><p>appID(小程序ID):它其实就是小程序的「身份证号码」</p></li><li><p>AppSecret(小程序密钥)</p></li><li><p>PV：分享给了多少人</p></li><li><p>UV：分享的课程被多少人打开</p></li><li><p>openGid：小程序的群唯一标识的id</p></li></ul><h2 id="利用-puppeteer-可以生成一个网页的图片"><a href="#利用-puppeteer-可以生成一个网页的图片" class="headerlink" title="利用 puppeteer 可以生成一个网页的图片"></a>利用 puppeteer 可以生成一个网页的图片</h2><p><a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md" target="_blank" rel="noopener">参考文档</a></p><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><ul><li>node没有原生的取POST请求体<br>koa中可以利用 koa-body，如：router.post(‘/del_room’, <strong>koaBody()</strong>, async (ctx)</li></ul><p><strong>但是</strong>取xml koa-body不行，可以从原生的数据中读取<br>如：</p><pre><code>getPostData = function (ctx) {    return new Promise((resolve, reject) =&gt; {        var data = &quot;&quot;;        ctx.req.on(&quot;data&quot;, chunk =&gt; data += chunk);        ctx.req.on(&quot;end&quot;, () =&gt; resolve(data))        ctx.req.on(&quot;error&quot;, err =&gt; reject(err))        }    )}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 小程序 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 小程序 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL深入浅出索引</title>
+      <link href="/2019/10/30/MySQL%E7%B4%A2%E5%BC%95/"/>
+      <url>/2019/10/30/MySQL%E7%B4%A2%E5%BC%95/</url>
+      
+        <content type="html"><![CDATA[<p>一句话简单来说，<strong>索引的出现其实就是为了提高数据查询的效率</strong>，就像书的目录一样。</p><p>一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。</p><a id="more"></a><h2 id="索引优缺点"><a href="#索引优缺点" class="headerlink" title="索引优缺点"></a>索引优缺点</h2><p>虽然索引可以提高数据查询的速度，但是任何事物都是双刃剑，它也有一些缺点： 索引占据一定磁盘空间，就 像 有 按 笔画查找的目录的书会比没有这种目录的书页数要多一些。</p><p>索引减慢了数据插入和删除的速度。因为每次插入和删除的时候都需要更新索引，一个 表拥 有的索引越多，则写操作的平均性能下降就越大。 </p><h2 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h2><p>索引的出现是为了提高查询效率，但是实现索引的方式却有很多种，所以这里也就引入了索引模型的概念。可以用于提高读写效率的数据结构很多，这里介绍三种常见、也比较简单的数据结构，它们分别是哈希表、有序数组和搜索树。</p><ul><li>哈希表</li></ul><p>哈希表这种结构<strong>适用于只有等值查询</strong>的场景，比如 Memcached 及其他一些 NoSQL 引擎</p><ul><li>有序数组</li></ul><p>在<strong>等值查询和范围查询</strong>场景中的性能就都非常优秀</p><p>如果仅仅看查询效率，有序数组就是最好的数据结构了。但是，在需要更新数据的时候就麻烦了，你往中间插入一个记录就必须得挪动后面所有的记录，成本太高。</p><p>所以，有序数组索引<strong>只适用于静态存储引擎</strong>，比如你要保存的是 2017 年某个城市的所有人口信息，这类不会再修改的数据。</p><ul><li>二叉搜索树</li></ul><p>特点：每个节点的左儿子小于父节点，父节点又小于右儿子。</p><p>当然为了维持 O(log(N)) 的查询复杂度，你就需要保持这棵树是平衡二叉树。为了做这个保证，<strong>更新的时间复杂度</strong>也是 O(log(N))。</p><p>树可以有二叉，也可以有多叉。多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉树是搜索效率最高的，但是实际上大多数的数据库存储却并不使用二叉树。其原因是，索引不止存在内存中，还要写到磁盘上。</p><p>你可以想象一下一棵 100 万节点的平衡二叉树，树高 20。一次查询可能需要访问 20 个数据块。在机械硬盘时代，从磁盘随机读一个数据块需要 10 ms 左右的寻址时间。也就是说，对于一个 100 万行的表，如果使用二叉树来存储，单独访问一个行可能需要 20 个 10 ms 的时间，这个查询可真够慢的。</p><p>为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。</p><p>以 InnoDB 的一个整数字段索引为例，<strong>这个 N 差不多是 1200</strong>。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p><h2 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h2><p>在 InnoDB 中，表都是根据主键顺序以索引的形式存放的，这种存储方式的表称为索引组织表。又因为前面我们提到的，InnoDB 使用了 B+ 树索引模型，所以数据都是存储在 B+ 树中的。</p><p>每一个索引在 InnoDB 里面对应一棵 B+ 树。</p><p>假设，我们有一个主键列为 ID 的表，表中有字段 k，并且在 k 上有索引。</p><p>这个表的建表语句是：</p><pre><code>mysql&gt; create table T(id int primary key, k int not null, name varchar(16),index (k))engine=InnoDB;</code></pre><h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>主键与索引的区别：主键也是一种索引，主键也是一种唯一索引，但索引的作用主要是提高查找速度，而主键作用主要是标识记录唯一性（当然也便于查找）。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> 索引 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>面试总结</title>
+      <link href="/2019/10/30/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/"/>
+      <url>/2019/10/30/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<p>关于面试的点点滴滴</p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://yangshun.github.io/tech-interview-handbook/coding-round-overview" target="_blank" rel="noopener">如何准备编程面试</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/cheatsheet" target="_blank" rel="noopener">面试备忘录</a>：涉及面试前需要准备的问题，收到面试题的考虑方式、编程测试准备流程、面试总结</li><li><a href="https://yangshun.github.io/tech-interview-handbook/algorithms/algorithms-introduction" target="_blank" rel="noopener">算法小贴士</a>：各类算法小贴士，以及按主题分类过的最容易考到的问题</li><li><a href="https://github.com/yangshun/front-end-interview-handbook" target="_blank" rel="noopener">前端求职面试问题答案</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/company-interview-formats" target="_blank" rel="noopener">互联网大厂的面试形式解析</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/behavioral-questions" target="_blank" rel="noopener">科技巨头们的通用常见问题，以及几个大厂的常见通用非技术问题</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/questions-to-ask" target="_blank" rel="noopener">适合在面试结束时问考官的好问题！</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/resume" target="_blank" rel="noopener">做简历注意事项，让你的简历更能引起面试官注意</a></li><li><a href="http://www.cjjjs.com/page/topicinfo?id_topic=63" target="_blank" rel="noopener">面试题</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 面试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试 </tag>
+            
+            <tag> 总结 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>腾讯COS项目记录</title>
+      <link href="/2019/10/30/%E8%85%BE%E8%AE%AFCOS/"/>
+      <url>/2019/10/30/%E8%85%BE%E8%AE%AFCOS/</url>
+      
+        <content type="html"><![CDATA[<h2 id="https-github-com-tencentyun-qcloud-cos-sts-sdk-tree-master-nodejs"><a href="#https-github-com-tencentyun-qcloud-cos-sts-sdk-tree-master-nodejs" class="headerlink" title="https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs"></a><a href="https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs" target="_blank" rel="noopener">https://github.com/tencentyun/qcloud-cos-sts-sdk/tree/master/nodejs</a></h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 小程序 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 多媒体 </tag>
+            
+            <tag> FFmpeg </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>vim常用操作</title>
+      <link href="/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"/>
+      <url>/2019/10/30/vim%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<p>vim  工作常用命令</p><a id="more"></a><p><a href="https://vimsky.com/wp-content/uploads/2015/03/131.jpg" target="_blank" rel="noopener">vim 常用总结图片</a></p><h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><ul><li>查找替换<pre><code>/text　　查找text，n下一个，N前一个?text　　查找text，反向查找，n下一个，N前一个</code></pre></li></ul><p>ra 将当前字符替换为a，当期字符即光标所在字符。<br>:s/old/new/ 用old替换new，替换当前行的第一个匹配<br>:s/old/new/g 用old替换new，替换当前行的所有匹配<br>:%s/old/new/ 用old替换new，替换所有行的第一个匹配<br>:%s/old/new/g 用old替换new，替换整个文件的所有匹配</p><pre><code>- 复制粘贴</code></pre><p>dd    删除光标所在行<br>x    删除当前字符<br>yy    复制一行，此命令前可跟数字，标识复制多行，如6yy，表示从当前行开始复制6行<br>p    粘贴粘贴板的内容到当前行的下面  大P 为上面</p><pre><code>- 移动光标</code></pre><p>h,j,k,l    上，下，左，右<br>gg → 到第一行<br>G → 到最后一行</p><pre><code>## 常见用法</code></pre><p>i → Insert 模式，按 ESC 回到 Normal 模式.<br>x → 删当前光标所在的一个字符。<br>dd → 删除当前行，并把删除的行存到剪贴板里<br>p → 粘贴剪贴板</p><p>normal模式下：<br>插入：a → 在光标后插入  o → 在当前行后插入一个新行  O → 在当前行前插入一个新行  cw → 替换从光标所在位置后到一个单词结尾的字符<br>移动光标：0 → 数字零，到行头    ^ → 到本行第一个不是blank字符的位置（所谓blank字符就是空格，tab，换行，回车等）<br>$ → 到本行行尾    g_ → 到本行最后一个不是blank字符的位置。<br>/pattern → 搜索 pattern 的字符串（陈皓注：如果搜索出多个匹配，可按n键到下一个）<br>拷贝/粘贴：P → 粘贴  p是表示在当前位置之后，P表示在当前位置之前<br>w → 到下一个单词的开头。<br>e → 到下一个单词的结尾。</p><p>撤销与重做<br>u           撤销（Undo）<br>U           撤销对整行的操作<br>Ctrl + r    重做（Redo），即撤销的撤销</p><p>ZZ 保存并退出<br>:q! 强制退出并忽略所有更改<br>:e! 放弃所有修改，并打开原来文件</p><pre><code></code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 命令 </tag>
+            
+            <tag> vim </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux常用命令</title>
+      <link href="/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2019/10/30/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<p>git  工作常用命令</p><a id="more"></a><h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><p><a href="http://linux.51yip.com/" target="_blank" rel="noopener">Linux 在线手册</a><br><a href="https://www.cnblogs.com/peida/archive/2012/12/05/2803591.html" target="_blank" rel="noopener">Linux 命令学习</a></p><pre><code>查看磁盘占用：df -h 查看当前文件夹大小（包含子目录）：du -sh查看目录下目录多少：ls -l |grep &quot;^d&quot;|wc -l查看目录下文件多少：ls -l |grep &quot;^-&quot;|wc -l查看目录剩余磁盘大小：df -hl 目录pathctrl+r：搜索之前用过的命令实时查看日志：tail -f /var/log/messages（-f 实时  -n 行数）du可以查看文件及文件夹的大小。  // du -h file_pathmv file1 file2：移动文件，若file2不存在则为改名字查看进程：ps -ef | prep name解包：tar xvf FileName.tar　　unzip filename.zip打包：tar cvf FileName.tar DirNamecp -r dir1 dir2远程传输      上传$scp -r local_folder remote_username@remote_ip:remote_folder    下载$scp remote_username@remote_ip:remote_folder local_foldercurl:用来请求web服务器，== postman。    get：参数加url后面.    POST：--data &quot;data&quot;,-X 动作，默认get,    -d POST自动带上Content-Type : application/x-www-form-urlencoded md5sum 计算文件md5值，对比文件是否一样</code></pre><h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><pre><code>chmod 755 file拥有者-属组用户-其他用户x-可执行r-可读w-可写rwx = 111 = 7rw- = 110 = 6r-x = 101 = 5r-- = 100 = 4-wx = 011 = 3-w- = 010 = 2--x = 001 = 1--- = 000 = 0ll 关于第一位最高位的解释：    d代表的是目录(directroy)    -代表的是文件(regular file)    s代表的是套字文件(socket)    p代表的管道文件(pipe)或命名管道文件(named pipe)    l代表的是符号链接文件(symbolic link)    b代表的是该文件是面向块的设备文件(block-oriented device file)    c代表的是该文件是面向字符的设备文件(charcter-oriented device file)</code></pre><h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><pre><code>make PREFIX=/home/lyy/lyy/redis install  指定路径安装Linux 查看环境变量 echo $PATH     临时设置：export env=xxx    永久设置：# vi /etc/profile             export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib查看一个文件夹中所有文件的大小（不含子目录中的文件）：du -Sh或du -Ssh查看一个文件夹中所有文件的大小（包含子目录中的文件）：du -h或者du -shS：表示不统计子目录，s：表示不要显示其下子目录和文件占用的磁盘空间大小信息，只显示总的占用空间大小查看文件夹中每一个文件的大小：du -ah 或者ls -lRh</code></pre><h2 id="常用目录"><a href="#常用目录" class="headerlink" title="常用目录"></a>常用目录</h2><pre><code>/bin： bin是Binary的缩写, 这个目录存放着最经常使用的命令。/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。/root：该目录为系统管理员，也称作超级权限者的用户主目录。/tmp：这个目录是用来存放一些临时文件的。/usr： 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。/media：linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。/mnt：让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。/usr/bin：系统用户使用的应用程序。/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</code></pre><h2 id="文件颜色"><a href="#文件颜色" class="headerlink" title="文件颜色"></a>文件颜色</h2><pre><code>白色：表示普通文件浅蓝色：表示链接文件； 灰色：表示其他文件； 绿色：表示可执行文件； 红色：表示压缩文件； 蓝色：表示目录； 红色闪烁：表示链接的文件有问题了； 黄色：表示设备文件，包括block,char,fifo。 </code></pre><h2 id="实现ssh免密登录"><a href="#实现ssh免密登录" class="headerlink" title="实现ssh免密登录"></a>实现ssh免密登录</h2><pre><code>1、生成自己的公钥：$ ssh-keygen (一路回车)2、将公钥放到 对方.ssh/authorized_keys 下，没有则创建文件夹3、chmod 700 ~/.ssh   chmod 600 ~/.ssh/authorized_keys4、重启  // ubuntu系统：service ssh restart  // debian系统：/etc/init.d/ssh restart可能出错：    目录权限问题：Linux家目录设为700，.ssh为700，authorized_keys为600 即可解决</code></pre><p>linux .o,.a,.so<br>    .o,是目标文件,相当于windows中的.obj文件 </p><pre><code>.so 为共享库,是shared object,用于动态连接的,相当于windows下的dll .a为静态库,是好多个.o合在一起,用于静态连接 </code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> 命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>多媒体&amp;FFmpeg命令</title>
+      <link href="/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2019/10/22/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p><a id="more"></a><h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。码率：码率 = 采样率 * 采样位数 * 声道数如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。-f 输出hls格式。hls协议流媒体网络传输协议：hls_list_size 3:HLS播放的列表，FFmpeg默认5。-hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。-hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环-ar freq 设置音频采样率 -ac channels 设置通道 缺省为与输入相同 -acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul><li>合并多段音频</li></ul><p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p><ul><li>aac =&gt; mp3</li></ul><p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p><ul><li>一段音频剪切中间一段</li></ul><p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 多媒体 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 多媒体 </tag>
+            
+            <tag> FFmpeg </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL常用命令</title>
+      <link href="/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2019/10/22/MySQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<p>工作中常用的 MySQL 命令<br><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><pre><code>登录：mysql -h -uroot -pshow databases;  use youke;  show tables;  desc 表名;  exit;查看MySQL版本，进到MySQL命令行执行：select @@version;order by：排序 默认升序即A-Z 降序需指定DESC。且order by可指定多个值，先排一次序再排一次limit：限制输出，可指定n，也可为n,m  从n开始取m个MySQL语法顺序：SELECT[DISTINCT] =&gt; FROM =&gt; WHERE =&gt; GROUP BY =&gt; HAVING =&gt; UNION =&gt; ORDER BY =&gt; limit执行顺序：FROM =&gt; JOIN =&gt; ON =&gt; WHERE =&gt; GROUP BY(开始使用select中的别名，后面的语句中都可以使用) =&gt;avg,sum... =&gt; HAVING =&gt; SELECT =&gt; DISTINCT =&gt; UNION =&gt; ORDER BY =&gt; LIMIT从from开始</code></pre><h3 id="针对表"><a href="#针对表" class="headerlink" title="针对表"></a>针对表</h3><p>创建表 node这个数据库里面创建一个user表</p><pre><code>创建：CREATE TABLE `node`.`nodeuser`(    `id` INT(11) NOT NULL AUTO_INCREMENT,  # id字段 int(11)数据类型，最大的值为11位 id自动增长    `username` varchar(64) NOT NULL,    `pass` varchar(64) NOT NULL,    PRIMARY KEY(`id`)  # 重要 主键)ENGINE = InnoDB CHARSET = utf8;增加字段：ALTER TABLE account ADD status int(11) NOT NULL DEFAULT 0;删除字段：ALTER TABLE &lt;表名&gt; DROP &lt;字段名称&gt;修改表名称：ALTER TABLE &lt;表名&gt; RENAME &lt;新表名&gt;字段增加长度：alter table 表名 modify column 列名 类型(要修改的长度);</code></pre><h3 id="针对数据"><a href="#针对数据" class="headerlink" title="针对数据"></a>针对数据</h3><pre><code>INSERT INTO &#39;user&#39; (`id`, &#39;username&#39;, &#39;pass&#39;) values (1, &#39;goudan&#39;, &#39;123&#39;);  # 增 固定代码 哪个表DELETE FROM user where id = 0  # 删 删article表的数据 因为id是唯一的update `xxx` set `username`=`1234` where `id`=6666;  # 改SELECT * FORM `shuoshuo` WHERE `id`=?  # 查查询：    过滤：加 distinct，如 select distinct roomid from audio_pos;    区间查找：between and，如：select * from audio_pos where id between 2600 and 2650;</code></pre><h3 id="针对索引"><a href="#针对索引" class="headerlink" title="针对索引"></a>针对索引</h3><pre><code>查询：show index from table_name新增索引：ALTER TABLE table_name ADD INDEX index_name (column_list)删除索引：DROP INDEX index_name ON talbe_name</code></pre><h2 id="常用操作总结"><a href="#常用操作总结" class="headerlink" title="常用操作总结"></a>常用操作总结</h2><ul><li>让别人访问自己的MySQL<pre><code>登录MySQL：mysql -u root -pvmwaremysql&gt;use mysql;mysql&gt;update user set host = &#39;%&#39; where user = &#39;root&#39;;mysql&gt;select host, user from user;重启MySQL服务：Windows可从服务重启</code></pre></li><li>存在既更新，不存在就添加<pre><code>INSERT 语句的一部分,如果指定 ON DUPLICATE KEY UPDATE ，并且插入行后会导致在一个**UNIQUE索引或PRIMARY KEY中出现重复值**，则在出现重复值的行执行UPDATE，如果不会导致唯一值列重复的问题，则插入新行sql 语句原型：insert into audio_favor(openid, audioid, status) values(?, ?, ?) on duplicate key update status=status+?</code></pre></li><li>if 判断</li></ul><p>语法：IF(expr1,expr2,expr3)  expr1 是TRUE则返回2 否则返回3<br>update audio_pos set favor_cnt=if(favor_cnt=0, 0, favor_cnt-1) where id=?</p><ul><li>导入导出表数据<br>mysqldunp  参数：-d 不导出任何数据，只导出数据库表结构。-t 只导出数据，而不添加CREATE TABLE 语句。</li></ul><p>导出整个数据库结构和数据(-p 密码一般不输入，后面再输入)<br>mysqldump -h localhost -uroot -p123456 database &gt; dump.sql<br>mysqldump -h localhost -uroot -p123456  -d database &gt; dump.sql（不包含数据）</p><p>导出单个数据表结构和数据<br>mysqldump -h localhost -uroot -p123456  database table &gt; dump.sql<br>mysqldump -h localhost -uroot -p123456  -d database table &gt; dump.sql（不包含数据）</p><p>导入数据<br>mysql -uroot -p123456 -d database &lt; database.sql</p><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>$ ./mysqldump -uyouke_write -p -h 10.66.92.228 -d youke &gt; /home/lyy/db.sql  # 导出表结构导入表结构，进入数据库，进入某一库，执行 source xxx.sql查看索引：show index from tblname; 等同于show keys from tblname;select version();  查看MySQL版本show create table audio_pos;查看创建table的SQL当更新某一字段状态，位操作：如何将一个变量其中一位清0，置1MySQL：    第一位为1 val=(val |= (1&lt;&lt;0))  取消 val=(val &amp; ~(1&lt;&lt;0))    第二位为1 val=(val |= (1&lt;&lt;1))  取消 val=(val &amp; ~(1&lt;&lt;1))JS：    第一位为1 val |= (1&lt;&lt;0)  取消 val &amp;= ~(1&lt;&lt;0)    第二位为1 val |= (1&lt;&lt;1)  取消 val &amp;= ~(1&lt;&lt;1)</code></pre><h2 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h2><h3 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h3><ul><li>int<br>int代表整型，11代表字段的长度。<br>int(M) M指示最大显示宽度。最大有效显示宽度是255。显示宽度与存储大小或类型包含的值的范围无关</li></ul><pre><code>MySQL字段类型：-2 147 483 648 ～ 2 147 483 647， INT UNSIGNED的范围类型就是0 ～ 4 294 967 295。insert on duplicate key update 比 replace快，原因是索引方面1. 如果Key是空的, 那么该列值的可以重复, 表示该列没有索引, 或者是一个非唯一的复合索引的非前导列2. 如果Key是PRI,  那么该列是主键的组成部分3. 如果Key是UNI,  那么该列是一个唯一值索引的第一列(前导列),并别不能含有空值(NULL)4. 如果Key是MUL,  那么该列的值可以重复, 该列是一个非唯一索引的前导列(第一列)或者是一个唯一性索引的组成部分但是可以含有空值NULL如果对于一个列的定义，同时满足上述4种情况的多种，比如一个列既是PRI,又是UNI那么&quot;desc 表名&quot;的时候，显示的Key值按照优先级来显示 PRI-&gt;UNI-&gt;MUL那么此时，显示PRI</code></pre><h3 id="mysql之触发器"><a href="#mysql之触发器" class="headerlink" title="mysql之触发器"></a>mysql之触发器</h3><p>触发器用来在某些操作之后，“自动”执行一些操作。（比如插入了新的学生信息，那么在班级表中应该修改学生数）。</p><p>当insert delete update设置触发器之后，执行insert delete update操作就会自动触发设置的内容。</p><h3 id="mysql之视图"><a href="#mysql之视图" class="headerlink" title="mysql之视图"></a>mysql之视图</h3><ul><li>视图是一种基于查询结果的虚拟表，数据来源的表称为基本表。</li><li>视图的建立和删除不影响基本表。</li><li>视图的插入，修改操作会影响基本表。</li><li>如果视图来自多个基本表，那么不可以修改基本表。</li><li>视图的用处：</li></ul><p>1.视图基于查询结果，使得视图可以隐藏基本表一些不该展示给用户的数据信息（比如某个开发人员需要用户信息表，但不应该展示给他用户的密码信息。）<br>2.视图是一个虚拟表，可以将查询信息存储到视图中，这样可以便于操作。</p><h3 id="mysql之存储过程"><a href="#mysql之存储过程" class="headerlink" title="mysql之存储过程"></a>mysql之存储过程</h3><ul><li>存储过程存储了一系列sql语句，使得简化了操作，不要求重复执行一系列操作。只需要在需要的时候调用一下存储过程就行了。</li><li>一般来说，可以认为存储过程的功能与函数的功能类似（应该都学过函数吧），但只是要注意存储过程没有返回值，所以可以依据函数可用场景来理解存储过程。</li><li>调用存储过程：call 存储过程名();</li></ul><h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p><strong>存储过程与触发器的区别</strong>：触发器触发事件就执行一系列语句；而存储过程是调用，而且存储过程还要根据情况考虑执行“另外一系列语句”。</p><p><strong>存储过程与函数的区别</strong>：函数有返回值,而存储过程没有【所以不能使用在select语句中】</p><h3 id="mysql之自定义函数"><a href="#mysql之自定义函数" class="headerlink" title="mysql之自定义函数"></a>mysql之自定义函数</h3><ul><li>函数存储着一系列sql语句，调用函数就是一次性执行这些语句。所以函数可以降低语句重复。【但注意的是函数注重返回值，不注重执行过程，所以一些语句无法执行。所以函数并不是单纯的sql语句集合。】</li><li>mysql函数有自己的自定义函数（已经定义好了的函数），详情参考：<a href="https://www.cnblogs.com/progor/p/8832663.html" target="_blank" rel="noopener">mysql之常用函数</a></li></ul><p><strong>函数与存储过程的区别</strong>：函数只会返回一个值，不允许返回一个结果集。函数强调返回值，所以函数不允许返回多个值的情况，即使是查询语句。</p><h2 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h2><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> 命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pm2工作使用</title>
+      <link href="/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/"/>
+      <url>/2019/10/22/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<p>pm2 基本知识及常用命令</p><a id="more"></a><h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>PM2是node进程管理工具，可以利用它来简化很多node应用管理的繁琐任务，如性能监控、自动重启、负载均衡等，而且使用非常简单。</p><h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><pre><code>配置文件里的设置项，跟命令行参数基本是一一对应的。可以选择yaml或者json文件，就看个人洗好了。json格式的配置文件，pm2当作普通的js文件来处理，所以可以在里面添加注释或者编写代码，这对于动态调整配置很有好处。如果启动的时候指定了配置文件，那么命令行参数会被忽略。（个别参数除外，比如--env）PM2配置文件夹结构    一旦PM2启动，自动创建这些文件夹：$HOME/.pm2 将包含所有与PM2相关的文件$HOME/.pm2/logs 将包含所有应用程序日志  // out标准输出  error 错误输出$HOME/.pm2/pids 将包含所有应用程序pid$HOME/.pm2/pm2.log PM2日志  // pm2自身日志，如谁用了那个命令$HOME/.pm2/pm2.pid PM2 pid$HOME/.pm2/rpc.sock 远程命令的套接字文件$HOME/.pm2/pub.sock 用于可发布事件的套接字文件$HOME/.pm2/conf.js PM2配置</code></pre><h5 id="启动文件"><a href="#启动文件" class="headerlink" title="启动文件"></a>启动文件</h5><pre><code>配置pm2启动文件  生成示例生态系统.json文件，其中列出了进程和部署环境$ pm2 ecosystem；这将生成一个示例ecosystem.config.js根据需要再次编辑文件{  &quot;apps&quot;: [  // json结构，apps是一个数组，每一个数组成员就是对应一个pm2中运行的应用    {      &quot;name&quot;: &quot;mywork&quot;,  // 应用程序名称      &quot;cwd&quot;: &quot;/srv/node-app/current&quot;,  // 应用程序所在的目录      &quot;script&quot;: &quot;bin/www&quot;,  // 应用程序的脚本路径      &quot;log_date_format&quot;: &quot;YYYY-MM-DD HH:mm Z&quot;,        &quot;error_file&quot;: &quot;/var/log/node-app/node-app.stderr.log&quot;,  // 错误日志      &quot;out_file&quot;: &quot;log/node-app.stdout.log&quot;,  //  自定义应用程序日志文件      &quot;pid_file&quot;: &quot;pids/node-geo-api.pid&quot;,  // 自定义应用程序的pid文件      &quot;instances&quot;: 6,      &quot;min_uptime&quot;: &quot;200s&quot;,  // 最小运行时间，这里设置的是60s即如果应用程序在60s内退出，pm2会认为程序异常退出，此时触发重启max_restarts设置数量      &quot;max_restarts&quot;: 10,    // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）      &quot;max_memory_restart&quot;: &quot;1M&quot;,  // 服务内存超过1M，会自动重启      &quot;cron_restart&quot;: &quot;1 0 * * *&quot;,  // 定时启动，解决重启能解决的问题      &quot;watch&quot;: false,  // 监听重启，启用情况下，文件夹或子文件夹下变化应用自动重启；      &quot;merge_logs&quot;: true,      &quot;exec_interpreter&quot;: &quot;node&quot;,      &quot;exec_mode&quot;: &quot;fork&quot;,  // 应用启动模式，支持fork和cluster模式；      &quot;autorestart&quot;: false,  // 默认为true, 发生异常的情况下自动重启；      &quot;vizion&quot;: false    }  ]}</code></pre><h3 id="工作常用命令"><a href="#工作常用命令" class="headerlink" title="工作常用命令"></a>工作常用命令</h3><pre><code>启动项目：pm2 start ecosystem.config.js--env development实时日志打印：pm2 logs youke查看项目状态：pm2 show youke停止项目：pm2 stop youke</code></pre><h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><pre><code>重启：pm2 restart ecosystem.config.jspm2 reload；与restart杀死并重新启动进程的相对，reload实现了0秒的停机时间重载。pm2 [list|ls|l|status]查看启动程序的详细信息：pm2 describe idpm2 monit：可以得到进程(以及集群)的CPU的使用率和内存占用(ctrl +c 退出)启动项目：pm2 start ecosystem.config.js --watch--watch：监听应用目录的变化，一旦发生变化，自动重启。如果要精确监听、不见听的目录，最好通过配置文件。-i --instances：启用多少个实例，可用于负载均衡。如果-i 0或者-i max，则根据当前机器核数确定实例数目。--ignore-watch：排除监听的目录/文件，可以是特定的文件名，也可以是正则。        比如--ignore-watch=&quot;test node_modules &quot;some scripts&quot;&quot;-n --name：应用的名称。查看应用信息的时候可以用到。-o --output &lt;path&gt;：标准输出日志文件的路径。-e --error &lt;path&gt;：错误输出日志文件的路径。</code></pre><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://wohugb.gitbooks.io/pm2/content/bu_shu.html" target="_blank" rel="noopener">pm2教程</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> node </tag>
+            
+            <tag> pm2 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>工具&amp;网站推荐</title>
+      <link href="/2019/10/22/%E5%B7%A5%E5%85%B7&amp;%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/"/>
+      <url>/2019/10/22/%E5%B7%A5%E5%85%B7&amp;%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/</url>
+      
+        <content type="html"><![CDATA[<p>工作常用软件推荐</p><a id="more"></a><h3 id="工作常用软件"><a href="#工作常用软件" class="headerlink" title="工作常用软件"></a>工作常用软件</h3><p>思维导图 MindMaster<br>截图工具 Snipaste<br>服务器之间文件传输用 sftp,filezilla<br>连接服务器用 cmder, MobaXterm_Personal，putty</p><h3 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h3><p><a href="https://fontawesome.com/icons?d=gallery" target="_blank" rel="noopener">字体图标库</a><br><a href="https://blog.csdn.net/weixin_40845165/article/details/84076958" target="_blank" rel="noopener">Navicat 破解版</a><br><a href="https://www.staticgen.com/" target="_blank" rel="noopener">静态网页技术栈</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 工具 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>git工作常用命令</title>
+      <link href="/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/"/>
+      <url>/2019/10/21/git%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<p>git  工作常用命令</p><a id="more"></a><h3 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h3><p><strong>后面的命令一定要进入项目目录，即包含 .git 的目录</strong></p><pre><code>$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;  # 合并至当前本地分支，则  :和  :后可以省略$ git push origin dev_lyy(本地):dev_lyy(远程)  # 推送至远程分支，没有则新建远程分支</code></pre><h5 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h5><h5 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h5><p>当master领先自己本地一个分支时，即其他同事合并了代码，而我本地也做了修改<br>git:(dev) git rebase master</p><p>git 所做操作：首先，git 会把 dev 分支里面的每个 commit 取消掉；<br>其次，把上面的操作临时保存成 patch 文件，存在 .git/rebase 目录下；<br>然后，把 dev 分支更新到最新的 master 分支；<br>最后，把上面保存的 patch 文件应用到 dev 分支上；</p><p><strong>提醒</strong></p><pre><code>在 rebase 的过程中，也许会出现冲突 conflict。在这种情况，git 会停止 rebase 并会让你去解决冲突。在解决完冲突后，用 git add 命令去更新这些内容。[注意]此步骤你无需执行 git-commit，只要执行 continuegit rebase --continue这样 git 会继续应用余下的 patch 补丁文件。当然，在任何时候，我们都可以用 --abort 参数来终止 rebase 的行动，并且分支会回到 rebase 开始前的状态。git rebase —abort</code></pre><h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>Git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1哈希值，作为指纹字符串。<br>该字串由 40个十六进制字符（0-9及 a-f）组成，看起来就像是：24b9da6552252987aa493b52f8696cd6d3b00373<br>Git 的工作完全依赖于这类指纹字串，所以你会经常看到这样的哈希值。实际上，所有保存在 Git数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。</p><p>Git 管理项目时，文件流转的三个工作区域： </p><ul><li>Git 的工作目录</li><li>暂存区域</li><li>以及本地仓库</li></ul><p>基本的 Git 工作流程如下：</p><ol><li>在工作目录中修改某些文件。 </li><li>对修改后的文件进行快照，然后保存到暂存区域。 </li><li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。</li></ol><p>分为俩种情况：</p><ol><li>在工作目录中初始化新仓库</li></ol><p>$ git init  # 初始化;产生一个 .git 文件<br>$ git remote add origin git地址  # 添加远程仓库;origin-远程仓库名字可自定义</p><ol start="2"><li>从现有仓库克隆</li></ol><p>$ git clone git://github.com/schacon/grit.git  # 在当前目录下创建一个名为“grit”的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录，然后从中取出最新版本的文件拷贝。</p><h3 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h3><pre><code>$ git branch --set-upstream-to=origin/test test  与远程分支建立连接$ git branch：不加参数 列出本地    -r                      # 列出远程分支    -a                      # all    -name                   # 新建分支    -track                  # 本地/远程（创建分支并且关联远程）    -v                      # verbose详细信息    -d/-D name              # 删除指定分支    -m old_name new_name    # 修改分支名$ git push origin --delete branch_name # 删除远程分支$ git checkout -b branch_name [branch/commit] # 创建并切换分支</code></pre><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>$ git remote add name git_address   # 关联远程库$ git stash # 储藏当前工作，接着到另一分支处理问题$ git stash list # 查看储藏栈$ git stash pop # 提取最新工作并从栈删除$ git cherry-pick # 可以理解为”挑拣”提交，它会获取某一个分支的单笔提交，                                    并作为一个新的提交引入到你当前分支上。$ git diff 具体修改了那些地方 git diff &lt;local branch&gt; &lt;remote&gt;/&lt;remote branch&gt;对比远程分支$ git remote：管理主机名    不带参数 -列出所有远程主机    -v 参看远程主机的网址    -show &lt;主机名&gt;查看详细信息忽略文件：创建一个名为 .gitignore的文件，列出要忽略的文件模式。如：*.a       #忽略所有 .a 结尾的文件    !lib.a    #但 lib.a 除外</code></pre><h3 id="常见误操作处理方法"><a href="#常见误操作处理方法" class="headerlink" title="常见误操作处理方法"></a>常见误操作处理方法</h3><pre><code>撤销 add：git reset HEAD合并 commit：    1. 追加至上一个 commit ：git commit --amend；commit 的时间是不会变的；可加上--no-edit    2. 合并多个：git rebase -i commit(-i 后参数可写commitHSAH值即你想合并至哪一个commit        或者-i HEAD~n(HEAD将它看做 你的上一次提交 的别名)HEAD~1 上个版本 HEAD~n 上n个版本)        - 紧接着进入vim界面：pick为保留，s或者squash为删除commit        - 又另一个vim界面：commit msg 保留自己需要的或者修改，用#删除别的commit msg如何重置某个文件到未修改的状态？  # git checkout -- &lt;filepath&gt;如何重置所有文件到未修改的状态？  # git reset --hard如何重置到某个 commit？          # git reset &lt;commit SHA&gt;git reset用于撤销未被提交到remote的改动，即撤销local的修改。除了移动当前分支的HEAD，还可以更改workspace和index：git reset --soft HEAD^上一个commit，想撤回俩个用HEAD~2：    --soft：修改HEAD，不修改index和workspace。    --mixed：修改HEAD和index，不修改workspace。默认行为。    --hard：修改HEAD、index、workspace。把index和workspace的修改全部撤销。</code></pre><h3 id="常见错误处理方法"><a href="#常见错误处理方法" class="headerlink" title="常见错误处理方法"></a>常见错误处理方法</h3><ul><li>git pull or push报错：fatal: refusing to merge unrelated histories （拒绝合并不相关的历史）</li></ul><p><code>则在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。</code></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 命令 </tag>
+            
+            <tag> git </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记录如何使用hexo搭建博客</title>
+      <link href="/2018/12/17/%E8%AE%B0%E5%BD%95%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+      <url>/2018/12/17/%E8%AE%B0%E5%BD%95%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+      
+        <content type="html"><![CDATA[<p>hexo + GitHub pages 搭建博客流程</p><a id="more"></a><h3 id="一、hexo-amp-node-安装"><a href="#一、hexo-amp-node-安装" class="headerlink" title="一、hexo &amp; node 安装"></a>一、hexo &amp; node 安装</h3><p>npm install hexo-cli -g<br>npm install hexo-deployer-git –save<br>or 使用yarn</p><h3 id="二、-Hexo初始化配置"><a href="#二、-Hexo初始化配置" class="headerlink" title="二、 Hexo初始化配置"></a>二、 Hexo初始化配置</h3><h5 id="创建Hexo文件夹"><a href="#创建Hexo文件夹" class="headerlink" title="创建Hexo文件夹"></a>创建Hexo文件夹</h5><p>安装完成后，根据自己喜好建立目录（如F:\Blog\Hexo），直接进入F:\Blog\Hexo文件夹下右键鼠标，点击Git Bash Here，进入Git命令框，执行以下操作。</p><blockquote><p>$ hexo init</p></blockquote><h5 id="项目文件介绍"><a href="#项目文件介绍" class="headerlink" title="项目文件介绍"></a>项目文件介绍</h5><p><img src="https://www.cnblogs.com/images/cnblogs_com/luoyangyang/1573981/t_hexo_mulu.png" alt="hexo目录"></p><ul><li>deploy：执行hexo deploy命令部署到GitHub上的内容目录</li><li>public：执行hexo generate命令，输出的静态网页内容目录</li><li>scaffolds：layout模板文件目录，其中的md文件可以添加编辑</li><li>scripts：扩展脚本目录，这里可以自定义一些javascript脚本</li><li>source：文章源码目录，该目录下的markdown和html文件均会被hexo处理。该页面对应repo的根目录，404文件、favicon.ico文件，CNAME文件等都应该放这里，该目录下可新建页面目录。 <ul><li>drafts：草稿文章</li><li>posts：发布文章</li></ul></li><li>themes：主题文件目录</li><li>_config.yml：全局配置文件，大多数的设置都在这里</li><li>package.json：应用程序数据，指明hexo的版本等信息，类似于一般软件中的关于按钮</li></ul><h5 id="本地查看效果"><a href="#本地查看效果" class="headerlink" title="本地查看效果"></a>本地查看效果</h5><p>执行下面语句，执行完即可登录localhost:4000查看效果</p><blockquote><p>hexo generate<br>hexo server</p></blockquote><h3 id="三、-将博客部署到Github-Pages上"><a href="#三、-将博客部署到Github-Pages上" class="headerlink" title="三、 将博客部署到Github Pages上"></a>三、 将博客部署到Github Pages上</h3><h5 id="创建项目代码库"><a href="#创建项目代码库" class="headerlink" title="创建项目代码库"></a>创建项目代码库</h5><ol><li>注册完登陆后，我们就创建一个我们自己的Github Pages项目。点击New repository。</li><li>创建要点如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c7492a1849?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></li></ol><h5 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h5><ol><li>创建一对新的SSH密钥(keys)</li></ol><blockquote><p>$ssh-keygen -t rsa -C “<a href="mailto:your_email@example.com" target="_blank" rel="noopener">your_email@example.com</a>“<br>#这将按照你提供的邮箱地址，创建一对密钥<br>Generating public/private rsa key pair.<br>Enter file in which to save the key (/c/Users/you/.ssh/id_rsa): [Press enter]</p></blockquote><p>直接回车，则将密钥按默认文件进行存储。此时也可以输入特定的文件名，比如/c/Users/you/.ssh/github_rsa</p><ol start="2"><li>在GitHub账户中添加你的公钥</li><li>测试</li></ol><p>可以输入下面的命令，看看设置是否成功，<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>的部分不要修改：</p><blockquote><p>$ ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a></p></blockquote><p>出现 yes/no ？ 输入yes</p><ol start="4"><li>设置用户信息</li></ol><blockquote><p>$ git config –global user.name “username” //用户名</p></blockquote><blockquote><p>$ git config –global user.email  “<a href="mailto:liji.anchang@163.com" target="_blank" rel="noopener">liji.anchang@163.com</a>“ //填写自己的邮箱</p></blockquote><h3 id="四、-将本地的Hexo文件更新到Github的库中"><a href="#四、-将本地的Hexo文件更新到Github的库中" class="headerlink" title="四、 将本地的Hexo文件更新到Github的库中"></a>四、 将本地的Hexo文件更新到Github的库中</h3><ol><li>复制项目 GitHub 地址</li></ol><p><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c77a882a00?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></p><ol start="2"><li><p>打开你一开始创建的Hexo文件夹（如F:\Blog\Hexo），用记事本打开刚文件夹下的_config.yml文件</p></li><li><p>在配置文件里作如下修改，保存</p></li></ol><p><img src="https://user-gold-cdn.xitu.io/2018/1/20/161117c78dc8dca4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图"></p><ol start="4"><li>在Hexo文件夹下执行<blockquote><p>hexo g<br>hexo d</p></blockquote></li></ol><p>或者</p><blockquote><p>hexo g -d</p></blockquote><p>执行完之后会让你输入github的账号和密码，输入完后就可以登录我们自己的部署在Github Pages服务器上的博客了。对应的地址是 username.github.io(我的是：luoyangyang369.github.io)。</p><p>假如这时候，报错 ERROR Deployer not found: git，那么就是你的deployer没有安装成功，你需要执行如下命令再安装一次：</p><blockquote><p>npm install hexo-deployer-git –save</p></blockquote><p>这样，你再执行hexo g -d，你的博客就部署到Github上了。</p><ol start="5"><li>在浏览器上输入自己的主页地址即可访问</li></ol><h3 id="五、美化自己博客"><a href="#五、美化自己博客" class="headerlink" title="五、美化自己博客"></a>五、美化自己博客</h3><ol><li>进入<a href="https://hexo.io/themes/" target="_blank" rel="noopener">Hexo的官网主题专栏</a></li><li>克隆主题<br>再打开Hexo文件夹下的themes目录（F:\Blog\hexo\themes），右键Git Bash，在命令行输入:<blockquote><p>git clone <a href="https://github.com/iissnan/hexo-theme-next(此处地址替换成你需要使用的主题的地址)" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next(此处地址替换成你需要使用的主题的地址)</a> </p></blockquote></li><li>修改Hexo配置文件</li></ol><p>下载完成后，打开Hexo文件夹下的配置文件_config.yml<br>修改参数为：theme: hexo-theme-next</p><ol start="4"><li><p>部署主题，本地查看效果</p><blockquote><p>hexo -g =&gt; hexo -s<br>简写：hexo server -g</p></blockquote></li><li><p>如果效果满意，将它部署到Github上</p></li></ol><blockquote><p>hexo clean   (必须要，不然有时因为缓存问题，服务器更新不了主题)<br>hexo g -d</p></blockquote><h3 id="六、-在博客写文章"><a href="#六、-在博客写文章" class="headerlink" title="六、 在博客写文章"></a>六、 在博客写文章</h3><ol><li>用hexo发表新文章<blockquote><p>$ hexo n “文章标题”</p></blockquote></li></ol><p>其中 我的家 为文章标题，执行命令 hexo n “我的家” 后，会在项目 \Hexo\source_posts 中生成 我的家.md文件，用编辑器打开编写即可。</p><p>当然，也可以直接在\Hexo\source_posts中新建一个md文件，我就是这么做的。<br>写完后，推送到服务器上，执行以下命令即可在我们的站点看到新的文章。</p><blockquote><p>$ hexo g #生成</p></blockquote><blockquote><p>$ hexo d #部署 # 可与hexo g合并为 hexo d -g</p></blockquote><ol start="2"><li>用 <a href="https://www.jianshu.com/p/191d1e21f7ed" target="_blank" rel="noopener">Markdown</a> 写文章</li></ol><p>我们注意到在 \Hexo\source_posts 文件夹下存放着我们的文章，它们的格式都是以.md格式结尾的，没错，Hexo也是支持Markdown语法的，所以当我们需要写具有格式化的文章时，我们可以使用支持Markdown语法的编辑器进行文章编译，然后保存文件到 \Hexo\source_posts 文件夹下即可。</p><p>找一篇自己写过的 markdown 文章复制进去之后，只要执行</p><blockquote><p>$ hexo d -g</p></blockquote><p>推送至我们的Github仓库即可。</p><h3 id="七、-将自己的域名关联到Github-Pages上"><a href="#七、-将自己的域名关联到Github-Pages上" class="headerlink" title="七、 将自己的域名关联到Github Pages上"></a>七、 将自己的域名关联到Github Pages上</h3><p><a href="https://www.aliyun.com/" target="_blank" rel="noopener">域名网址</a><br><a href="https://account.aliyun.com/login/login.htm?oauth_callback=http%3A%2F%2Fdc.console.aliyun.com%2Fnext%2Findex#/domain/list/all-domain" target="_blank" rel="noopener">域名控制台</a></p><h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p><a href="https://juejin.im/entry/5a574864f265da3e3c6c1217" target="_blank" rel="noopener">2018，你该搭建自己的博客了！</a><br><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/" target="_blank" rel="noopener">使用指南</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>hexo&amp;markdown常用命令</title>
+      <link href="/2018/01/21/hexo&amp;markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2018/01/21/hexo&amp;markdown%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<p>hexo &amp; markdown 常用命令</p><a id="more"></a><h2 id="hexo常用命令笔记"><a href="#hexo常用命令笔记" class="headerlink" title="hexo常用命令笔记"></a>hexo常用命令笔记</h2><h5 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h5><pre><code>hexo n  # 写文章hexo clean  # 清除缓存 网页正常情况下可以忽略此条命令hexo g  # 生成hexo d  # 部署 # 可与hexo g 合并为 hexo d -g</code></pre><h5 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h5><pre><code>npm install hexo -g # 安装  npm update hexo -g # 升级  hexo init # 初始化</code></pre><h5 id="简写"><a href="#简写" class="headerlink" title="简写"></a>简写</h5><pre><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;  # 新建文章hexo p == hexo publishhexo g == hexo generate # 生成hexo s == hexo server  # 启动服务预览hexo d == hexo deploy  # 部署</code></pre><h5 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h5><pre><code>hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。hexo server -s  # 静态模式hexo server -p 5000  # 更改端口hexo server -i 192.168.1.1  # 自定义 IPhexo clean  # 清除缓存 网页正常情况下可以忽略此条命令hexo g  # 生成静态网页hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#markdown-基础语法" class="headerlink" title="markdown 基础语法"></a>markdown 基础语法</h2><h5 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h5><p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p><h5 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h5><ul><li>加粗： 要加粗的文字左右分别用两个*号包起来</li><li>斜体： 要倾斜的文字左右分别用一个*号包起来</li><li>斜体加粗：  要倾斜和加粗的文字左右分别用三个*号包起来</li><li>删除线：  要加删除线的文字左右分别用两个~~号包起来</li></ul><p><strong>效果：</strong><br><strong>这是加粗的文字</strong><br><em>这是倾斜的文字</em>`<br><strong><em>这是斜体加粗的文字</em></strong><br><del>这是加删除线的文字</del></p><h5 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h5><pre><code>&gt;这是引用的内容&gt;&gt;这是引用的内容&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;这是引用的内容</code></pre><p><strong>效果：</strong></p><blockquote><p>这是引用的内容</p></blockquote><h5 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h5><p>三个或者三个以上的 - 或者 * 都可以。<br><strong>效果：</strong></p><hr><h5 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h5><pre><code>![图片alt](图片地址 &#39;&#39;图片title&#39;&#39;)图片alt就是显示在图片下面的文字，相当于对图片内容的解释。图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加</code></pre><p>示例：</p><blockquote><p>![blockchain](<a href="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/" target="_blank" rel="noopener">https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/</a> u=702257389,1274025419&amp;fm=27&amp;gp=0.jpg “区块链”)</p></blockquote><p><strong>效果：</strong><br><img src="https://upload-images.jianshu.io/upload_images/6860761-fd2f51090a890873.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/550/format/webp" alt="blockchain" title="区块链"></p><h5 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h5><blockquote><p>语法：<a href="超链接地址" title="超链接title">超链接名</a><br>title可加可不加</p></blockquote><p><strong>效果：</strong><br><a href="luoyangyang.pub">洋洋的博客</a></p><h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><p>语法：</p><ul><li>无序列表：</li></ul><p>用 - + * 任何一种都可以<br>注意：- + * 跟内容之间都要有一个空格<br><strong>效果：</strong></p><ul><li>列表内容</li></ul><ul><li>列表内容</li></ul><ul><li>列表内容</li></ul><ul><li>有序列表：</li></ul><p>用数字加点</p><ol><li>列表内容</li><li>列表内容</li><li>列表内容</li></ol><ul><li>列表嵌套</li></ul><p>上一级和下一级之间敲三个空格即可</p><h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>单行代码：代码之间分别用一个反引号包起来<br>代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 命令 </tag>
+            
+            <tag> Hexo </tag>
+            
+            <tag> markdown </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

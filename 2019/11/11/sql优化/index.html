@@ -91,11 +91,11 @@
 <meta name="keywords" content="MySQL,SQL优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL优化">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;11&#x2F;sql%E4%BC%98%E5%8C%96&#x2F;index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;11&#x2F;SQL%E4%BC%98%E5%8C%96&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
-<meta property="og:updated_time" content="2019-11-11T07:31:42.918Z">
+<meta property="og:updated_time" content="2019-11-13T11:07:46.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
 
@@ -127,7 +127,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/11/sql优化/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/11/SQL优化/"/>
 
 
 
@@ -306,7 +306,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/11/sql%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/11/SQL%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YangYang Luo">
@@ -375,7 +375,7 @@
 
           
           
-             <span id="/2019/11/11/sql%E4%BC%98%E5%8C%96/" class="leancloud_visitors" data-flag-title="SQL优化">
+             <span id="/2019/11/11/SQL%E4%BC%98%E5%8C%96/" class="leancloud_visitors" data-flag-title="SQL优化">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  602
+                  1.6k
                 </span>
               
 
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  5
                 </span>
               
             </div>
@@ -462,6 +462,68 @@
 <p>from子查询：子查询跟在from之后的；一般用在“先查出二维表，再处理”的情况。<br>如：select cid,cname from (select * from class where cname=”python”) as c;</p>
 <p>where子查询：子查询跟在where条件中；一般用在“先查询出指定条件再查询”的情况<br>如：select * from student where cid=(select cid from class where cname=”python”);</p>
 <p>exist子查询：子查询在exist语句里面；一般用作“存在才做”的情况<br>如：select * from class where exists(select * from  student where cid=1) and cid=1;</p>
+<h2 id="explain-优化神器"><a href="#explain-优化神器" class="headerlink" title="explain 优化神器"></a>explain 优化神器</h2><p><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">参考</a></p>
+<h3 id="EXPLAIN-输出格式"><a href="#EXPLAIN-输出格式" class="headerlink" title="EXPLAIN 输出格式"></a>EXPLAIN 输出格式</h3><pre><code>mysql&gt; explain select * from user_info where id = 2\G
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: user_info
+   partitions: NULL
+         type: const
+possible_keys: PRIMARY
+          key: PRIMARY
+      key_len: 8
+          ref: const
+         rows: 1
+     filtered: 100.00
+        Extra: NULL
+1 row in set, 1 warning (0.00 sec)</code></pre><p>各列的含义如下:</p>
+<ul>
+<li><strong>id: SELECT 查询的标识符. 每个 SELECT 都会自动分配一个唯一的标识符.</strong></li>
+<li><strong>select_type: SELECT 查询的类型.</strong></li>
+<li><strong>table: 查询涉及的表或衍生表</strong></li>
+<li><strong>partitions: 匹配的分区</strong></li>
+<li><strong>type: join 类型</strong></li>
+<li><strong>possible_keys: 此次查询中可能选用的索引</strong></li>
+<li><strong>key: 此次查询中确切使用到的索引.</strong></li>
+<li><strong>ref: 哪个字段或常数与 key 一起被使用</strong></li>
+<li><strong>key_len：表示查询优化器使用了索引的字节数. 这个字段可以评估组合索引是否完全被使用, 或只有最左部分字段被使用到.</strong></li>
+<li><strong>rows: 显示此查询一共扫描了多少行. 这个是一个估计值.直观显示 SQL 的效率好坏, 原则上 rows 越少越好</strong></li>
+<li><strong>filtered: 表示此查询条件所过滤的数据的百分比</strong></li>
+<li><strong>extra: 额外的信息</strong></li>
+</ul>
+<p>下面是几个重要字段</p>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>type 字段比较重要, 它提供了判断查询是否高效的重要依据依据. 通过 type 字段, 我们判断此次查询是 全表扫描 还是 索引扫描 等.</p>
+<p>常见取值：</p>
+<ul>
+<li><strong>const:</strong> 针对主键或唯一索引的等值查询扫描, 最多只返回一行数据. const 查询速度非常快, 因为它仅仅读取一次即可</li>
+<li><strong>eq_ref:</strong> 此类型通常出现在多表的 join 查询, 表示对于前表的每一个结果, 都只能匹配到后表的一行结果. 并且查询的比较操作通常是 =, 查询效率较高. </li>
+<li><strong>ref:</strong> 此类型通常出现在多表的 join 查询, 针对于非唯一或非主键索引, 或者是使用了 最左前缀 规则索引的查询.</li>
+<li><strong>range:</strong> 表示使用索引范围查询, 通过索引字段范围获取表中部分数据记录. 这个类型通常出现在 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN() 操作中.<br>当 type 是 range 时, 那么 EXPLAIN 输出的 ref 字段为 NULL, 并且 key_len 字段是此次查询中使用到的索引的最长的那个.</li>
+<li><strong>index:</strong> 表示全索引扫描(full index scan), 和 ALL 类型类似, 只不过 ALL 类型是全表扫描, 而 index 类型则仅仅扫描所有的索引, 而不扫描数据.<br>index 类型通常出现在: 所要查询的数据直接在索引树中就可以获取到, 而不需要扫描数据. 当是这种情况时, Extra 字段 会显示 Using index.</li>
+<li><strong>ALL:</strong> 表示全表扫描, 这个类型的查询是性能最差的查询之一. 通常来说, 我们的查询不应该出现 ALL 类型的查询, 因为这样的查询在数据量大的情况下, 对数据库的性能是巨大的灾难. 如一个查询是 ALL 类型查询, 那么一般来说可以对相应的字段添加索引来避免.</li>
+</ul>
+<p>通常来说, 不同的 type 类型的<strong>性能关系</strong>如下:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>ALL &lt; index &lt; range ~ index_merge &lt; ref &lt; eq_ref &lt; const &lt; system</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h4 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h4><p>EXplain 中的很多额外的信息会在 Extra 字段显示, 常见的有以下几种内容:</p>
+<ul>
+<li>Using filesort</li>
+</ul>
+<p>当 Extra 中有 Using filesort 时, 表示 MySQL 需额外的排序操作, 不能通过索引顺序达到排序效果. 一般有 Using filesort, 都建议优化去掉, 因为这样的查询 CPU 资源消耗大.</p>
+<ul>
+<li>Using index</li>
+</ul>
+<p>“覆盖索引扫描”, 表示查询在索引树中就可查找所需数据, 不用扫描表数据文件, 往往说明性能不错</p>
+<ul>
+<li>Using temporary</li>
+</ul>
+<p>查询有使用临时表, 一般出现于排序, 分组和多表 join 的情况, 查询效率不高, 建议优化.</p>
 
       
     </div>
@@ -488,12 +550,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2019/11/11/sql%E4%BC%98%E5%8C%96/">SQL优化</a></p>
+  <p><span>本文标题:</span><a href="/2019/11/11/SQL%E4%BC%98%E5%8C%96/">SQL优化</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年11月11日 - 17:11</p>
-  <p><span>最后更新:</span>2019年11月11日 - 15:11</p>
-  <p><span>原始链接:</span><a href="/2019/11/11/sql%E4%BC%98%E5%8C%96/" title="SQL优化">http://yoursite.com/2019/11/11/sql%E4%BC%98%E5%8C%96/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/sql%E4%BC%98%E5%8C%96/"  aria-label="复制成功！"></i></span>
+  <p><span>最后更新:</span>2019年11月13日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2019/11/11/SQL%E4%BC%98%E5%8C%96/" title="SQL优化">http://yoursite.com/2019/11/11/SQL%E4%BC%98%E5%8C%96/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/SQL%E4%BC%98%E5%8C%96/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -552,8 +614,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="计算机系统基础知识">
-                <i class="fa fa-chevron-left"></i> 计算机系统基础知识
+              <a href="/2019/11/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="next" title="bash学习">
+                <i class="fa fa-chevron-left"></i> bash学习
               </a>
             
           </div>
@@ -562,8 +624,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/11/MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="prev" title="MySQL常见问题">
-                MySQL常见问题 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/11/bash%E5%AD%A6%E4%B9%A0/" rel="prev" title="bash学习">
+                bash学习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -673,7 +735,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -684,7 +746,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -695,7 +757,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -802,7 +864,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接查询-联合查询-子查询"><span class="nav-number">1.</span> <span class="nav-text">连接查询 联合查询 子查询</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接查询-联合查询-子查询"><span class="nav-number">1.</span> <span class="nav-text">连接查询 联合查询 子查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explain-优化神器"><span class="nav-number">2.</span> <span class="nav-text">explain 优化神器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EXPLAIN-输出格式"><span class="nav-number">2.1.</span> <span class="nav-text">EXPLAIN 输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#type"><span class="nav-number">2.1.1.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Extra"><span class="nav-number">2.1.2.</span> <span class="nav-text">Extra</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -839,7 +901,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">15.5k</span>
+    <span title="Site words total count">26.1k</span>
   
 </div>
 

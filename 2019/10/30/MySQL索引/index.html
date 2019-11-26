@@ -88,15 +88,15 @@
 
 
 
-<meta name="description" content="一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。">
+<meta name="description" content="一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。 一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。">
 <meta name="keywords" content="MySQL,索引">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL深入浅出索引">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;30&#x2F;MySQL%E7%B4%A2%E5%BC%95&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
-<meta property="og:description" content="一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。">
+<meta property="og:description" content="一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。 一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-11T08:00:35.944Z">
+<meta property="og:updated_time" content="2019-11-11T10:04:01.901Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.1k
+                  1.2k
                 </span>
               
 
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3
+                  4
                 </span>
               
             </div>
@@ -438,7 +438,8 @@
       
 
       
-        <p>一句话简单来说，<strong>索引的出现其实就是为了提高数据查询的效率</strong>，就像书的目录一样。<br>一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。</p>
+        <p>一句话简单来说，<strong>索引的出现其实就是为了提高数据查询的效率</strong>，就像书的目录一样。</p>
+<p>一本 500 页的书，如果你想快速找到其中的某一个知识点，在不借助目录的情况下，那我估计你可得找一会儿。同样，对于数据库的表而言，索引其实就是它的“目录”。</p>
 <a id="more"></a>
 
 <h2 id="索引优缺点"><a href="#索引优缺点" class="headerlink" title="索引优缺点"></a>索引优缺点</h2><p>虽然索引可以提高数据查询的速度，但是任何事物都是双刃剑，它也有一些缺点： 索引占据一定磁盘空间，就 像 有 按 笔画查找的目录的书会比没有这种目录的书页数要多一些。</p>
@@ -471,7 +472,8 @@
 id int primary key, 
 k int not null, 
 name varchar(16),
-index (k))engine=InnoDB;</code></pre>
+index (k))engine=InnoDB;</code></pre><h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>主键与索引的区别：主键也是一种索引，主键也是一种唯一索引，但索引的作用主要是提高查找速度，而主键作用主要是标识记录唯一性（当然也便于查找）。</p>
+
       
     </div>
     
@@ -653,7 +655,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -664,7 +666,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -675,7 +677,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -782,7 +784,7 @@ show_date_time();
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=310 height=110 src="//music.163.com/outchain/player?type=0&id=371085186&auto=1&height=90"></iframe>
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引优缺点"><span class="nav-number">1.</span> <span class="nav-text">索引优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引的常见模型"><span class="nav-number">2.</span> <span class="nav-text">索引的常见模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB-的索引模型"><span class="nav-number">3.</span> <span class="nav-text">InnoDB 的索引模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引优缺点"><span class="nav-number">1.</span> <span class="nav-text">索引优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引的常见模型"><span class="nav-number">2.</span> <span class="nav-text">索引的常见模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB-的索引模型"><span class="nav-number">3.</span> <span class="nav-text">InnoDB 的索引模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">4.</span> <span class="nav-text">补充</span></a></li></ol></div>
             
 
           </div>
@@ -819,7 +821,7 @@ show_date_time();
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">15.5k</span>
+    <span title="Site words total count">26.1k</span>
   
 </div>
 
