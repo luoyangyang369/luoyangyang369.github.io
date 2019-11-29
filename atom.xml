@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-11-27T09:55:07.692Z</updated>
+  <updated>2019-11-28T10:55:16.505Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2019/11/21/Flask%E6%80%BB%E7%BB%93/"/>
     <id>http://yoursite.com/2019/11/21/Flask总结/</id>
     <published>2019-11-21T09:25:25.000Z</published>
-    <updated>2019-11-27T09:55:07.692Z</updated>
+    <updated>2019-11-28T10:55:16.505Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flaskapp = Flask(__name__)  // 创建类实例@app.route(&quot;/&quot;)  // 使用 route() 装饰器来告诉 Flask 触发函数的 URL def hello():    return &quot;Hello World!&quot;if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python 解释器运行代码的 情况下运行，而不会在作为模块导入时运行    app.run()  //  run() 函数来运行本地服务器和我们的应用</code></pre><p>运行： python hello.py</p><h2 id="Werkzeug"><a href="#Werkzeug" class="headerlink" title="Werkzeug"></a>Werkzeug</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。</p><p>什么又是WSGI呢？WSGI的全称是Web Server Gateway Interface，它是用来定义web服务器接口的一个规范。简单地讲，就是定义http服务器应该长什么样子，能处理哪些事情。</p><h3 id="包含哪些内容的实现"><a href="#包含哪些内容的实现" class="headerlink" title="包含哪些内容的实现"></a>包含哪些内容的实现</h3><ul><li>HTTP头的解析</li><li>易用使用的request和response对象</li><li>基于交互风格的JavaScript脚本语言的浏览器调试器</li><li>与 WSGI 1.0 规范100%兼容</li><li>支持Python 2.6, 2.7和3.3</li><li>Unicode支持</li><li>HTTP Session和签名Cookie支持</li><li>URI和IRI处理函数，包含对Unicode的支持</li><li>内置兼容一些非标准的WSGI服务器和浏览器</li><li>集成了URLs路由功能</li></ul>]]></content>
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flaskapp = Flask(__name__)  // 创建类实例@app.route(&quot;/&quot;)  // 使用 route() 装饰器来告诉 Flask 触发函数的 URL def hello():    return &quot;Hello World!&quot;if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python 解释器运行代码的 情况下运行，而不会在作为模块导入时运行    app.run()  //  run() 函数来运行本地服务器和我们的应用</code></pre><p>运行： python hello.py</p><h2 id="小知识"><a href="#小知识" class="headerlink" title="小知识"></a>小知识</h2><h3 id="Flask的Context-上下文"><a href="#Flask的Context-上下文" class="headerlink" title="Flask的Context(上下文)"></a>Flask的Context(上下文)</h3><p>Flask提供了两种上下文，一种是应用上下文(Application Context)，一种是请求上下文(Request Context)。</p><ul><li>application 指的就是当你调用app = Flask(name)创建的这个对象app；</li><li>request 指的是每次http请求发生时，WSGI server(比如gunicorn)调Flask.call()之后，在Flask对象内部创建的Request对象；</li><li>application 表示用于响应WSGI请求的应用本身，request 表示每次http请求;</li><li>application的生命周期大于request，一个application存活期间，可能发生多次http请求，所以，也就会有多个request</li></ul><h3 id="flask-里的函数"><a href="#flask-里的函数" class="headerlink" title="flask 里的函数"></a>flask 里的函数</h3><ul><li><p>escape 解析路径上的特殊符号</p></li><li><p>url_for 看成是路由命名函数，可以做路由导向，可以带参数</p></li><li><p>redirect 重定向函数</p></li><li><p>render_template 模板渲染函数, 自动寻找根目录 templates 里的模板</p></li><li><p>make_response 获取响应对象</p></li><li><p>request 获取请求对象</p></li><li><p>g 是一个特殊对象，独立于每一个请求。在处理请求过程中，它可以用于储存 可能多个函数都会用到的数据。</p><p>  如：把连接储存于其中，可以多次使用，而不用在同一个 请求中每次调用 get_db 时都创建一个新的连接。</p></li><li><p>current_app 是另一个特殊对象，该对象指向处理请求的 Flask 应用。这里 使用了应用工厂，那么在其余的代码中就不会出现应用对象。</p></li></ul><p>当应用创建后，在处理 一个请求时， get_db 会被调用。这样就需要使用 current_app 。</p><h3 id="一句话"><a href="#一句话" class="headerlink" title="一句话"></a>一句话</h3><p>flask在使用session 时要设置一个密钥 app.secret_key  如：app.secret_key = ‘123456’  一般使用os.urandom(16) 生成</p><h3 id="jsonify-amp-amp-json-dumps"><a href="#jsonify-amp-amp-json-dumps" class="headerlink" title="jsonify &amp;&amp; json.dumps"></a>jsonify &amp;&amp; json.dumps</h3><p>区别：</p><ol><li>Content-Type有区别</li></ol><p>jsonify时响应的Content-Type字段值为application/json，而使用json.dumps时该字段值为text/html。</p><ol start="2"><li>接受参数有区别</li></ol><h2 id="blueprints"><a href="#blueprints" class="headerlink" title="blueprints"></a>blueprints</h2><p>用于实现单个应用的视图、模板、静态文件的集合。</p><p>蓝图就是模块化处理的类。<br>简单来说，蓝图就是一个存储操作路由映射方法的容器，主要用来实现客户端请求和URL相互关联的功能。 在Flask中，使用蓝图可以帮助我们实现模块化应用的功能。</p><p>Flask 中的蓝图为这些情况设计:</p><ul><li>把一个应用分解为一个蓝图的集合。这对大型应用是理想的。一个项目可以实例化一个应用对象，初始化几个扩展，并注册一集合的蓝图。</li><li>以 URL 前缀和/或子域名，在应用上注册一个蓝图。 URL 前缀/子域名中的参数即成为这个蓝图下的所有视图函数的共同的视图参数（默认情况下）。</li><li>在一个应用中用不同的 URL 规则多次注册一个蓝图。</li><li>通过蓝图提供模板过滤器、静态文件、模板和其它功能。一个蓝图不一定要实现应用或者视图函数。</li><li>初始化一个 Flask 扩展时，在这些情况中注册一个蓝图。</li></ul><h2 id="url-for-amp-amp-redirect"><a href="#url-for-amp-amp-redirect" class="headerlink" title="url_for &amp;&amp; redirect"></a>url_for &amp;&amp; redirect</h2><p>反转函数url_for与重定向redirect</p><p>url_for，简单来说，这个函数接受视图函数的名字（字符串形式）作为参数，返回视图函数对应的url，例如：</p><pre><code>@app.route(&#39;/&#39;)def hello_world():    print(url_for(&#39;index&#39;))  # 返回index视图的URL  此处会打印/index/  有参数则以key=value的形式写在后面 print(url_for(&#39;hello&#39;,name=&#39;harp&#39;))    return &#39;Hello World&#39;@app.route(&#39;/index/&#39;)def index():    return &#39;index&#39;</code></pre><p>redirect则更简单，功能就是跳转到指定的url，大部分情况下，我们都是和url_for一起使用的，例如：</p><pre><code>@app.route(&#39;/&#39;)def hello_world():    return &#39;Hello World&#39;@app.route(&#39;/&lt;name&gt;/&#39;)def hello(name):    if name == &#39;Harp&#39;:        return &#39;Hello %s&#39; % name    else:        return redirect(url_for(&#39;hello_world&#39;))</code></pre><p>在hello这个视图函数中，如果url传入的参数是Harp（即请求的网址是<a href="http://127.0.0.1:5000/Harp/），则返回&#39;Hello" target="_blank" rel="noopener">http://127.0.0.1:5000/Harp/），则返回&#39;Hello</a> Harp’，其他情况则重定向到hello_world这个视图函数对应的网址’/‘。</p><h2 id="Werkzeug"><a href="#Werkzeug" class="headerlink" title="Werkzeug"></a>Werkzeug</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。</p><p>什么又是WSGI呢？WSGI的全称是Web Server Gateway Interface，它是用来定义web服务器接口的一个规范。简单地讲，就是定义http服务器应该长什么样子，能处理哪些事情。</p><h3 id="包含哪些内容的实现"><a href="#包含哪些内容的实现" class="headerlink" title="包含哪些内容的实现"></a>包含哪些内容的实现</h3><ul><li>HTTP头的解析</li><li>易用使用的request和response对象</li><li>基于交互风格的JavaScript脚本语言的浏览器调试器</li><li>与 WSGI 1.0 规范100%兼容</li><li>支持Python 2.6, 2.7和3.3</li><li>Unicode支持</li><li>HTTP Session和签名Cookie支持</li><li>URI和IRI处理函数，包含对Unicode的支持</li><li>内置兼容一些非标准的WSGI服务器和浏览器</li><li>集成了URLs路由功能</li></ul><h2 id="flask-vs-django"><a href="#flask-vs-django" class="headerlink" title="flask vs django"></a>flask vs django</h2><blockquote><p>Flask 怎么定位自己的？<br>将自己定位为微框架。啥叫微框架，就是毛坯房的意思。给你个毛胚房，你自己装修去。</p></blockquote><blockquote><p>Django 怎么定位标榜自己的？<br>划重点 The web framework for perfectionists with deadlines. 完美主义者的 Deadline 终结框架</p></blockquote>]]></content>
     
     <summary type="html">
     
@@ -38,6 +38,31 @@
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="Flask" scheme="http://yoursite.com/tags/Flask/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>VSCode使用</title>
+    <link href="http://yoursite.com/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/"/>
+    <id>http://yoursite.com/2019/11/21/VSCode使用/</id>
+    <published>2019-11-21T09:25:25.000Z</published>
+    <updated>2019-11-28T08:29:41.836Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p><h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p><p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p><ol><li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li><li>选取Python解释器  <blockquote><p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p></blockquote></li></ol><h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul><li>Settings Sync</li></ul><p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p><ul><li>Python</li></ul><p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p><ul><li>Bracket Pair Colorizer</li></ul><p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p><ul><li>Visual Studio IntelliCode</li></ul><p>自动补全配置</p><ul><li>Code Runner</li></ul><p>支持多种语言，包括 Python，运行执行一段任意代码。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p><blockquote><p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p></blockquote><p>就是找到启动的 .exe文件右键 =&gt; 属性</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="工具" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="VSCode" scheme="http://yoursite.com/tags/VSCode/"/>
+    
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
@@ -274,9 +299,9 @@
     <link href="http://yoursite.com/2019/07/16/%E5%B0%8F%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/"/>
     <id>http://yoursite.com/2019/07/16/小知识总结/</id>
     <published>2019-07-16T09:25:25.000Z</published>
-    <updated>2019-11-27T09:02:38.906Z</updated>
+    <updated>2019-11-28T10:11:17.079Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="工作中"><a href="#工作中" class="headerlink" title="工作中"></a>工作中</h2><p><a href="http://www.ruanyifeng.com/blog/2016/08/migrate-from-http-to-https.html" target="_blank" rel="noopener">HTTPS 升级指南</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows 安装</a><br><a href=""></a></p><h2 id="一句话知识"><a href="#一句话知识" class="headerlink" title="一句话知识"></a>一句话知识</h2><p>PNG 比 JPEG 格式质量好，占空间，同一张图片 PNG 26M，JPEG 为 4 M<br>可移植性就是可以在多个系统运使用行<br>request 请求接口时，发起一个带证书的请求，用法如下所示：</p><pre><code>let opt = {        url:&quot;https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers&quot;,        body:sendData,        key: fs.readFileSync(&#39;./config/apiclient_key.pem&#39;), // 将微信生成的证书放入 cert目录下        cert: fs.readFileSync(&#39;./config/apiclient_cert.pem&#39;),        // ca:fs.readFileSync(&#39;./config/apiclient_cert.p12&#39;)    }</code></pre>]]></content>
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="工作中"><a href="#工作中" class="headerlink" title="工作中"></a>工作中</h2><p><a href="http://www.ruanyifeng.com/blog/2016/08/migrate-from-http-to-https.html" target="_blank" rel="noopener">HTTPS 升级指南</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows 安装</a><br><a href=""></a></p><h2 id="一句话知识"><a href="#一句话知识" class="headerlink" title="一句话知识"></a>一句话知识</h2><p>PNG 比 JPEG 格式质量好，占空间，同一张图片 PNG 26M，JPEG 为 4 M<br>可移植性就是可以在多个系统运使用行<br>request 请求接口时，发起一个带证书的请求，用法如下所示：</p><pre><code>let opt = {        url:&quot;https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers&quot;,        body:sendData,        key: fs.readFileSync(&#39;./config/apiclient_key.pem&#39;), // 将微信生成的证书放入 cert目录下        cert: fs.readFileSync(&#39;./config/apiclient_cert.pem&#39;),        // ca:fs.readFileSync(&#39;./config/apiclient_cert.p12&#39;)    }</code></pre><h2 id="回调函数和钩子函数"><a href="#回调函数和钩子函数" class="headerlink" title="回调函数和钩子函数"></a>回调函数和钩子函数</h2><ul><li>什么是回调函数？</li></ul><p>简而言之，回调函数就是一个通过函数指针调用的函数。如果你把函数的指针（地址）作为参数传递给另一个函数，当这个指针被用为调用它所指向的函数时，我们就说这是回调函数。</p><ul><li>为什么要使用回调函数？</li></ul><p>因为可以把调用者与被调用者分开。调用者不关心谁是被调用者，所有它需知道的，只是存在一个具有某种特定原型、某些限制条件（如返回值为 int ）的被调用函数。</p><ul><li>什么是钩子函数？</li></ul><p>钩子实际上是一个处理消息的程序段，通过系统调用，把它挂入系统。每当特定的消息发出，在没有到达目的窗口前，钩子程序就先捕获该消息，亦即钩子函数先得到控制权。这时钩子函数即可以加工处理（改变）该消息，也可以不作处理而继续传递该消息，还可以强制结束消息的传递。对每种类型的钩子由系统来维护一个钩子链，最近安装的钩子放在链的开始，而最先安装的钩子放在最后，也就是后加入的先获得控制权。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>回调函数就好像是一个中断处理函数，系统在符合你设定的条件时自动调用。为此，你需要做三件事：</p><ol><li><p>声明；</p></li><li><p>定义；</p></li><li><p>设置触发条件，就是在你的函数中把你的回调函数名称转化为地址作为一个参数，以便于系统调用。</p></li></ol><p>声明和定义时应注意：回调函数由系统调用，所以可以认为它属于WINDOWS系统，不要把它当作你的某个类的成员函数</p><p>回调函数是一个程序员不能显式调用的函数；通过将回调函数的地址传给调用者从而实现调用。回调函数使用是必要的，在我们想通过一个统一接口实现不同的内容，这时用回掉函数非常合适。比如，我们为几个不同的设备分别写了不同的显示函数：void TVshow(); void ComputerShow(); void NoteBookShow()…等等。这是我们想用一个统一的显示函数，我们这时就可以用回掉函数了。void show(void (*ptr)()); 使用时根据所传入的参数不同而调用不同的回调函数。</p>]]></content>
     
     <summary type="html">
     
@@ -394,29 +419,6 @@
   </entry>
   
   <entry>
-    <title>理解高性能网络模型</title>
-    <link href="http://yoursite.com/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
-    <id>http://yoursite.com/2019/06/11/理解高性能网络模型/</id>
-    <published>2019-06-11T09:25:25.000Z</published>
-    <updated>2019-11-27T08:53:26.362Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
     <title>数据结构与算法</title>
     <link href="http://yoursite.com/2019/06/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
     <id>http://yoursite.com/2019/06/11/数据结构与算法/</id>
@@ -438,6 +440,29 @@
       <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
       <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>理解高性能网络模型</title>
+    <link href="http://yoursite.com/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://yoursite.com/2019/06/11/理解高性能网络模型/</id>
+    <published>2019-06-11T09:25:25.000Z</published>
+    <updated>2019-11-27T08:53:26.362Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
@@ -469,9 +494,9 @@
     <link href="http://yoursite.com/2019/05/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/"/>
     <id>http://yoursite.com/2019/05/17/计算机专有名词/</id>
     <published>2019-05-17T09:25:25.000Z</published>
-    <updated>2019-11-27T08:52:49.420Z</updated>
+    <updated>2019-11-27T10:21:48.228Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p>CVM：云服务器（Cloud Virtual Machine）<br>IPC（Inter-Process Communication，进程间通信）</p>]]></content>
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><p>CVM：云服务器（Cloud Virtual Machine）</p><h3 id="IPC（Inter-Process-Communication，进程间通信）"><a href="#IPC（Inter-Process-Communication，进程间通信）" class="headerlink" title="IPC（Inter-Process Communication，进程间通信）"></a>IPC（Inter-Process Communication，进程间通信）</h3><p><a href="https://www.jianshu.com/p/c1015f5ffa74" target="_blank" rel="noopener">参考</a><br>每个进程各自有不同的用户地址空间，任何一个进程的全局变量在另一个进程中都看不到，所以进程之间要交换数据必须通过内核，在内核中开辟一块缓冲区，进程1把数据从用户空间拷到内核缓冲区，进程2再从内核缓冲区把数据读走，内核提供的这种机制称为进程间通信（IPC，InterProcess Communication）</p><h4 id="进程间通信的7种方式"><a href="#进程间通信的7种方式" class="headerlink" title="进程间通信的7种方式"></a>进程间通信的7种方式</h4><p>第一类：传统的Unix通信机制</p><ol><li>管道/匿名管道(pipe)</li></ol>]]></content>
     
     <summary type="html">
     
@@ -486,29 +511,6 @@
       <category term="计算机" scheme="http://yoursite.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
     
       <category term="英语" scheme="http://yoursite.com/tags/%E8%8B%B1%E8%AF%AD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>密码学</title>
-    <link href="http://yoursite.com/2019/05/16/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
-    <id>http://yoursite.com/2019/05/16/密码学/</id>
-    <published>2019-05-16T09:25:25.000Z</published>
-    <updated>2019-11-27T09:08:04.042Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>摘要（digest）：摘要、hash、散列 有时候会混为一谈，大部分都是一个东西</p><p>将长度不固定的消息作为输入，通过运行hash函数，生成固定长度的输出，这段输出就叫做摘要。通常用来验证消息完整、未被篡改。<br>摘要运算是不可逆的。也就是说，输入固定的情况下，产生固定的输出。但知道输出的情况下，无法反推出输入。</p><p>常见的摘要算法 与 对应的输出位数如下：<br>MD5：128位<br>SHA-1：160位<br>SHA256 ：256位<br>SHA512：512位</p><p>MAC（Message Authentication Code）：消息认证码，用以保证数据的完整性。运算结果取决于消息本身、秘钥。<br>MAC可以有多种不同的实现方式，比如HMAC。<br>HMAC（Hash-based Message Authentication Code）：可以粗略地理解为带秘钥的hash函数。</p><p>对称加密：常见的对称加密算法：DES、3DES、AES、Blowfish、RC5、IDEA。<br>非对称加密：常见的非对称加密算法：RSA、DSA、ElGamal。</p><p>签名：</p><ol><li>确认信息来源于特定的主体。</li><li>确认信息完整、未被篡改。</li></ol><p>发送方生成签名：</p><ol><li>计算原始信息的摘要。</li><li>通过私钥对摘要进行签名，得到电子签名。</li><li>将原始信息、电子签名，发送给接收方。</li></ol><p>伪代码：digest = hash(message); // 计算摘要<br>digitalSignature = sign(digest, priviteKey); // 计算数字签名</p><p>接收方验证签名：</p><ol><li>通过公钥解开电子签名，得到摘要D1。（如果解不开，信息来源主体校验失败）</li><li>计算原始信息的摘要D2。</li><li>对比D1、D2，如果D1等于D2，说明原始信息完整、未被篡改。</li></ol><p>伪代码：digest1 = verify(digitalSignature, publicKey); // 获取摘要<br>digest2 = hash(message); // 计算原始信息的摘要<br>digest1 === digest2 // 验证是否相等</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="noopener">数字签名</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="密码学" scheme="http://yoursite.com/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
-    
-    
-      <category term="密码学" scheme="http://yoursite.com/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
     
   </entry>
   
