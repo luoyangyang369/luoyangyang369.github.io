@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Python,Flask," />
+  <meta name="keywords" content="Python," />
 
 
 
@@ -88,16 +88,16 @@
 
 
 
-<meta name="keywords" content="Python,Flask">
+<meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flask总结">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;21&#x2F;Flask%E6%80%BB%E7%BB%93&#x2F;index.html">
 <meta property="og:site_name" content="洋洋&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
-<meta property="og:updated_time" content="2019-11-28T10:55:16.505Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;images.cnblogs.com&#x2F;cnblogs_com&#x2F;luoyangyang&#x2F;1573981&#x2F;t_191129021136flask.png">
+<meta property="og:updated_time" content="2019-11-30T06:41:28.167Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;www.youhutong.com&#x2F;static&#x2F;appImage&#x2F;article&#x2F;thumb&#x2F;8e43ba8c3810921daff968b4105fbfa5.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;images.cnblogs.com&#x2F;cnblogs_com&#x2F;luoyangyang&#x2F;1573981&#x2F;t_191129021136flask.png">
 
 
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.4k
+                  1.5k
                 </span>
               
 
@@ -438,7 +438,7 @@
       
 
       
-        <p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+        <p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021136flask.png" alt="flask"></p>
 <a id="more"></a>
 
 <h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flask
@@ -457,6 +457,7 @@ if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python �
 <li>application 表示用于响应WSGI请求的应用本身，request 表示每次http请求;</li>
 <li>application的生命周期大于request，一个application存活期间，可能发生多次http请求，所以，也就会有多个request</li>
 </ul>
+<p>application 就是指app = Flask(name)对象<br>request 就是对应每次http 请求创建的Request对象<br>Flask通过_RequestContext将App与Request关联起来</p>
 <h3 id="flask-里的函数"><a href="#flask-里的函数" class="headerlink" title="flask 里的函数"></a>flask 里的函数</h3><ul>
 <li><p>escape 解析路径上的特殊符号</p>
 </li>
@@ -566,7 +567,7 @@ def hello(name):
   <p><span>本文标题:</span><a href="/2019/11/21/Flask%E6%80%BB%E7%BB%93/">Flask总结</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 YangYang Luo 的个人博客">YangYang Luo</a></p>
   <p><span>发布时间:</span>2019年11月21日 - 17:11</p>
-  <p><span>最后更新:</span>2019年11月28日 - 18:11</p>
+  <p><span>最后更新:</span>2019年11月30日 - 14:11</p>
   <p><span>原始链接:</span><a href="/2019/11/21/Flask%E6%80%BB%E7%BB%93/" title="Flask总结">http://yoursite.com/2019/11/21/Flask%E6%80%BB%E7%BB%93/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/21/Flask%E6%80%BB%E7%BB%93/"  aria-label="复制成功！"></i></span>
   </p>
@@ -601,8 +602,6 @@ def hello(name):
           
             <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
           
-            <a href="/tags/Flask/" rel="tag"><i class="fa fa-tag"></i> Flask</a>
-          
         </div>
       
 
@@ -627,8 +626,8 @@ def hello(name):
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/" rel="next" title="VSCode使用">
-                <i class="fa fa-chevron-left"></i> VSCode使用
+              <a href="/2019/11/21/nginx%E6%80%BB%E7%BB%93/" rel="next" title="nginx总结">
+                <i class="fa fa-chevron-left"></i> nginx总结
               </a>
             
           </div>
@@ -636,6 +635,10 @@ def hello(name):
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/" rel="prev" title="VSCode使用">
+                VSCode使用 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -766,7 +769,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

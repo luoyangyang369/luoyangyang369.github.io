@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>VSCode使用</title>
+    <url>/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg" alt="VSCode"></p>
+<a id="more"></a>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p>
+<h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p>
+<p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p>
+<ol>
+<li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li>
+<li>选取Python解释器  <blockquote>
+<p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul>
+<li>Settings Sync</li>
+</ul>
+<p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p>
+<ul>
+<li>Python</li>
+</ul>
+<p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p>
+<ul>
+<li>Bracket Pair Colorizer</li>
+</ul>
+<p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p>
+<ul>
+<li>Visual Studio IntelliCode</li>
+</ul>
+<p>自动补全配置</p>
+<ul>
+<li>Code Runner</li>
+</ul>
+<p>支持多种语言，包括 Python，运行执行一段任意代码。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p>
+<blockquote>
+<p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p>
+</blockquote>
+<p>就是找到启动的 .exe文件右键 =&gt; 属性</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Flask总结</title>
     <url>/2019/11/21/Flask%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021136flask.png" alt="flask"></p>
 <a id="more"></a>
 
 <h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flask
@@ -22,6 +71,7 @@ if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python �
 <li>application 表示用于响应WSGI请求的应用本身，request 表示每次http请求;</li>
 <li>application的生命周期大于request，一个application存活期间，可能发生多次http请求，所以，也就会有多个request</li>
 </ul>
+<p>application 就是指app = Flask(name)对象<br>request 就是对应每次http 请求创建的Request对象<br>Flask通过_RequestContext将App与Request关联起来</p>
 <h3 id="flask-里的函数"><a href="#flask-里的函数" class="headerlink" title="flask 里的函数"></a>flask 里的函数</h3><ul>
 <li><p>escape 解析路径上的特殊符号</p>
 </li>
@@ -108,57 +158,6 @@ def hello(name):
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Flask</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VSCode使用</title>
-    <url>/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p>
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p>
-<h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p>
-<p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p>
-<ol>
-<li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li>
-<li>选取Python解释器  <blockquote>
-<p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p>
-</blockquote>
-</li>
-</ol>
-<h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul>
-<li>Settings Sync</li>
-</ul>
-<p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p>
-<ul>
-<li>Python</li>
-</ul>
-<p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p>
-<ul>
-<li>Bracket Pair Colorizer</li>
-</ul>
-<p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p>
-<ul>
-<li>Visual Studio IntelliCode</li>
-</ul>
-<p>自动补全配置</p>
-<ul>
-<li>Code Runner</li>
-</ul>
-<p>支持多种语言，包括 Python，运行执行一段任意代码。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p>
-<blockquote>
-<p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p>
-</blockquote>
-<p>就是找到启动的 .exe文件右键 =&gt; 属性</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>VSCode</tag>
-        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -439,76 +438,6 @@ http {
       </categories>
       <tags>
         <tag>消息队列</tag>
-        <tag>CMQ</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pm2工作使用</title>
-    <url>/2019/09/13/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>pm2 基本知识及常用命令</p>
-<a id="more"></a>
-<h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>PM2是node进程管理工具，可以利用它来简化很多node应用管理的繁琐任务，如性能监控、自动重启、负载均衡等，而且使用非常简单。</p>
-<h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><pre><code>配置文件里的设置项，跟命令行参数基本是一一对应的。
-可以选择yaml或者json文件，就看个人洗好了。
-json格式的配置文件，pm2当作普通的js文件来处理，所以可以在里面添加注释或者编写代码，这对于动态调整配置很有好处。
-如果启动的时候指定了配置文件，那么命令行参数会被忽略。（个别参数除外，比如--env）
-
-PM2配置文件夹结构    一旦PM2启动，自动创建这些文件夹：
-$HOME/.pm2 将包含所有与PM2相关的文件
-$HOME/.pm2/logs 将包含所有应用程序日志  // out标准输出  error 错误输出
-$HOME/.pm2/pids 将包含所有应用程序pid
-$HOME/.pm2/pm2.log PM2日志  // pm2自身日志，如谁用了那个命令
-$HOME/.pm2/pm2.pid PM2 pid
-$HOME/.pm2/rpc.sock 远程命令的套接字文件
-$HOME/.pm2/pub.sock 用于可发布事件的套接字文件
-$HOME/.pm2/conf.js PM2配置</code></pre><h5 id="启动文件"><a href="#启动文件" class="headerlink" title="启动文件"></a>启动文件</h5><pre><code>配置pm2启动文件  
-生成示例生态系统.json文件，其中列出了进程和部署环境
-$ pm2 ecosystem；这将生成一个示例ecosystem.config.js
-根据需要再次编辑文件
-{
-  &quot;apps&quot;: [  // json结构，apps是一个数组，每一个数组成员就是对应一个pm2中运行的应用
-    {
-      &quot;name&quot;: &quot;mywork&quot;,  // 应用程序名称
-      &quot;cwd&quot;: &quot;/srv/node-app/current&quot;,  // 应用程序所在的目录
-      &quot;script&quot;: &quot;bin/www&quot;,  // 应用程序的脚本路径
-      &quot;log_date_format&quot;: &quot;YYYY-MM-DD HH:mm Z&quot;,  
-      &quot;error_file&quot;: &quot;/var/log/node-app/node-app.stderr.log&quot;,  // 错误日志
-      &quot;out_file&quot;: &quot;log/node-app.stdout.log&quot;,  //  自定义应用程序日志文件
-      &quot;pid_file&quot;: &quot;pids/node-geo-api.pid&quot;,  // 自定义应用程序的pid文件
-      &quot;instances&quot;: 6,
-      &quot;min_uptime&quot;: &quot;200s&quot;,  // 最小运行时间，这里设置的是60s即如果应用程序在60s内退出，pm2会认为程序异常退出，此时触发重启max_restarts设置数量
-      &quot;max_restarts&quot;: 10,    // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）
-      &quot;max_memory_restart&quot;: &quot;1M&quot;,  // 服务内存超过1M，会自动重启
-      &quot;cron_restart&quot;: &quot;1 0 * * *&quot;,  // 定时启动，解决重启能解决的问题
-      &quot;watch&quot;: false,  // 监听重启，启用情况下，文件夹或子文件夹下变化应用自动重启；
-      &quot;merge_logs&quot;: true,
-      &quot;exec_interpreter&quot;: &quot;node&quot;,
-      &quot;exec_mode&quot;: &quot;fork&quot;,  // 应用启动模式，支持fork和cluster模式；
-      &quot;autorestart&quot;: false,  // 默认为true, 发生异常的情况下自动重启；
-      &quot;vizion&quot;: false
-    }
-  ]
-}</code></pre><h3 id="工作常用命令"><a href="#工作常用命令" class="headerlink" title="工作常用命令"></a>工作常用命令</h3><pre><code>启动项目：pm2 start ecosystem.config.js--env development
-实时日志打印：pm2 logs youke
-查看项目状态：pm2 show youke
-停止项目：pm2 stop youke</code></pre><h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><pre><code>重启：pm2 restart ecosystem.config.js
-pm2 reload；与restart杀死并重新启动进程的相对，reload实现了0秒的停机时间重载。
-pm2 [list|ls|l|status]
-查看启动程序的详细信息：pm2 describe id
-pm2 monit：可以得到进程(以及集群)的CPU的使用率和内存占用(ctrl +c 退出)
-
-启动项目：pm2 start ecosystem.config.js --watch
---watch：监听应用目录的变化，一旦发生变化，自动重启。如果要精确监听、不见听的目录，最好通过配置文件。
--i --instances：启用多少个实例，可用于负载均衡。如果-i 0或者-i max，则根据当前机器核数确定实例数目。
---ignore-watch：排除监听的目录/文件，可以是特定的文件名，也可以是正则。
-        比如--ignore-watch=&quot;test node_modules &quot;some scripts&quot;&quot;
--n --name：应用的名称。查看应用信息的时候可以用到。
--o --output &lt;path&gt;：标准输出日志文件的路径。
--e --error &lt;path&gt;：错误输出日志文件的路径。</code></pre><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://wohugb.gitbooks.io/pm2/content/bu_shu.html" target="_blank" rel="noopener">pm2教程</a></p>
-]]></content>
-      <tags>
-        <tag>pm2</tag>
-        <tag>node</tag>
       </tags>
   </entry>
   <entry>
@@ -577,7 +506,77 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
       </categories>
       <tags>
         <tag>多媒体</tag>
-        <tag>FFmpeg</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pm2工作使用</title>
+    <url>/2019/09/13/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>pm2 基本知识及常用命令</p>
+<a id="more"></a>
+<h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><p>PM2是node进程管理工具，可以利用它来简化很多node应用管理的繁琐任务，如性能监控、自动重启、负载均衡等，而且使用非常简单。</p>
+<h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><pre><code>配置文件里的设置项，跟命令行参数基本是一一对应的。
+可以选择yaml或者json文件，就看个人洗好了。
+json格式的配置文件，pm2当作普通的js文件来处理，所以可以在里面添加注释或者编写代码，这对于动态调整配置很有好处。
+如果启动的时候指定了配置文件，那么命令行参数会被忽略。（个别参数除外，比如--env）
+
+PM2配置文件夹结构    一旦PM2启动，自动创建这些文件夹：
+$HOME/.pm2 将包含所有与PM2相关的文件
+$HOME/.pm2/logs 将包含所有应用程序日志  // out标准输出  error 错误输出
+$HOME/.pm2/pids 将包含所有应用程序pid
+$HOME/.pm2/pm2.log PM2日志  // pm2自身日志，如谁用了那个命令
+$HOME/.pm2/pm2.pid PM2 pid
+$HOME/.pm2/rpc.sock 远程命令的套接字文件
+$HOME/.pm2/pub.sock 用于可发布事件的套接字文件
+$HOME/.pm2/conf.js PM2配置</code></pre><h5 id="启动文件"><a href="#启动文件" class="headerlink" title="启动文件"></a>启动文件</h5><pre><code>配置pm2启动文件  
+生成示例生态系统.json文件，其中列出了进程和部署环境
+$ pm2 ecosystem；这将生成一个示例ecosystem.config.js
+根据需要再次编辑文件
+{
+  &quot;apps&quot;: [  // json结构，apps是一个数组，每一个数组成员就是对应一个pm2中运行的应用
+    {
+      &quot;name&quot;: &quot;mywork&quot;,  // 应用程序名称
+      &quot;cwd&quot;: &quot;/srv/node-app/current&quot;,  // 应用程序所在的目录
+      &quot;script&quot;: &quot;bin/www&quot;,  // 应用程序的脚本路径
+      &quot;log_date_format&quot;: &quot;YYYY-MM-DD HH:mm Z&quot;,  
+      &quot;error_file&quot;: &quot;/var/log/node-app/node-app.stderr.log&quot;,  // 错误日志
+      &quot;out_file&quot;: &quot;log/node-app.stdout.log&quot;,  //  自定义应用程序日志文件
+      &quot;pid_file&quot;: &quot;pids/node-geo-api.pid&quot;,  // 自定义应用程序的pid文件
+      &quot;instances&quot;: 6,
+      &quot;min_uptime&quot;: &quot;200s&quot;,  // 最小运行时间，这里设置的是60s即如果应用程序在60s内退出，pm2会认为程序异常退出，此时触发重启max_restarts设置数量
+      &quot;max_restarts&quot;: 10,    // 设置应用程序异常退出重启的次数，默认15次（从0开始计数）
+      &quot;max_memory_restart&quot;: &quot;1M&quot;,  // 服务内存超过1M，会自动重启
+      &quot;cron_restart&quot;: &quot;1 0 * * *&quot;,  // 定时启动，解决重启能解决的问题
+      &quot;watch&quot;: false,  // 监听重启，启用情况下，文件夹或子文件夹下变化应用自动重启；
+      &quot;merge_logs&quot;: true,
+      &quot;exec_interpreter&quot;: &quot;node&quot;,
+      &quot;exec_mode&quot;: &quot;fork&quot;,  // 应用启动模式，支持fork和cluster模式；
+      &quot;autorestart&quot;: false,  // 默认为true, 发生异常的情况下自动重启；
+      &quot;vizion&quot;: false
+    }
+  ]
+}</code></pre><h3 id="工作常用命令"><a href="#工作常用命令" class="headerlink" title="工作常用命令"></a>工作常用命令</h3><pre><code>启动项目：pm2 start ecosystem.config.js--env development
+实时日志打印：pm2 logs youke
+查看项目状态：pm2 show youke
+停止项目：pm2 stop youke</code></pre><h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><pre><code>重启：pm2 restart ecosystem.config.js
+pm2 reload；与restart杀死并重新启动进程的相对，reload实现了0秒的停机时间重载。
+pm2 [list|ls|l|status]
+查看启动程序的详细信息：pm2 describe id
+pm2 monit：可以得到进程(以及集群)的CPU的使用率和内存占用(ctrl +c 退出)
+
+启动项目：pm2 start ecosystem.config.js --watch
+--watch：监听应用目录的变化，一旦发生变化，自动重启。如果要精确监听、不见听的目录，最好通过配置文件。
+-i --instances：启用多少个实例，可用于负载均衡。如果-i 0或者-i max，则根据当前机器核数确定实例数目。
+--ignore-watch：排除监听的目录/文件，可以是特定的文件名，也可以是正则。
+        比如--ignore-watch=&quot;test node_modules &quot;some scripts&quot;&quot;
+-n --name：应用的名称。查看应用信息的时候可以用到。
+-o --output &lt;path&gt;：标准输出日志文件的路径。
+-e --error &lt;path&gt;：错误输出日志文件的路径。</code></pre><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://wohugb.gitbooks.io/pm2/content/bu_shu.html" target="_blank" rel="noopener">pm2教程</a></p>
+]]></content>
+      <categories>
+        <category>node</category>
+      </categories>
+      <tags>
+        <tag>node</tag>
       </tags>
   </entry>
   <entry>
@@ -589,13 +588,13 @@ hls_list_size 3:HLS播放的列表，FFmpeg默认5。
       </categories>
       <tags>
         <tag>多媒体</tag>
-        <tag>FFmpeg</tag>
       </tags>
   </entry>
   <entry>
     <title>node学习</title>
     <url>/2019/09/05/node%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021922node.png" alt="node"></p>
+<a id="more"></a>
 
 <h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><ul>
 <li><p>for 或者 foreach 进行循环获取数组值<br>var array = [‘a’, ‘b’, ‘c’, ‘d’];<br>for (var i = 0; i &lt; array.length; i++)<br>array.forEach(function (element)</p>
@@ -701,13 +700,12 @@ let p = await formImage();</code></pre><p>Node.js等则规定在JavaScript的回
       </categories>
       <tags>
         <tag>node</tag>
-        <tag>语言</tag>
       </tags>
   </entry>
   <entry>
-    <title>记录一次小程序开发</title>
+    <title>小程序项目记录</title>
     <url>/2019/08/26/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>记录一次小程序开发，出现的坑以及一些知识</p>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129022044%E5%B0%8F%E7%A8%8B%E5%BA%8F.jpg" alt="小程序"><br>记录一次小程序开发，出现的坑以及一些知识</p>
 <a id="more"></a>
 
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
@@ -769,7 +767,6 @@ let p = await formImage();</code></pre><p>Node.js等则规定在JavaScript的回
         <category>面试</category>
       </categories>
       <tags>
-        <tag>面试</tag>
         <tag>总结</tag>
       </tags>
   </entry>
@@ -789,7 +786,6 @@ let p = await formImage();</code></pre><p>Node.js等则规定在JavaScript的回
       </categories>
       <tags>
         <tag>工作</tag>
-        <tag>问题</tag>
       </tags>
   </entry>
   <entry>
@@ -835,7 +831,6 @@ let p = await formImage();</code></pre><p>Node.js等则规定在JavaScript的回
       </categories>
       <tags>
         <tag>学习</tag>
-        <tag>小知识</tag>
       </tags>
   </entry>
   <entry>
@@ -875,7 +870,6 @@ $ make install</code></pre><p>清理安装后的临时文件：</p>
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -941,8 +935,20 @@ $ make install</code></pre><p>清理安装后的临时文件：</p>
       </categories>
       <tags>
         <tag>数据结构</tag>
-        <tag>数组</tag>
-        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>理解高性能网络模型</title>
+    <url>/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1032,21 +1038,6 @@ while (i &lt;= n)  {
       </categories>
       <tags>
         <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>理解高性能网络模型</title>
-    <url>/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1103,7 +1094,6 @@ while (i &lt;= n)  {
       </categories>
       <tags>
         <tag>计算机</tag>
-        <tag>英语</tag>
       </tags>
   </entry>
   <entry>
@@ -1233,11 +1223,10 @@ while (i &lt;= n)  {
 </blockquote>
 ]]></content>
       <categories>
-        <category>MySQL</category>
+        <category>计算机</category>
       </categories>
       <tags>
-        <tag>计算机系统</tag>
-        <tag>编码</tag>
+        <tag>计算机</tag>
       </tags>
   </entry>
   <entry>
@@ -1360,7 +1349,6 @@ main() {
         <category>计算机</category>
       </categories>
       <tags>
-        <tag>计算机</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
@@ -1459,7 +1447,6 @@ possible_keys: PRIMARY
       </categories>
       <tags>
         <tag>MySQL</tag>
-        <tag>SQL优化</tag>
       </tags>
   </entry>
   <entry>
@@ -1732,8 +1719,7 @@ S：表示不统计子目录，s：表示不要显示其下子目录和文件占
         <category>bash</category>
       </categories>
       <tags>
-        <tag>学习</tag>
-        <tag>bash</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1832,7 +1818,6 @@ S：表示不统计子目录，s：表示不要显示其下子目录和文件占
       </categories>
       <tags>
         <tag>学习</tag>
-        <tag>书籍</tag>
       </tags>
   </entry>
   <entry>
@@ -2007,7 +1992,6 @@ hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#mark
       <tags>
         <tag>命令</tag>
         <tag>Hexo</tag>
-        <tag>markdown</tag>
       </tags>
   </entry>
   <entry>
@@ -2150,6 +2134,87 @@ hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#mark
       </tags>
   </entry>
   <entry>
+    <title>python知识归纳</title>
+    <url>/2018/12/07/python%E7%9F%A5%E8%AF%86%E5%BD%92%E7%BA%B3/</url>
+    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+<a id="more"></a>
+
+
+<h2 id="什么是wsgi-uwsgi-uWSGI"><a href="#什么是wsgi-uwsgi-uWSGI" class="headerlink" title="什么是wsgi,uwsgi,uWSGI?"></a>什么是wsgi,uwsgi,uWSGI?</h2><ul>
+<li>WSGI:</li>
+</ul>
+<p>web服务器网关接口，是一套协议。用于接收用户请求并将请求进行初次封装，然后将请求交给web框架。<br>实现wsgi协议的模块：wsgiref,本质上就是编写一socket服务端，用于接收用户请求（django)<br>werkzeug,本质上就是编写一个socket服务端，用于接收用户请求(flask)</p>
+<ul>
+<li>uwsgi:<br>与WSGI一样是一种通信协议，它是uWSGI服务器的独占协议，用于定义传输信息的类型。 uWSGI:<br>是一个web服务器，实现了WSGI的协议，uWSGI协议，http协议</li>
+</ul>
+<h2 id="Django、Flask、Tornado的对比？"><a href="#Django、Flask、Tornado的对比？" class="headerlink" title="Django、Flask、Tornado的对比？"></a>Django、Flask、Tornado的对比？</h2><p>1、 Django走的大而全的方向，开发效率高。它的MTV框架，自带的ORM,admin后台管理,自带的sqlite数据库和开发测试用的服务器，给开发者提高了超高的开发效率。 </p>
+<p>重量级web框架，功能齐全，提供一站式解决的思路，能让开发者不用在选择上花费大量时间。<br>自带ORM和模板引擎，支持jinja等非官方模板引擎。<br>自带ORM使Django和关系型数据库耦合度高，如果要使用非关系型数据库，需要使用第三方库<br>自带数据库管理app<br>成熟，稳定，开发效率高，相对于Flask，Django的整体封闭性比较好，适合做企业级网站的开发。python web框架的先驱，第三方库丰富</p>
+<p>2、 Flask 是轻量级的框架，自由，灵活，可扩展性强，核心基于Werkzeug WSGI工具 和jinja2 模板引擎</p>
+<p>适用于做小网站以及web服务的API,开发大型网站无压力，但架构需要自己设计<br>与关系型数据库的结合不弱于Django，而与非关系型数据库的结合远远优于Django<br>3、 Tornado走的是少而精的方向，性能优越，它最出名的异步非阻塞的设计方式<br>Tornado的两大核心模块：<br>iostraem:对非阻塞的socket进行简单的封装<br>ioloop: 对I/O 多路复用的封装,它实现一个单例</p>
+<h2 id="CORS-和-CSRF的区别？"><a href="#CORS-和-CSRF的区别？" class="headerlink" title="CORS 和 CSRF的区别？"></a>CORS 和 CSRF的区别？</h2><p>CORS是一个W3C标准,全称是“跨域资源共享”(Cross-origin resoure sharing). 它允许浏览器向跨源服务器，发出XMLHttpRequest请求，从而客服了AJAX只能同源使用的限制。<br>CSRF主流防御方式是在后端生成表单的时候生成一串随机token,内置到表单里成为一个字段，同时，将此串token置入session中。每次表单提交到后端时都会检查这两个值是否一致，以此来判断此次表单提交是否是可信的，提交过一次之后，如果这个页面没有生成CSRF token,那么token将会被清空,如果有新的需求，那么token会被更新。 攻击者可以伪造POST表单提交，但是他没有后端生成的内置于表单的token，session中没有token都无济于事。</p>
+<h2 id="Session-Cookie-JWT的理解"><a href="#Session-Cookie-JWT的理解" class="headerlink" title="Session,Cookie,JWT的理解"></a>Session,Cookie,JWT的理解</h2><h3 id="为什么要使用会话管理"><a href="#为什么要使用会话管理" class="headerlink" title="为什么要使用会话管理"></a>为什么要使用会话管理</h3><p>众所周知，HTTP协议是一个无状态的协议，也就是说每个请求都是一个独立的请求，请求与请求之间并无关系。但在实际的应用场景，这种方式并不能满足我们的需求。举个大家都喜欢用的例子，把商品加入购物车，单独考虑这个请求，服务端并不知道这个商品是谁的，应该加入谁的购物车？因此这个请求的上下文环境实际上应该包含用户的相关信息，在每次用户发出请求时把这一小部分额外信息，也做为请求的一部分，这样服务端就可以根据上下文中的信息，针对具体的用户进行操作。所以这几种技术的出现都是对HTTP协议的一个补充，使得我们可以用HTTP协议+状态管理构建一个的面向用户的WEB应用。</p>
+<h3 id="Session-和Cookie的区别"><a href="#Session-和Cookie的区别" class="headerlink" title="Session 和Cookie的区别"></a>Session 和Cookie的区别</h3><p>这里我想先谈谈session与cookies,因为这两个技术是做为开发最为常见的。那么session与cookies的区别是什么？个人认为session与cookies最核心区别在于额外信息由谁来维护。利用cookies来实现会话管理时，用户的相关信息或者其他我们想要保持在每个请求中的信息，都是放在cookies中,而cookies是由客户端来保存，每当客户端发出新请求时，就会稍带上cookies,服务端会根据其中的信息进行操作。 当利用session来进行会话管理时，客户端实际上只存了一个由服务端发送的session_id,而由这个session_id,可以在服务端还原出所需要的所有状态信息，从这里可以看出这部分信息是由服务端来维护的。</p>
+<p>除此以外，session与cookies都有一些自己的缺点：<br>cookies的安全性不好，攻击者可以通过获取本地cookies进行欺骗或者利用cookies进行CSRF攻击。使用cookies时,在多个域名下，会存在跨域问题。 session 在一定的时间里，需要存放在服务端，因此当拥有大量用户时，也会大幅度降低服务端的性能，当有多台机器时，如何共享session也会是一个问题.(redis集群)也就是说，用户第一个访问的时候是服务器A，而第二个请求被转发给了服务器B，那服务器B如何得知其状态。实际上，session与cookies是有联系的，比如我们可以把session_id存放在cookies中的。</p>
+<h2 id="JWT是如何工作的"><a href="#JWT是如何工作的" class="headerlink" title="JWT是如何工作的"></a>JWT是如何工作的</h2><p>首先用户发出登录请求，服务端根据用户的登录请求进行匹配，如果匹配成功，将相关的信息放入payload中，利用算法，加上服务端的密钥生成token，这里需要注意的是secret_key很重要，如果这个泄露的话，客户端就可以随机篡改发送的额外信息，它是信息完整性的保证。生成token后服务端将其返回给客户端，客户端可以在下次请求时，将token一起交给服务端，一般是说我们可以将其放在Authorization首部中，这样也就可以避免跨域问题。<br>简述Django请求生命周期<br>一般是用户通过浏览器向我们的服务器发起一个请求(request),这个请求会去访问视图函数，如果不涉及到数据调用，那么这个时候视图函数返回一个模板也就是一个网页给用户） 视图函数调用模型毛模型去数据库查找数据，然后逐级返回，视图函数把返回的数据填充到模板中空格中，最后返回网页给用户。</p>
+<ol>
+<li>wsgi ,请求封装后交给web框架（Flask，Django)</li>
+<li>中间件，对请求进行校验或在请求对象中添加其他相关数据，例如：csrf,request.session</li>
+<li>路由匹配 根据浏览器发送的不同url去匹配不同的视图函数</li>
+<li>视图函数，在视图函数中进行业务逻辑的处理，可能涉及到：orm，templates</li>
+<li>中间件，对响应的数据进行处理</li>
+<li>wsgi，将响应的内容发送给浏览器</li>
+</ol>
+<h2 id="nginx-tomcat-apach到都是什么？"><a href="#nginx-tomcat-apach到都是什么？" class="headerlink" title="nginx,tomcat,apach到都是什么？"></a>nginx,tomcat,apach到都是什么？</h2><p>Nginx（engine x)是一个高性能的HTTP和反向代理服务器，也是 一个IMAP/POP3/SMTP服务器，工作在OSI七层，负载的实现方式：轮询，IP_HASH,fair,session_sticky. Apache HTTP Server是一个模块化的服务器，源于NCSAhttpd服务器 Tomcat 服务器是一个免费的开放源代码的Web应用服务器，属于轻量级应用服务器，是开发和调试JSP程序的首选。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python学习</title>
+    <url>/2018/12/07/python%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+<a id="more"></a>
+
+<h2 id="关键字解释"><a href="#关键字解释" class="headerlink" title="关键字解释"></a>关键字解释</h2><ul>
+<li><strong>name</strong>: </li>
+</ul>
+<p>通俗的理解<strong>name</strong> == ‘<strong>main</strong>‘：假如你叫小明.py，在朋友眼中，你是小明(<strong>name</strong> == ‘小明’)；在你自己眼中，你是你自己(<strong>name</strong> == ‘<strong>main</strong>‘)。</p>
+<p>if <strong>name</strong> == ‘<strong>main</strong>‘的意思是：当.py文件被直接运行时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块将被运行；当.py文件以模块形式被导入时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块不被运行。</p>
+<p>被运行的时候，<strong>name</strong>是<strong>main</strong>;  当作为模块导入的时候为 当前文件名称</p>
+<ul>
+<li>assert</li>
+</ul>
+<p>在开发一个程序时候，与其让它运行时崩溃，不如在它出现错误条件时就崩溃（返回错误）。这时候断言assert 就显得非常有用。</p>
+<p>assert的语法格式：  assert expression</p>
+<p>它的等价语句为：</p>
+<p>if not expression:<br>    raise AssertionError</p>
+<p>也可为assert添加异常参数，其实就是在断言表达式后添加字符串信息，用来解释断言并更好的知道是哪里出了问题。格式如下：</p>
+<p>assert expression [, arguments]</p>
+<ul>
+<li><strong>init</strong></li>
+</ul>
+<p>定义类的时候，若是添加<strong>init</strong>方法，那么在创建类的实例的时候，实例会自动调用这个方法，一般用来对实例的属性进行初使化。</p>
+<p><strong>init</strong>.py 文件的作用是将文件夹变为一个Python模块,Python 中的每个模块的包中，都有<strong>init</strong>.py 文件。</p>
+<p>通常<strong>init</strong>.py 文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<strong>init</strong>.py文件。</p>
+<p>这样我们可以在<strong>init</strong>.py文件中批量导入我们所需要的模块，而不再需要一个一个的导入。</p>
+<ul>
+<li>关于.pyc 文件 与 .pyo 文件</li>
+</ul>
+<p>.py文件的汇编,只有在import语句执行时进行，当.py文件第一次被导入时，它会被汇编为字节代码，并将字节码写入同名的.pyc文件中。后来每次导入操作都会直接执行.pyc 文件（当.py文件的修改时间发生改变，这样会生成新的.pyc文件），在解释器使用-O选项时，将使用同名的.pyo文件，这个文件去掉了断言（assert）、断行号以及其他调试信息，体积更小，运行更快。（使用-OO选项，生成的.pyo文件会忽略文档信息）</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python环境搭建</title>
     <url>/2018/12/07/python%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
@@ -2205,89 +2270,6 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple</code></pre><h3 id="pip3使
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>环境</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python知识归纳</title>
-    <url>/2018/12/07/python%E7%9F%A5%E8%AF%86%E5%BD%92%E7%BA%B3/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-
-<h2 id="什么是wsgi-uwsgi-uWSGI"><a href="#什么是wsgi-uwsgi-uWSGI" class="headerlink" title="什么是wsgi,uwsgi,uWSGI?"></a>什么是wsgi,uwsgi,uWSGI?</h2><ul>
-<li>WSGI:</li>
-</ul>
-<p>web服务器网关接口，是一套协议。用于接收用户请求并将请求进行初次封装，然后将请求交给web框架。<br>实现wsgi协议的模块：wsgiref,本质上就是编写一socket服务端，用于接收用户请求（django)<br>werkzeug,本质上就是编写一个socket服务端，用于接收用户请求(flask)</p>
-<ul>
-<li>uwsgi:<br>与WSGI一样是一种通信协议，它是uWSGI服务器的独占协议，用于定义传输信息的类型。 uWSGI:<br>是一个web服务器，实现了WSGI的协议，uWSGI协议，http协议</li>
-</ul>
-<h2 id="Django、Flask、Tornado的对比？"><a href="#Django、Flask、Tornado的对比？" class="headerlink" title="Django、Flask、Tornado的对比？"></a>Django、Flask、Tornado的对比？</h2><p>1、 Django走的大而全的方向，开发效率高。它的MTV框架，自带的ORM,admin后台管理,自带的sqlite数据库和开发测试用的服务器，给开发者提高了超高的开发效率。 </p>
-<p>重量级web框架，功能齐全，提供一站式解决的思路，能让开发者不用在选择上花费大量时间。<br>自带ORM和模板引擎，支持jinja等非官方模板引擎。<br>自带ORM使Django和关系型数据库耦合度高，如果要使用非关系型数据库，需要使用第三方库<br>自带数据库管理app<br>成熟，稳定，开发效率高，相对于Flask，Django的整体封闭性比较好，适合做企业级网站的开发。python web框架的先驱，第三方库丰富</p>
-<p>2、 Flask 是轻量级的框架，自由，灵活，可扩展性强，核心基于Werkzeug WSGI工具 和jinja2 模板引擎</p>
-<p>适用于做小网站以及web服务的API,开发大型网站无压力，但架构需要自己设计<br>与关系型数据库的结合不弱于Django，而与非关系型数据库的结合远远优于Django<br>3、 Tornado走的是少而精的方向，性能优越，它最出名的异步非阻塞的设计方式<br>Tornado的两大核心模块：<br>iostraem:对非阻塞的socket进行简单的封装<br>ioloop: 对I/O 多路复用的封装,它实现一个单例</p>
-<h2 id="CORS-和-CSRF的区别？"><a href="#CORS-和-CSRF的区别？" class="headerlink" title="CORS 和 CSRF的区别？"></a>CORS 和 CSRF的区别？</h2><p>CORS是一个W3C标准,全称是“跨域资源共享”(Cross-origin resoure sharing). 它允许浏览器向跨源服务器，发出XMLHttpRequest请求，从而客服了AJAX只能同源使用的限制。<br>CSRF主流防御方式是在后端生成表单的时候生成一串随机token,内置到表单里成为一个字段，同时，将此串token置入session中。每次表单提交到后端时都会检查这两个值是否一致，以此来判断此次表单提交是否是可信的，提交过一次之后，如果这个页面没有生成CSRF token,那么token将会被清空,如果有新的需求，那么token会被更新。 攻击者可以伪造POST表单提交，但是他没有后端生成的内置于表单的token，session中没有token都无济于事。</p>
-<h2 id="Session-Cookie-JWT的理解"><a href="#Session-Cookie-JWT的理解" class="headerlink" title="Session,Cookie,JWT的理解"></a>Session,Cookie,JWT的理解</h2><h3 id="为什么要使用会话管理"><a href="#为什么要使用会话管理" class="headerlink" title="为什么要使用会话管理"></a>为什么要使用会话管理</h3><p>众所周知，HTTP协议是一个无状态的协议，也就是说每个请求都是一个独立的请求，请求与请求之间并无关系。但在实际的应用场景，这种方式并不能满足我们的需求。举个大家都喜欢用的例子，把商品加入购物车，单独考虑这个请求，服务端并不知道这个商品是谁的，应该加入谁的购物车？因此这个请求的上下文环境实际上应该包含用户的相关信息，在每次用户发出请求时把这一小部分额外信息，也做为请求的一部分，这样服务端就可以根据上下文中的信息，针对具体的用户进行操作。所以这几种技术的出现都是对HTTP协议的一个补充，使得我们可以用HTTP协议+状态管理构建一个的面向用户的WEB应用。</p>
-<h3 id="Session-和Cookie的区别"><a href="#Session-和Cookie的区别" class="headerlink" title="Session 和Cookie的区别"></a>Session 和Cookie的区别</h3><p>这里我想先谈谈session与cookies,因为这两个技术是做为开发最为常见的。那么session与cookies的区别是什么？个人认为session与cookies最核心区别在于额外信息由谁来维护。利用cookies来实现会话管理时，用户的相关信息或者其他我们想要保持在每个请求中的信息，都是放在cookies中,而cookies是由客户端来保存，每当客户端发出新请求时，就会稍带上cookies,服务端会根据其中的信息进行操作。 当利用session来进行会话管理时，客户端实际上只存了一个由服务端发送的session_id,而由这个session_id,可以在服务端还原出所需要的所有状态信息，从这里可以看出这部分信息是由服务端来维护的。</p>
-<p>除此以外，session与cookies都有一些自己的缺点：<br>cookies的安全性不好，攻击者可以通过获取本地cookies进行欺骗或者利用cookies进行CSRF攻击。使用cookies时,在多个域名下，会存在跨域问题。 session 在一定的时间里，需要存放在服务端，因此当拥有大量用户时，也会大幅度降低服务端的性能，当有多台机器时，如何共享session也会是一个问题.(redis集群)也就是说，用户第一个访问的时候是服务器A，而第二个请求被转发给了服务器B，那服务器B如何得知其状态。实际上，session与cookies是有联系的，比如我们可以把session_id存放在cookies中的。</p>
-<h2 id="JWT是如何工作的"><a href="#JWT是如何工作的" class="headerlink" title="JWT是如何工作的"></a>JWT是如何工作的</h2><p>首先用户发出登录请求，服务端根据用户的登录请求进行匹配，如果匹配成功，将相关的信息放入payload中，利用算法，加上服务端的密钥生成token，这里需要注意的是secret_key很重要，如果这个泄露的话，客户端就可以随机篡改发送的额外信息，它是信息完整性的保证。生成token后服务端将其返回给客户端，客户端可以在下次请求时，将token一起交给服务端，一般是说我们可以将其放在Authorization首部中，这样也就可以避免跨域问题。<br>简述Django请求生命周期<br>一般是用户通过浏览器向我们的服务器发起一个请求(request),这个请求会去访问视图函数，如果不涉及到数据调用，那么这个时候视图函数返回一个模板也就是一个网页给用户） 视图函数调用模型毛模型去数据库查找数据，然后逐级返回，视图函数把返回的数据填充到模板中空格中，最后返回网页给用户。</p>
-<ol>
-<li>wsgi ,请求封装后交给web框架（Flask，Django)</li>
-<li>中间件，对请求进行校验或在请求对象中添加其他相关数据，例如：csrf,request.session</li>
-<li>路由匹配 根据浏览器发送的不同url去匹配不同的视图函数</li>
-<li>视图函数，在视图函数中进行业务逻辑的处理，可能涉及到：orm，templates</li>
-<li>中间件，对响应的数据进行处理</li>
-<li>wsgi，将响应的内容发送给浏览器</li>
-</ol>
-<h2 id="nginx-tomcat-apach到都是什么？"><a href="#nginx-tomcat-apach到都是什么？" class="headerlink" title="nginx,tomcat,apach到都是什么？"></a>nginx,tomcat,apach到都是什么？</h2><p>Nginx（engine x)是一个高性能的HTTP和反向代理服务器，也是 一个IMAP/POP3/SMTP服务器，工作在OSI七层，负载的实现方式：轮询，IP_HASH,fair,session_sticky. Apache HTTP Server是一个模块化的服务器，源于NCSAhttpd服务器 Tomcat 服务器是一个免费的开放源代码的Web应用服务器，属于轻量级应用服务器，是开发和调试JSP程序的首选。</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>知识</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python学习</title>
-    <url>/2018/12/07/python%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-<h2 id="关键字解释"><a href="#关键字解释" class="headerlink" title="关键字解释"></a>关键字解释</h2><ul>
-<li><strong>name</strong>: </li>
-</ul>
-<p>通俗的理解<strong>name</strong> == ‘<strong>main</strong>‘：假如你叫小明.py，在朋友眼中，你是小明(<strong>name</strong> == ‘小明’)；在你自己眼中，你是你自己(<strong>name</strong> == ‘<strong>main</strong>‘)。</p>
-<p>if <strong>name</strong> == ‘<strong>main</strong>‘的意思是：当.py文件被直接运行时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块将被运行；当.py文件以模块形式被导入时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块不被运行。</p>
-<p>被运行的时候，<strong>name</strong>是<strong>main</strong>;  当作为模块导入的时候为 当前文件名称</p>
-<ul>
-<li>assert</li>
-</ul>
-<p>在开发一个程序时候，与其让它运行时崩溃，不如在它出现错误条件时就崩溃（返回错误）。这时候断言assert 就显得非常有用。</p>
-<p>assert的语法格式：  assert expression</p>
-<p>它的等价语句为：</p>
-<p>if not expression:<br>    raise AssertionError</p>
-<p>也可为assert添加异常参数，其实就是在断言表达式后添加字符串信息，用来解释断言并更好的知道是哪里出了问题。格式如下：</p>
-<p>assert expression [, arguments]</p>
-<ul>
-<li><strong>init</strong></li>
-</ul>
-<p>定义类的时候，若是添加<strong>init</strong>方法，那么在创建类的实例的时候，实例会自动调用这个方法，一般用来对实例的属性进行初使化。</p>
-<p><strong>init</strong>.py 文件的作用是将文件夹变为一个Python模块,Python 中的每个模块的包中，都有<strong>init</strong>.py 文件。</p>
-<p>通常<strong>init</strong>.py 文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<strong>init</strong>.py文件。</p>
-<p>这样我们可以在<strong>init</strong>.py文件中批量导入我们所需要的模块，而不再需要一个一个的导入。</p>
-<ul>
-<li>关于.pyc 文件 与 .pyo 文件</li>
-</ul>
-<p>.py文件的汇编,只有在import语句执行时进行，当.py文件第一次被导入时，它会被汇编为字节代码，并将字节码写入同名的.pyc文件中。后来每次导入操作都会直接执行.pyc 文件（当.py文件的修改时间发生改变，这样会生成新的.pyc文件），在解释器使用-O选项时，将使用同名的.pyo文件，这个文件去掉了断言（assert）、断行号以及其他调试信息，体积更小，运行更快。（使用-OO选项，生成的.pyo文件会忽略文档信息）</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>学习</tag>
       </tags>
   </entry>
 </search>
