@@ -1,166 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>VSCode使用</title>
-    <url>/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg" alt="VSCode"></p>
-<a id="more"></a>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p>
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p>
-<h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p>
-<p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p>
-<ol>
-<li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li>
-<li>选取Python解释器  <blockquote>
-<p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p>
-</blockquote>
-</li>
-</ol>
-<h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul>
-<li>Settings Sync</li>
-</ul>
-<p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p>
-<ul>
-<li>Python</li>
-</ul>
-<p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p>
-<ul>
-<li>Bracket Pair Colorizer</li>
-</ul>
-<p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p>
-<ul>
-<li>Visual Studio IntelliCode</li>
-</ul>
-<p>自动补全配置</p>
-<ul>
-<li>Code Runner</li>
-</ul>
-<p>支持多种语言，包括 Python，运行执行一段任意代码。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p>
-<blockquote>
-<p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p>
-</blockquote>
-<p>就是找到启动的 .exe文件右键 =&gt; 属性</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Flask总结</title>
-    <url>/2019/11/21/Flask%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021136flask.png" alt="flask"></p>
-<a id="more"></a>
-
-<h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flask
-app = Flask(__name__)  // 创建类实例
-
-@app.route(&quot;/&quot;)  // 使用 route() 装饰器来告诉 Flask 触发函数的 URL 
-def hello():
-    return &quot;Hello World!&quot;
-
-if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python 解释器运行代码的 情况下运行，而不会在作为模块导入时运行
-    app.run()  //  run() 函数来运行本地服务器和我们的应用</code></pre><p>运行： python hello.py</p>
-<h2 id="小知识"><a href="#小知识" class="headerlink" title="小知识"></a>小知识</h2><h3 id="Flask的Context-上下文"><a href="#Flask的Context-上下文" class="headerlink" title="Flask的Context(上下文)"></a>Flask的Context(上下文)</h3><p>Flask提供了两种上下文，一种是应用上下文(Application Context)，一种是请求上下文(Request Context)。</p>
-<ul>
-<li>application 指的就是当你调用app = Flask(name)创建的这个对象app；</li>
-<li>request 指的是每次http请求发生时，WSGI server(比如gunicorn)调Flask.call()之后，在Flask对象内部创建的Request对象；</li>
-<li>application 表示用于响应WSGI请求的应用本身，request 表示每次http请求;</li>
-<li>application的生命周期大于request，一个application存活期间，可能发生多次http请求，所以，也就会有多个request</li>
-</ul>
-<p>application 就是指app = Flask(name)对象<br>request 就是对应每次http 请求创建的Request对象<br>Flask通过_RequestContext将App与Request关联起来</p>
-<h3 id="flask-里的函数"><a href="#flask-里的函数" class="headerlink" title="flask 里的函数"></a>flask 里的函数</h3><ul>
-<li><p>escape 解析路径上的特殊符号</p>
-</li>
-<li><p>url_for 看成是路由命名函数，可以做路由导向，可以带参数</p>
-</li>
-<li><p>redirect 重定向函数</p>
-</li>
-<li><p>render_template 模板渲染函数, 自动寻找根目录 templates 里的模板</p>
-</li>
-<li><p>make_response 获取响应对象</p>
-</li>
-<li><p>request 获取请求对象</p>
-</li>
-<li><p>g 是一个特殊对象，独立于每一个请求。在处理请求过程中，它可以用于储存 可能多个函数都会用到的数据。</p>
-<p>  如：把连接储存于其中，可以多次使用，而不用在同一个 请求中每次调用 get_db 时都创建一个新的连接。</p>
-</li>
-<li><p>current_app 是另一个特殊对象，该对象指向处理请求的 Flask 应用。这里 使用了应用工厂，那么在其余的代码中就不会出现应用对象。</p>
-</li>
-</ul>
-<p>当应用创建后，在处理 一个请求时， get_db 会被调用。这样就需要使用 current_app 。</p>
-<h3 id="一句话"><a href="#一句话" class="headerlink" title="一句话"></a>一句话</h3><p>flask在使用session 时要设置一个密钥 app.secret_key  如：app.secret_key = ‘123456’  一般使用os.urandom(16) 生成</p>
-<h3 id="jsonify-amp-amp-json-dumps"><a href="#jsonify-amp-amp-json-dumps" class="headerlink" title="jsonify &amp;&amp; json.dumps"></a>jsonify &amp;&amp; json.dumps</h3><p>区别：</p>
-<ol>
-<li>Content-Type有区别</li>
-</ol>
-<p>jsonify时响应的Content-Type字段值为application/json，而使用json.dumps时该字段值为text/html。</p>
-<ol start="2">
-<li>接受参数有区别</li>
-</ol>
-<h2 id="blueprints"><a href="#blueprints" class="headerlink" title="blueprints"></a>blueprints</h2><p>用于实现单个应用的视图、模板、静态文件的集合。</p>
-<p>蓝图就是模块化处理的类。<br>简单来说，蓝图就是一个存储操作路由映射方法的容器，主要用来实现客户端请求和URL相互关联的功能。 在Flask中，使用蓝图可以帮助我们实现模块化应用的功能。</p>
-<p>Flask 中的蓝图为这些情况设计:</p>
-<ul>
-<li>把一个应用分解为一个蓝图的集合。这对大型应用是理想的。一个项目可以实例化一个应用对象，初始化几个扩展，并注册一集合的蓝图。</li>
-<li>以 URL 前缀和/或子域名，在应用上注册一个蓝图。 URL 前缀/子域名中的参数即成为这个蓝图下的所有视图函数的共同的视图参数（默认情况下）。</li>
-<li>在一个应用中用不同的 URL 规则多次注册一个蓝图。</li>
-<li>通过蓝图提供模板过滤器、静态文件、模板和其它功能。一个蓝图不一定要实现应用或者视图函数。</li>
-<li>初始化一个 Flask 扩展时，在这些情况中注册一个蓝图。</li>
-</ul>
-<h2 id="url-for-amp-amp-redirect"><a href="#url-for-amp-amp-redirect" class="headerlink" title="url_for &amp;&amp; redirect"></a>url_for &amp;&amp; redirect</h2><p>反转函数url_for与重定向redirect</p>
-<p>url_for，简单来说，这个函数接受视图函数的名字（字符串形式）作为参数，返回视图函数对应的url，例如：</p>
-<pre><code>@app.route(&#39;/&#39;)
-def hello_world():
-    print(url_for(&#39;index&#39;))  # 返回index视图的URL  此处会打印/index/  有参数则以key=value的形式写在后面 print(url_for(&#39;hello&#39;,name=&#39;harp&#39;))
-    return &#39;Hello World&#39;
-
-@app.route(&#39;/index/&#39;)
-def index():
-    return &#39;index&#39;</code></pre><p>redirect则更简单，功能就是跳转到指定的url，大部分情况下，我们都是和url_for一起使用的，例如：</p>
-<pre><code>@app.route(&#39;/&#39;)
-def hello_world():
-    return &#39;Hello World&#39;
-
-
-@app.route(&#39;/&lt;name&gt;/&#39;)
-def hello(name):
-    if name == &#39;Harp&#39;:
-        return &#39;Hello %s&#39; % name
-    else:
-        return redirect(url_for(&#39;hello_world&#39;))</code></pre><p>在hello这个视图函数中，如果url传入的参数是Harp（即请求的网址是<a href="http://127.0.0.1:5000/Harp/），则返回&#39;Hello" target="_blank" rel="noopener">http://127.0.0.1:5000/Harp/），则返回&#39;Hello</a> Harp’，其他情况则重定向到hello_world这个视图函数对应的网址’/‘。</p>
-<h2 id="Werkzeug"><a href="#Werkzeug" class="headerlink" title="Werkzeug"></a>Werkzeug</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。</p>
-<p>什么又是WSGI呢？WSGI的全称是Web Server Gateway Interface，它是用来定义web服务器接口的一个规范。简单地讲，就是定义http服务器应该长什么样子，能处理哪些事情。</p>
-<h3 id="包含哪些内容的实现"><a href="#包含哪些内容的实现" class="headerlink" title="包含哪些内容的实现"></a>包含哪些内容的实现</h3><ul>
-<li>HTTP头的解析</li>
-<li>易用使用的request和response对象</li>
-<li>基于交互风格的JavaScript脚本语言的浏览器调试器</li>
-<li>与 WSGI 1.0 规范100%兼容</li>
-<li>支持Python 2.6, 2.7和3.3</li>
-<li>Unicode支持</li>
-<li>HTTP Session和签名Cookie支持</li>
-<li>URI和IRI处理函数，包含对Unicode的支持</li>
-<li>内置兼容一些非标准的WSGI服务器和浏览器</li>
-<li>集成了URLs路由功能</li>
-</ul>
-<h2 id="flask-vs-django"><a href="#flask-vs-django" class="headerlink" title="flask vs django"></a>flask vs django</h2><blockquote>
-<p>Flask 怎么定位自己的？<br>将自己定位为微框架。啥叫微框架，就是毛坯房的意思。给你个毛胚房，你自己装修去。</p>
-</blockquote>
-<blockquote>
-<p>Django 怎么定位标榜自己的？<br>划重点 The web framework for perfectionists with deadlines. 完美主义者的 Deadline 终结框架</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>nginx总结</title>
     <url>/2019/11/21/nginx%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
@@ -382,6 +222,166 @@ http {
       </tags>
   </entry>
   <entry>
+    <title>Flask总结</title>
+    <url>/2019/11/21/Flask%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021136flask.png" alt="flask"></p>
+<a id="more"></a>
+
+<h2 id="小-demo"><a href="#小-demo" class="headerlink" title="小 demo"></a>小 demo</h2><pre><code>from flask import Flask  // 导入flask
+app = Flask(__name__)  // 创建类实例
+
+@app.route(&quot;/&quot;)  // 使用 route() 装饰器来告诉 Flask 触发函数的 URL 
+def hello():
+    return &quot;Hello World!&quot;
+
+if __name__ == &quot;__main__&quot;:  // 确保服务器只会在使用 Python 解释器运行代码的 情况下运行，而不会在作为模块导入时运行
+    app.run()  //  run() 函数来运行本地服务器和我们的应用</code></pre><p>运行： python hello.py</p>
+<h2 id="小知识"><a href="#小知识" class="headerlink" title="小知识"></a>小知识</h2><h3 id="Flask的Context-上下文"><a href="#Flask的Context-上下文" class="headerlink" title="Flask的Context(上下文)"></a>Flask的Context(上下文)</h3><p>Flask提供了两种上下文，一种是应用上下文(Application Context)，一种是请求上下文(Request Context)。</p>
+<ul>
+<li>application 指的就是当你调用app = Flask(name)创建的这个对象app；</li>
+<li>request 指的是每次http请求发生时，WSGI server(比如gunicorn)调Flask.call()之后，在Flask对象内部创建的Request对象；</li>
+<li>application 表示用于响应WSGI请求的应用本身，request 表示每次http请求;</li>
+<li>application的生命周期大于request，一个application存活期间，可能发生多次http请求，所以，也就会有多个request</li>
+</ul>
+<p>application 就是指app = Flask(name)对象<br>request 就是对应每次http 请求创建的Request对象<br>Flask通过_RequestContext将App与Request关联起来</p>
+<h3 id="flask-里的函数"><a href="#flask-里的函数" class="headerlink" title="flask 里的函数"></a>flask 里的函数</h3><ul>
+<li><p>escape 解析路径上的特殊符号</p>
+</li>
+<li><p>url_for 看成是路由命名函数，可以做路由导向，可以带参数</p>
+</li>
+<li><p>redirect 重定向函数</p>
+</li>
+<li><p>render_template 模板渲染函数, 自动寻找根目录 templates 里的模板</p>
+</li>
+<li><p>make_response 获取响应对象</p>
+</li>
+<li><p>request 获取请求对象</p>
+</li>
+<li><p>g 是一个特殊对象，独立于每一个请求。在处理请求过程中，它可以用于储存 可能多个函数都会用到的数据。</p>
+<p>  如：把连接储存于其中，可以多次使用，而不用在同一个 请求中每次调用 get_db 时都创建一个新的连接。</p>
+</li>
+<li><p>current_app 是另一个特殊对象，该对象指向处理请求的 Flask 应用。这里 使用了应用工厂，那么在其余的代码中就不会出现应用对象。</p>
+</li>
+</ul>
+<p>当应用创建后，在处理 一个请求时， get_db 会被调用。这样就需要使用 current_app 。</p>
+<h3 id="一句话"><a href="#一句话" class="headerlink" title="一句话"></a>一句话</h3><p>flask在使用session 时要设置一个密钥 app.secret_key  如：app.secret_key = ‘123456’  一般使用os.urandom(16) 生成</p>
+<h3 id="jsonify-amp-amp-json-dumps"><a href="#jsonify-amp-amp-json-dumps" class="headerlink" title="jsonify &amp;&amp; json.dumps"></a>jsonify &amp;&amp; json.dumps</h3><p>区别：</p>
+<ol>
+<li>Content-Type有区别</li>
+</ol>
+<p>jsonify时响应的Content-Type字段值为application/json，而使用json.dumps时该字段值为text/html。</p>
+<ol start="2">
+<li>接受参数有区别</li>
+</ol>
+<h2 id="blueprints"><a href="#blueprints" class="headerlink" title="blueprints"></a>blueprints</h2><p>用于实现单个应用的视图、模板、静态文件的集合。</p>
+<p>蓝图就是模块化处理的类。<br>简单来说，蓝图就是一个存储操作路由映射方法的容器，主要用来实现客户端请求和URL相互关联的功能。 在Flask中，使用蓝图可以帮助我们实现模块化应用的功能。</p>
+<p>Flask 中的蓝图为这些情况设计:</p>
+<ul>
+<li>把一个应用分解为一个蓝图的集合。这对大型应用是理想的。一个项目可以实例化一个应用对象，初始化几个扩展，并注册一集合的蓝图。</li>
+<li>以 URL 前缀和/或子域名，在应用上注册一个蓝图。 URL 前缀/子域名中的参数即成为这个蓝图下的所有视图函数的共同的视图参数（默认情况下）。</li>
+<li>在一个应用中用不同的 URL 规则多次注册一个蓝图。</li>
+<li>通过蓝图提供模板过滤器、静态文件、模板和其它功能。一个蓝图不一定要实现应用或者视图函数。</li>
+<li>初始化一个 Flask 扩展时，在这些情况中注册一个蓝图。</li>
+</ul>
+<h2 id="url-for-amp-amp-redirect"><a href="#url-for-amp-amp-redirect" class="headerlink" title="url_for &amp;&amp; redirect"></a>url_for &amp;&amp; redirect</h2><p>反转函数url_for与重定向redirect</p>
+<p>url_for，简单来说，这个函数接受视图函数的名字（字符串形式）作为参数，返回视图函数对应的url，例如：</p>
+<pre><code>@app.route(&#39;/&#39;)
+def hello_world():
+    print(url_for(&#39;index&#39;))  # 返回index视图的URL  此处会打印/index/  有参数则以key=value的形式写在后面 print(url_for(&#39;hello&#39;,name=&#39;harp&#39;))
+    return &#39;Hello World&#39;
+
+@app.route(&#39;/index/&#39;)
+def index():
+    return &#39;index&#39;</code></pre><p>redirect则更简单，功能就是跳转到指定的url，大部分情况下，我们都是和url_for一起使用的，例如：</p>
+<pre><code>@app.route(&#39;/&#39;)
+def hello_world():
+    return &#39;Hello World&#39;
+
+
+@app.route(&#39;/&lt;name&gt;/&#39;)
+def hello(name):
+    if name == &#39;Harp&#39;:
+        return &#39;Hello %s&#39; % name
+    else:
+        return redirect(url_for(&#39;hello_world&#39;))</code></pre><p>在hello这个视图函数中，如果url传入的参数是Harp（即请求的网址是<a href="http://127.0.0.1:5000/Harp/），则返回&#39;Hello" target="_blank" rel="noopener">http://127.0.0.1:5000/Harp/），则返回&#39;Hello</a> Harp’，其他情况则重定向到hello_world这个视图函数对应的网址’/‘。</p>
+<h2 id="Werkzeug"><a href="#Werkzeug" class="headerlink" title="Werkzeug"></a>Werkzeug</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。</p>
+<p>什么又是WSGI呢？WSGI的全称是Web Server Gateway Interface，它是用来定义web服务器接口的一个规范。简单地讲，就是定义http服务器应该长什么样子，能处理哪些事情。</p>
+<h3 id="包含哪些内容的实现"><a href="#包含哪些内容的实现" class="headerlink" title="包含哪些内容的实现"></a>包含哪些内容的实现</h3><ul>
+<li>HTTP头的解析</li>
+<li>易用使用的request和response对象</li>
+<li>基于交互风格的JavaScript脚本语言的浏览器调试器</li>
+<li>与 WSGI 1.0 规范100%兼容</li>
+<li>支持Python 2.6, 2.7和3.3</li>
+<li>Unicode支持</li>
+<li>HTTP Session和签名Cookie支持</li>
+<li>URI和IRI处理函数，包含对Unicode的支持</li>
+<li>内置兼容一些非标准的WSGI服务器和浏览器</li>
+<li>集成了URLs路由功能</li>
+</ul>
+<h2 id="flask-vs-django"><a href="#flask-vs-django" class="headerlink" title="flask vs django"></a>flask vs django</h2><blockquote>
+<p>Flask 怎么定位自己的？<br>将自己定位为微框架。啥叫微框架，就是毛坯房的意思。给你个毛胚房，你自己装修去。</p>
+</blockquote>
+<blockquote>
+<p>Django 怎么定位标榜自己的？<br>划重点 The web framework for perfectionists with deadlines. 完美主义者的 Deadline 终结框架</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VSCode使用</title>
+    <url>/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg" alt="VSCode"></p>
+<a id="more"></a>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p>
+<h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p>
+<p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p>
+<ol>
+<li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li>
+<li>选取Python解释器  <blockquote>
+<p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul>
+<li>Settings Sync</li>
+</ul>
+<p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p>
+<ul>
+<li>Python</li>
+</ul>
+<p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p>
+<ul>
+<li>Bracket Pair Colorizer</li>
+</ul>
+<p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p>
+<ul>
+<li>Visual Studio IntelliCode</li>
+</ul>
+<p>自动补全配置</p>
+<ul>
+<li>Code Runner</li>
+</ul>
+<p>支持多种语言，包括 Python，运行执行一段任意代码。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p>
+<blockquote>
+<p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p>
+</blockquote>
+<p>就是找到启动的 .exe文件右键 =&gt; 属性</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>消息队列&CMQ</title>
     <url>/2019/09/26/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97&amp;CMQ/</url>
     <content><![CDATA[<p><img src="https://myblog-1258623898.cos.ap-chengdu.myqcloud.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E3%80%81%E6%95%B0%E5%88%B6%E3%80%81%E7%BC%96%E7%A0%81/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcp1%EF%BC%9A%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E4%B8%8E%E7%BC%96%E7%A0%81-1.png" alt="hh"></p>
@@ -438,74 +438,6 @@ http {
       </categories>
       <tags>
         <tag>消息队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多媒体&FFmpeg命令</title>
-    <url>/2019/09/13/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p>
-<a id="more"></a>
-
-<h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。
-流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。
-帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。
-编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）
-复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）
-把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)
-
-采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。
-
-采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。
-
-声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。
-单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。
-
-码率：码率 = 采样率 * 采样位数 * 声道数
-如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。
-
-音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。
-
-编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。
-音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。
-
-解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。
-
-帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。
-
-分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播
-HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：
-        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。
-        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版
-MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重
-AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小
-ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。
-无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
--f 输出hls格式。
-
-hls协议流媒体网络传输协议：
-hls_list_size 3:HLS播放的列表，FFmpeg默认5。
--hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。
--hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环
--ar freq 设置音频采样率 
--ac channels 设置通道 缺省为与输入相同 
--acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul>
-<li>合并多段音频</li>
-</ul>
-<p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p>
-<ul>
-<li>aac =&gt; mp3</li>
-</ul>
-<p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p>
-<ul>
-<li>一段音频剪切中间一段</li>
-</ul>
-<p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>
-]]></content>
-      <categories>
-        <category>多媒体</category>
-      </categories>
-      <tags>
-        <tag>多媒体</tag>
       </tags>
   </entry>
   <entry>
@@ -577,6 +509,74 @@ pm2 monit：可以得到进程(以及集群)的CPU的使用率和内存占用(ct
       </categories>
       <tags>
         <tag>node</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多媒体&FFmpeg命令</title>
+    <url>/2019/09/13/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p>
+<a id="more"></a>
+
+<h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。
+流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。
+帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。
+编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）
+复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）
+把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)
+
+采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。
+
+采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。
+
+声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。
+单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。
+
+码率：码率 = 采样率 * 采样位数 * 声道数
+如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。
+
+音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。
+
+编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。
+音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。
+
+解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。
+
+帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。
+
+分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播
+HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：
+        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。
+        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版
+MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重
+AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小
+ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。
+无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。
+-f 输出hls格式。
+
+hls协议流媒体网络传输协议：
+hls_list_size 3:HLS播放的列表，FFmpeg默认5。
+-hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。
+-hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环
+-ar freq 设置音频采样率 
+-ac channels 设置通道 缺省为与输入相同 
+-acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul>
+<li>合并多段音频</li>
+</ul>
+<p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p>
+<ul>
+<li>aac =&gt; mp3</li>
+</ul>
+<p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p>
+<ul>
+<li>一段音频剪切中间一段</li>
+</ul>
+<p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>
+]]></content>
+      <categories>
+        <category>多媒体</category>
+      </categories>
+      <tags>
+        <tag>多媒体</tag>
       </tags>
   </entry>
   <entry>
@@ -761,8 +761,9 @@ let p = await formImage();</code></pre><p>Node.js等则规定在JavaScript的回
 <li><a href="https://yangshun.github.io/tech-interview-handbook/questions-to-ask" target="_blank" rel="noopener">适合在面试结束时问考官的好问题！</a></li>
 <li><a href="https://yangshun.github.io/tech-interview-handbook/resume" target="_blank" rel="noopener">做简历注意事项，让你的简历更能引起面试官注意</a></li>
 <li><a href="http://www.cjjjs.com/page/topicinfo?id_topic=63" target="_blank" rel="noopener">面试题</a></li>
+<li><a href="https://juejin.im/post/5cb6c4ef51882532b70e6ff0" target="_blank" rel="noopener">MySQL</a></li>
 </ul>
-]]></content>
+<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2>]]></content>
       <categories>
         <category>面试</category>
       </categories>
@@ -938,20 +939,6 @@ $ make install</code></pre><p>清理安装后的临时文件：</p>
       </tags>
   </entry>
   <entry>
-    <title>理解高性能网络模型</title>
-    <url>/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构与算法</title>
     <url>/2019/06/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
@@ -1038,6 +1025,20 @@ while (i &lt;= n)  {
       </categories>
       <tags>
         <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>理解高性能网络模型</title>
+    <url>/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1455,7 +1456,8 @@ possible_keys: PRIMARY
     <content><![CDATA[<p>工作中常用的 MySQL 命令<br><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
 <a id="more"></a>
 
-<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><pre><code>登录：mysql -h -uroot -p
+<h2 id="工作常用"><a href="#工作常用" class="headerlink" title="工作常用"></a>工作常用</h2><p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191202083121SQL%E6%9F%A5%E8%AF%A2%E8%BF%87%E7%A8%8B.jpg" alt="sql查询过程"></p>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><pre><code>登录：mysql -h -uroot -p
 show databases;  use youke;  show tables;  desc 表名;  exit;
 查看MySQL版本，进到MySQL命令行执行：select @@version;
 order by：排序 默认升序即A-Z 降序需指定DESC。且order by可指定多个值，先排一次序再排一次
@@ -1574,7 +1576,7 @@ insert on duplicate key update 比 replace快，原因是索引方面
 <li>mysql函数有自己的自定义函数（已经定义好了的函数），详情参考：<a href="https://www.cnblogs.com/progor/p/8832663.html" target="_blank" rel="noopener">mysql之常用函数</a></li>
 </ul>
 <p><strong>函数与存储过程的区别</strong>：函数只会返回一个值，不允许返回一个结果集。函数强调返回值，所以函数不允许返回多个值的情况，即使是查询语句。</p>
-<h2 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h2><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a></p>
+<h2 id="重点链接"><a href="#重点链接" class="headerlink" title="重点链接"></a>重点链接</h2><p><a href="https://static001.geekbang.org/resource/image/0d/d9/0d2070e8f84c4801adbfa03bda1f98d9.png" target="_blank" rel="noopener">MySQL总览图</a><br><a href="https://blog.csdn.net/qq_41307443/article/details/79839558" target="_blank" rel="noopener">MySQL Windows安装</a><br><a href="https://www.cnblogs.com/RayWang/p/9347874.html" target="_blank" rel="noopener">MySQL安装问题</a><br><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL explain详解</a><br><a href="https://cyc2018.github.io/CS-Notes/#/notes/MySQL" target="_blank" rel="noopener">MySQL相关知识</a><br><a href="https://mp.weixin.qq.com/s/YMxLYbVuF_7rfaawp8flOA" target="_blank" rel="noopener">SQL优化方案</a></p>
 ]]></content>
       <categories>
         <category>MySQL</category>
@@ -2174,47 +2176,6 @@ hexo d  # 开始部署</code></pre><h2 id="markdown-基础语法"><a href="#mark
       </tags>
   </entry>
   <entry>
-    <title>python学习</title>
-    <url>/2018/12/07/python%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
-<a id="more"></a>
-
-<h2 id="关键字解释"><a href="#关键字解释" class="headerlink" title="关键字解释"></a>关键字解释</h2><ul>
-<li><strong>name</strong>: </li>
-</ul>
-<p>通俗的理解<strong>name</strong> == ‘<strong>main</strong>‘：假如你叫小明.py，在朋友眼中，你是小明(<strong>name</strong> == ‘小明’)；在你自己眼中，你是你自己(<strong>name</strong> == ‘<strong>main</strong>‘)。</p>
-<p>if <strong>name</strong> == ‘<strong>main</strong>‘的意思是：当.py文件被直接运行时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块将被运行；当.py文件以模块形式被导入时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块不被运行。</p>
-<p>被运行的时候，<strong>name</strong>是<strong>main</strong>;  当作为模块导入的时候为 当前文件名称</p>
-<ul>
-<li>assert</li>
-</ul>
-<p>在开发一个程序时候，与其让它运行时崩溃，不如在它出现错误条件时就崩溃（返回错误）。这时候断言assert 就显得非常有用。</p>
-<p>assert的语法格式：  assert expression</p>
-<p>它的等价语句为：</p>
-<p>if not expression:<br>    raise AssertionError</p>
-<p>也可为assert添加异常参数，其实就是在断言表达式后添加字符串信息，用来解释断言并更好的知道是哪里出了问题。格式如下：</p>
-<p>assert expression [, arguments]</p>
-<ul>
-<li><strong>init</strong></li>
-</ul>
-<p>定义类的时候，若是添加<strong>init</strong>方法，那么在创建类的实例的时候，实例会自动调用这个方法，一般用来对实例的属性进行初使化。</p>
-<p><strong>init</strong>.py 文件的作用是将文件夹变为一个Python模块,Python 中的每个模块的包中，都有<strong>init</strong>.py 文件。</p>
-<p>通常<strong>init</strong>.py 文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<strong>init</strong>.py文件。</p>
-<p>这样我们可以在<strong>init</strong>.py文件中批量导入我们所需要的模块，而不再需要一个一个的导入。</p>
-<ul>
-<li>关于.pyc 文件 与 .pyo 文件</li>
-</ul>
-<p>.py文件的汇编,只有在import语句执行时进行，当.py文件第一次被导入时，它会被汇编为字节代码，并将字节码写入同名的.pyc文件中。后来每次导入操作都会直接执行.pyc 文件（当.py文件的修改时间发生改变，这样会生成新的.pyc文件），在解释器使用-O选项时，将使用同名的.pyo文件，这个文件去掉了断言（assert）、断行号以及其他调试信息，体积更小，运行更快。（使用-OO选项，生成的.pyo文件会忽略文档信息）</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python环境搭建</title>
     <url>/2018/12/07/python%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
@@ -2270,6 +2231,47 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple</code></pre><h3 id="pip3使
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python学习</title>
+    <url>/2018/12/07/python%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p>
+<a id="more"></a>
+
+<h2 id="关键字解释"><a href="#关键字解释" class="headerlink" title="关键字解释"></a>关键字解释</h2><ul>
+<li><strong>name</strong>: </li>
+</ul>
+<p>通俗的理解<strong>name</strong> == ‘<strong>main</strong>‘：假如你叫小明.py，在朋友眼中，你是小明(<strong>name</strong> == ‘小明’)；在你自己眼中，你是你自己(<strong>name</strong> == ‘<strong>main</strong>‘)。</p>
+<p>if <strong>name</strong> == ‘<strong>main</strong>‘的意思是：当.py文件被直接运行时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块将被运行；当.py文件以模块形式被导入时，if <strong>name</strong> == ‘<strong>main</strong>‘之下的代码块不被运行。</p>
+<p>被运行的时候，<strong>name</strong>是<strong>main</strong>;  当作为模块导入的时候为 当前文件名称</p>
+<ul>
+<li>assert</li>
+</ul>
+<p>在开发一个程序时候，与其让它运行时崩溃，不如在它出现错误条件时就崩溃（返回错误）。这时候断言assert 就显得非常有用。</p>
+<p>assert的语法格式：  assert expression</p>
+<p>它的等价语句为：</p>
+<p>if not expression:<br>    raise AssertionError</p>
+<p>也可为assert添加异常参数，其实就是在断言表达式后添加字符串信息，用来解释断言并更好的知道是哪里出了问题。格式如下：</p>
+<p>assert expression [, arguments]</p>
+<ul>
+<li><strong>init</strong></li>
+</ul>
+<p>定义类的时候，若是添加<strong>init</strong>方法，那么在创建类的实例的时候，实例会自动调用这个方法，一般用来对实例的属性进行初使化。</p>
+<p><strong>init</strong>.py 文件的作用是将文件夹变为一个Python模块,Python 中的每个模块的包中，都有<strong>init</strong>.py 文件。</p>
+<p>通常<strong>init</strong>.py 文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<strong>init</strong>.py文件。</p>
+<p>这样我们可以在<strong>init</strong>.py文件中批量导入我们所需要的模块，而不再需要一个一个的导入。</p>
+<ul>
+<li>关于.pyc 文件 与 .pyo 文件</li>
+</ul>
+<p>.py文件的汇编,只有在import语句执行时进行，当.py文件第一次被导入时，它会被汇编为字节代码，并将字节码写入同名的.pyc文件中。后来每次导入操作都会直接执行.pyc 文件（当.py文件的修改时间发生改变，这样会生成新的.pyc文件），在解释器使用-O选项时，将使用同名的.pyo文件，这个文件去掉了断言（assert）、断行号以及其他调试信息，体积更小，运行更快。（使用-OO选项，生成的.pyo文件会忽略文档信息）</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>学习</tag>
       </tags>
   </entry>
 </search>

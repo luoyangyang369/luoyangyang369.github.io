@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-11-30T06:41:19.600Z</updated>
+  <updated>2019-11-27T10:05:25.011Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,25 +17,25 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>VSCode使用</title>
-    <link href="http://yoursite.com/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/"/>
-    <id>http://yoursite.com/2019/11/21/VSCode使用/</id>
+    <title>nginx总结</title>
+    <link href="http://yoursite.com/2019/11/21/nginx%E6%80%BB%E7%BB%93/"/>
+    <id>http://yoursite.com/2019/11/21/nginx总结/</id>
     <published>2019-11-21T09:25:25.000Z</published>
-    <updated>2019-11-30T06:41:19.600Z</updated>
+    <updated>2019-11-27T10:05:25.011Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg" alt="VSCode"></p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p><h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p><p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p><ol><li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li><li>选取Python解释器  <blockquote><p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p></blockquote></li></ol><h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul><li>Settings Sync</li></ul><p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p><ul><li>Python</li></ul><p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p><ul><li>Bracket Pair Colorizer</li></ul><p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p><ul><li>Visual Studio IntelliCode</li></ul><p>自动补全配置</p><ul><li>Code Runner</li></ul><p>支持多种语言，包括 Python，运行执行一段任意代码。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p><blockquote><p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p></blockquote><p>就是找到启动的 .exe文件右键 =&gt; 属性</p>]]></content>
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://juejin.im/post/5d81906c518825300a3ec7ca" target="_blank" rel="noopener">nginx 这一篇就够了</a></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Nginx是一款轻量级的Web服务器、反向代理服务器，由于它的内存占用少，启动极快，高并发能力强，在互联网项目中广泛应用。<br><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191127095906nginx.png" alt="nginx"></p><h2 id="nginx-服务架构"><a href="#nginx-服务架构" class="headerlink" title="nginx 服务架构"></a>nginx 服务架构</h2><blockquote><p>nginx 服务器的开发完全遵循模块化设计思想</p></blockquote><h3 id="模块化开发"><a href="#模块化开发" class="headerlink" title="模块化开发"></a>模块化开发</h3><ul><li>单一职责原则，一个模块只负责一个功能</li><li>将程序分解，自顶向下，逐步求精</li><li>高内聚，低耦合</li></ul><h3 id="nginx-的模块化结构"><a href="#nginx-的模块化结构" class="headerlink" title="nginx 的模块化结构"></a>nginx 的模块化结构</h3><ul><li>核心模块：nginx 最基本最核心的服务，如进程管理、权限控制、日志记录；</li><li>标准 HTTP 模块：nginx 服务器的标准 HTTP 功能；</li><li>可选 HTTP 模块：处理特殊的 HTTP 请求</li><li>邮件服务模块：邮件服务</li><li>第三方模块：作为扩展，完成特殊功能</li></ul><h2 id="nginx-配置文件实例"><a href="#nginx-配置文件实例" class="headerlink" title="nginx 配置文件实例"></a>nginx 配置文件实例</h2><pre><code>#定义 nginx 运行的用户和用户组user www www;#nginx 进程数，建议设置为等于 CPU 总核心数。worker_processes 8;#nginx 默认没有开启利用多核 CPU, 通过增加 worker_cpu_affinity 配置参数来充分利用多核 CPU 以下是 8 核的配置参数worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;#全局错误日志定义类型，[ debug | info | notice | warn | error | crit ]error_log /var/log/nginx/error.log info;#进程文件pid /var/run/nginx.pid;#一个 nginx 进程打开的最多文件描述符数目，理论值应该是最多打开文件数（系统的值 ulimit -n）与 nginx 进程数相除，但是 nginx 分配请求并不均匀，所以建议与 ulimit -n 的值保持一致。worker_rlimit_nofile 65535;#工作模式与连接数上限events{    #参考事件模型，use [ kqueue | rtsig | epoll | /dev/poll | select | poll ]; epoll 模型是 Linux 2.6 以上版本内核中的高性能网络 I/O 模型，如果跑在 FreeBSD 上面，就用 kqueue 模型。    #epoll 是多路复用 IO(I/O Multiplexing) 中的一种方式，但是仅用于 linux2.6 以上内核，可以大大提高 nginx 的性能    use epoll;    ############################################################################    #单个后台 worker process 进程的最大并发链接数    #事件模块指令，定义 nginx 每个进程最大连接数，默认 1024。最大客户连接数由 worker_processes 和 worker_connections 决定    #即 max_client=worker_processes*worker_connections, 在作为反向代理时：max_client=worker_processes*worker_connections / 4    worker_connections 65535;    ############################################################################}#设定 http 服务器http {    include mime.types; #文件扩展名与文件类型映射表    default_type application/octet-stream; #默认文件类型    #charset utf-8; #默认编码    server_names_hash_bucket_size 128; #服务器名字的 hash 表大小    client_header_buffer_size 32k; #上传文件大小限制    large_client_header_buffers 4 64k; #设定请求缓    client_max_body_size 8m; #设定请求缓    sendfile on; #开启高效文件传输模式，sendfile 指令指定 nginx 是否调用 sendfile 函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘 IO 重负载应用，可设置为 off，以平衡磁盘与网络 I/O 处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成 off。    autoindex on; #开启目录列表访问，合适下载服务器，默认关闭。    tcp_nopush on; #防止网络阻塞    tcp_nodelay on; #防止网络阻塞    ##连接客户端超时时间各种参数设置##    keepalive_timeout  120;          #单位是秒，客户端连接时时间，超时之后服务器端自动关闭该连接 如果 nginx 守护进程在这个等待的时间里，一直没有收到浏览发过来 http 请求，则关闭这个 http 连接    client_header_timeout 10;        #客户端请求头的超时时间    client_body_timeout 10;          #客户端请求主体超时时间    reset_timedout_connection on;    #告诉 nginx 关闭不响应的客户端连接。这将会释放那个客户端所占有的内存空间    send_timeout 10;                 #客户端响应超时时间，在两次客户端读取操作之间。如果在这段时间内，客户端没有读取任何数据，nginx 就会关闭连接    ################################    #FastCGI 相关参数是为了改善网站的性能：减少资源占用，提高访问速度。下面参数看字面意思都能理解。    fastcgi_connect_timeout 300;    fastcgi_send_timeout 300;    fastcgi_read_timeout 300;    fastcgi_buffer_size 64k;    fastcgi_buffers 4 64k;    fastcgi_busy_buffers_size 128k;    fastcgi_temp_file_write_size 128k;    ###作为代理缓存服务器设置#######    ###先写到 temp 再移动到 cache    #proxy_cache_path /var/tmp/nginx/proxy_cache levels=1:2 keys_zone=cache_one:512m inactive=10m max_size=64m;    ###以上 proxy_temp 和 proxy_cache 需要在同一个分区中    ###levels=1:2 表示缓存级别，表示缓存目录的第一级目录是 1 个字符，第二级目录是 2 个字符 keys_zone=cache_one:128m 缓存空间起名为 cache_one 大小为 512m    ###max_size=64m 表示单个文件超过 128m 就不缓存了  inactive=10m 表示缓存的数据，10 分钟内没有被访问过就删除    #########end####################    #####对传输文件压缩###########    #gzip 模块设置    gzip on; #开启 gzip 压缩输出    gzip_min_length 1k; #最小压缩文件大小    gzip_buffers 4 16k; #压缩缓冲区    gzip_http_version 1.0; #压缩版本（默认 1.1，前端如果是 squid2.5 请使用 1.0）    gzip_comp_level 2; #压缩等级，gzip 压缩比，1 为最小，处理最快；9 为压缩比最大，处理最慢，传输速度最快，也最消耗 CPU；    gzip_types text/plain application/x-javascript text/css application/xml;    #压缩类型，默认就已经包含 text/html，所以下面就不用再写了，写上去也不会有问题，但是会有一个 warn。    gzip_vary on;    ##############################    #limit_zone crawler $binary_remote_addr 10m; #开启限制 IP 连接数的时候需要使用    upstream blog.ha97.com {        #upstream 的负载均衡，weight 是权重，可以根据机器配置定义权重。weigth 参数表示权值，权值越高被分配到的几率越大。        server 192.168.80.121:80 weight=3;        server 192.168.80.122:80 weight=2;        server 192.168.80.123:80 weight=3;    }    #虚拟主机的配置    server {        #监听端口        listen 80;        #############https##################        #listen 443 ssl;        #ssl_certificate /opt/https/xxxxxx.crt;        #ssl_certificate_key /opt/https/xxxxxx.key;        #ssl_protocols SSLv3 TLSv1;        #ssl_ciphers HIGH:!ADH:!EXPORT57:RC4+RSA:+MEDIUM;        #ssl_prefer_server_ciphers on;        #ssl_session_cache shared:SSL:2m;        #ssl_session_timeout 5m;        ####################################end        #域名可以有多个，用空格隔开        server_name www.ha97.com ha97.com;        index index.html index.htm index.php;        root /data/www/ha97;        location ~ .*.(php|php5)?$ {            fastcgi_pass 127.0.0.1:9000;            fastcgi_index index.php;            include fastcgi.conf;        }        #图片缓存时间设置        location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$ {            expires 10d;        }        #JS 和 CSS 缓存时间设置        location ~ .*.(js|css)?$ {            expires 1h;        }        #日志格式设定        log_format access &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39; &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39; &#39;&quot;$http_user_agent&quot; $http_x_forwarded_for&#39;;        #定义本虚拟主机的访问日志        access_log /var/log/nginx/ha97access.log access;        #对 &quot;/&quot; 启用反向代理        location / {            proxy_pass http://127.0.0.1:88;            proxy_redirect off;            proxy_set_header X-Real-IP $remote_addr;            #后端的 Web 服务器可以通过 X-Forwarded-For 获取用户真实 IP            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;            #以下是一些反向代理的配置，可选。            proxy_set_header Host $host;            client_max_body_size 10m; #允许客户端请求的最大单文件字节数            client_body_buffer_size 128k; #缓冲区代理缓冲用户端请求的最大字节数，            ##代理设置 以下设置是 nginx 和后端服务器之间通讯的设置##            proxy_connect_timeout 90; #nginx 跟后端服务器连接超时时间（代理连接超时）            proxy_send_timeout 90; #后端服务器数据回传时间（代理发送超时）            proxy_read_timeout 90; #连接成功后，后端服务器响应时间（代理接收超时）            proxy_buffering on;    #该指令开启从后端被代理服务器的响应内容缓冲 此参数开启后 proxy_buffers 和 proxy_busy_buffers_size 参数才会起作用            proxy_buffer_size 4k;  #设置代理服务器（nginx）保存用户头信息的缓冲区大小            proxy_buffers 4 32k;   #proxy_buffers 缓冲区，网页平均在 32k 以下的设置            proxy_busy_buffers_size 64k; #高负荷下缓冲大小（proxy_buffers*2）            proxy_max_temp_file_size 2048m; #默认 1024m, 该指令用于设置当网页内容大于 proxy_buffers 时，临时文件大小的最大值。如果文件大于这个值，它将从 upstream 服务器同步地传递请求，而不是缓冲到磁盘            proxy_temp_file_write_size 512k; 这是当被代理服务器的响应过大时 nginx 一次性写入临时文件的数据量。            proxy_temp_path  /var/tmp/nginx/proxy_temp;    ##定义缓冲存储目录，之前必须要先手动创建此目录            proxy_headers_hash_max_size 51200;            proxy_headers_hash_bucket_size 6400;            #######################################################        }        #设定查看 nginx 状态的地址        location /nginxStatus {            stub_status on;            access_log on;            auth_basic &quot;nginxStatus&quot;;            auth_basic_user_file conf/htpasswd;            #htpasswd 文件的内容可以用 apache 提供的 htpasswd 工具来产生。        }        #本地动静分离反向代理配置        #所有 jsp 的页面均交由 tomcat 或 resin 处理        location ~ .(jsp|jspx|do)?$ {            proxy_set_header Host $host;            proxy_set_header X-Real-IP $remote_addr;            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;            proxy_pass http://127.0.0.1:8080;        }        #所有静态文件由 nginx 直接读取不经过 tomcat 或 resin        location ~ .*.(htm|html|gif|jpg|jpeg|png|bmp|swf|ioc|rar|zip|txt|flv|mid|doc|ppt|pdf|xls|mp3|wma)$        { expires 15d; }        location ~ .*.(js|css)?$        { expires 1h; }    }}</code></pre>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;img src=&quot;https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg&quot; alt=&quot;VSCode&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
     
     </summary>
     
     
-      <category term="工具" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
     
     
-      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
   </entry>
   
@@ -63,25 +63,25 @@
   </entry>
   
   <entry>
-    <title>nginx总结</title>
-    <link href="http://yoursite.com/2019/11/21/nginx%E6%80%BB%E7%BB%93/"/>
-    <id>http://yoursite.com/2019/11/21/nginx总结/</id>
+    <title>VSCode使用</title>
+    <link href="http://yoursite.com/2019/11/21/VSCode%E4%BD%BF%E7%94%A8/"/>
+    <id>http://yoursite.com/2019/11/21/VSCode使用/</id>
     <published>2019-11-21T09:25:25.000Z</published>
-    <updated>2019-11-27T10:05:25.011Z</updated>
+    <updated>2019-11-30T06:41:19.600Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://juejin.im/post/5d81906c518825300a3ec7ca" target="_blank" rel="noopener">nginx 这一篇就够了</a></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Nginx是一款轻量级的Web服务器、反向代理服务器，由于它的内存占用少，启动极快，高并发能力强，在互联网项目中广泛应用。<br><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191127095906nginx.png" alt="nginx"></p><h2 id="nginx-服务架构"><a href="#nginx-服务架构" class="headerlink" title="nginx 服务架构"></a>nginx 服务架构</h2><blockquote><p>nginx 服务器的开发完全遵循模块化设计思想</p></blockquote><h3 id="模块化开发"><a href="#模块化开发" class="headerlink" title="模块化开发"></a>模块化开发</h3><ul><li>单一职责原则，一个模块只负责一个功能</li><li>将程序分解，自顶向下，逐步求精</li><li>高内聚，低耦合</li></ul><h3 id="nginx-的模块化结构"><a href="#nginx-的模块化结构" class="headerlink" title="nginx 的模块化结构"></a>nginx 的模块化结构</h3><ul><li>核心模块：nginx 最基本最核心的服务，如进程管理、权限控制、日志记录；</li><li>标准 HTTP 模块：nginx 服务器的标准 HTTP 功能；</li><li>可选 HTTP 模块：处理特殊的 HTTP 请求</li><li>邮件服务模块：邮件服务</li><li>第三方模块：作为扩展，完成特殊功能</li></ul><h2 id="nginx-配置文件实例"><a href="#nginx-配置文件实例" class="headerlink" title="nginx 配置文件实例"></a>nginx 配置文件实例</h2><pre><code>#定义 nginx 运行的用户和用户组user www www;#nginx 进程数，建议设置为等于 CPU 总核心数。worker_processes 8;#nginx 默认没有开启利用多核 CPU, 通过增加 worker_cpu_affinity 配置参数来充分利用多核 CPU 以下是 8 核的配置参数worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;#全局错误日志定义类型，[ debug | info | notice | warn | error | crit ]error_log /var/log/nginx/error.log info;#进程文件pid /var/run/nginx.pid;#一个 nginx 进程打开的最多文件描述符数目，理论值应该是最多打开文件数（系统的值 ulimit -n）与 nginx 进程数相除，但是 nginx 分配请求并不均匀，所以建议与 ulimit -n 的值保持一致。worker_rlimit_nofile 65535;#工作模式与连接数上限events{    #参考事件模型，use [ kqueue | rtsig | epoll | /dev/poll | select | poll ]; epoll 模型是 Linux 2.6 以上版本内核中的高性能网络 I/O 模型，如果跑在 FreeBSD 上面，就用 kqueue 模型。    #epoll 是多路复用 IO(I/O Multiplexing) 中的一种方式，但是仅用于 linux2.6 以上内核，可以大大提高 nginx 的性能    use epoll;    ############################################################################    #单个后台 worker process 进程的最大并发链接数    #事件模块指令，定义 nginx 每个进程最大连接数，默认 1024。最大客户连接数由 worker_processes 和 worker_connections 决定    #即 max_client=worker_processes*worker_connections, 在作为反向代理时：max_client=worker_processes*worker_connections / 4    worker_connections 65535;    ############################################################################}#设定 http 服务器http {    include mime.types; #文件扩展名与文件类型映射表    default_type application/octet-stream; #默认文件类型    #charset utf-8; #默认编码    server_names_hash_bucket_size 128; #服务器名字的 hash 表大小    client_header_buffer_size 32k; #上传文件大小限制    large_client_header_buffers 4 64k; #设定请求缓    client_max_body_size 8m; #设定请求缓    sendfile on; #开启高效文件传输模式，sendfile 指令指定 nginx 是否调用 sendfile 函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘 IO 重负载应用，可设置为 off，以平衡磁盘与网络 I/O 处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成 off。    autoindex on; #开启目录列表访问，合适下载服务器，默认关闭。    tcp_nopush on; #防止网络阻塞    tcp_nodelay on; #防止网络阻塞    ##连接客户端超时时间各种参数设置##    keepalive_timeout  120;          #单位是秒，客户端连接时时间，超时之后服务器端自动关闭该连接 如果 nginx 守护进程在这个等待的时间里，一直没有收到浏览发过来 http 请求，则关闭这个 http 连接    client_header_timeout 10;        #客户端请求头的超时时间    client_body_timeout 10;          #客户端请求主体超时时间    reset_timedout_connection on;    #告诉 nginx 关闭不响应的客户端连接。这将会释放那个客户端所占有的内存空间    send_timeout 10;                 #客户端响应超时时间，在两次客户端读取操作之间。如果在这段时间内，客户端没有读取任何数据，nginx 就会关闭连接    ################################    #FastCGI 相关参数是为了改善网站的性能：减少资源占用，提高访问速度。下面参数看字面意思都能理解。    fastcgi_connect_timeout 300;    fastcgi_send_timeout 300;    fastcgi_read_timeout 300;    fastcgi_buffer_size 64k;    fastcgi_buffers 4 64k;    fastcgi_busy_buffers_size 128k;    fastcgi_temp_file_write_size 128k;    ###作为代理缓存服务器设置#######    ###先写到 temp 再移动到 cache    #proxy_cache_path /var/tmp/nginx/proxy_cache levels=1:2 keys_zone=cache_one:512m inactive=10m max_size=64m;    ###以上 proxy_temp 和 proxy_cache 需要在同一个分区中    ###levels=1:2 表示缓存级别，表示缓存目录的第一级目录是 1 个字符，第二级目录是 2 个字符 keys_zone=cache_one:128m 缓存空间起名为 cache_one 大小为 512m    ###max_size=64m 表示单个文件超过 128m 就不缓存了  inactive=10m 表示缓存的数据，10 分钟内没有被访问过就删除    #########end####################    #####对传输文件压缩###########    #gzip 模块设置    gzip on; #开启 gzip 压缩输出    gzip_min_length 1k; #最小压缩文件大小    gzip_buffers 4 16k; #压缩缓冲区    gzip_http_version 1.0; #压缩版本（默认 1.1，前端如果是 squid2.5 请使用 1.0）    gzip_comp_level 2; #压缩等级，gzip 压缩比，1 为最小，处理最快；9 为压缩比最大，处理最慢，传输速度最快，也最消耗 CPU；    gzip_types text/plain application/x-javascript text/css application/xml;    #压缩类型，默认就已经包含 text/html，所以下面就不用再写了，写上去也不会有问题，但是会有一个 warn。    gzip_vary on;    ##############################    #limit_zone crawler $binary_remote_addr 10m; #开启限制 IP 连接数的时候需要使用    upstream blog.ha97.com {        #upstream 的负载均衡，weight 是权重，可以根据机器配置定义权重。weigth 参数表示权值，权值越高被分配到的几率越大。        server 192.168.80.121:80 weight=3;        server 192.168.80.122:80 weight=2;        server 192.168.80.123:80 weight=3;    }    #虚拟主机的配置    server {        #监听端口        listen 80;        #############https##################        #listen 443 ssl;        #ssl_certificate /opt/https/xxxxxx.crt;        #ssl_certificate_key /opt/https/xxxxxx.key;        #ssl_protocols SSLv3 TLSv1;        #ssl_ciphers HIGH:!ADH:!EXPORT57:RC4+RSA:+MEDIUM;        #ssl_prefer_server_ciphers on;        #ssl_session_cache shared:SSL:2m;        #ssl_session_timeout 5m;        ####################################end        #域名可以有多个，用空格隔开        server_name www.ha97.com ha97.com;        index index.html index.htm index.php;        root /data/www/ha97;        location ~ .*.(php|php5)?$ {            fastcgi_pass 127.0.0.1:9000;            fastcgi_index index.php;            include fastcgi.conf;        }        #图片缓存时间设置        location ~ .*.(gif|jpg|jpeg|png|bmp|swf)$ {            expires 10d;        }        #JS 和 CSS 缓存时间设置        location ~ .*.(js|css)?$ {            expires 1h;        }        #日志格式设定        log_format access &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39; &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39; &#39;&quot;$http_user_agent&quot; $http_x_forwarded_for&#39;;        #定义本虚拟主机的访问日志        access_log /var/log/nginx/ha97access.log access;        #对 &quot;/&quot; 启用反向代理        location / {            proxy_pass http://127.0.0.1:88;            proxy_redirect off;            proxy_set_header X-Real-IP $remote_addr;            #后端的 Web 服务器可以通过 X-Forwarded-For 获取用户真实 IP            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;            #以下是一些反向代理的配置，可选。            proxy_set_header Host $host;            client_max_body_size 10m; #允许客户端请求的最大单文件字节数            client_body_buffer_size 128k; #缓冲区代理缓冲用户端请求的最大字节数，            ##代理设置 以下设置是 nginx 和后端服务器之间通讯的设置##            proxy_connect_timeout 90; #nginx 跟后端服务器连接超时时间（代理连接超时）            proxy_send_timeout 90; #后端服务器数据回传时间（代理发送超时）            proxy_read_timeout 90; #连接成功后，后端服务器响应时间（代理接收超时）            proxy_buffering on;    #该指令开启从后端被代理服务器的响应内容缓冲 此参数开启后 proxy_buffers 和 proxy_busy_buffers_size 参数才会起作用            proxy_buffer_size 4k;  #设置代理服务器（nginx）保存用户头信息的缓冲区大小            proxy_buffers 4 32k;   #proxy_buffers 缓冲区，网页平均在 32k 以下的设置            proxy_busy_buffers_size 64k; #高负荷下缓冲大小（proxy_buffers*2）            proxy_max_temp_file_size 2048m; #默认 1024m, 该指令用于设置当网页内容大于 proxy_buffers 时，临时文件大小的最大值。如果文件大于这个值，它将从 upstream 服务器同步地传递请求，而不是缓冲到磁盘            proxy_temp_file_write_size 512k; 这是当被代理服务器的响应过大时 nginx 一次性写入临时文件的数据量。            proxy_temp_path  /var/tmp/nginx/proxy_temp;    ##定义缓冲存储目录，之前必须要先手动创建此目录            proxy_headers_hash_max_size 51200;            proxy_headers_hash_bucket_size 6400;            #######################################################        }        #设定查看 nginx 状态的地址        location /nginxStatus {            stub_status on;            access_log on;            auth_basic &quot;nginxStatus&quot;;            auth_basic_user_file conf/htpasswd;            #htpasswd 文件的内容可以用 apache 提供的 htpasswd 工具来产生。        }        #本地动静分离反向代理配置        #所有 jsp 的页面均交由 tomcat 或 resin 处理        location ~ .(jsp|jspx|do)?$ {            proxy_set_header Host $host;            proxy_set_header X-Real-IP $remote_addr;            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;            proxy_pass http://127.0.0.1:8080;        }        #所有静态文件由 nginx 直接读取不经过 tomcat 或 resin        location ~ .*.(htm|html|gif|jpg|jpeg|png|bmp|swf|ioc|rar|zip|txt|flv|mid|doc|ppt|pdf|xls|mp3|wma)$        { expires 15d; }        location ~ .*.(js|css)?$        { expires 1h; }    }}</code></pre>]]></content>
+    <content type="html"><![CDATA[<p><img src="https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg" alt="VSCode"></p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/vinkim/article/details/81546333" target="_blank" rel="noopener">vscode</a></p><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">地址</a> 破解版</p><h2 id="VSCode-配置-python-环境"><a href="#VSCode-配置-python-环境" class="headerlink" title="VSCode 配置 python 环境"></a>VSCode 配置 python 环境</h2><p><a href="https://www.jianshu.com/p/cbf500c22154" target="_blank" rel="noopener">参考</a></p><p>安装完成后，打开软件会自动提示你安装一些重要插件，如中文语言包，Git等</p><ol><li>主要选择安装Python插件(也可以使用Ctrl+Shift+X可以打开扩展商店然后输入Python搜索)。</li><li>选取Python解释器  <blockquote><p>使用Ctrl+Shift+P打开命令板，输入Python: Select Interpreter进行搜索。</p></blockquote></li></ol><h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ul><li>Settings Sync</li></ul><p>这个插件可以实现同步你的vscode设置，包括setting文件，插件设置等，不过你要先有github的账户，因为它利用了github的token功能，相当于把这样文件上传到了你的github账户中，这样你就可以在其它的电脑上直接下载的配置文件了，不用再配置一次了，相当方便省事了。</p><ul><li>Python</li></ul><p>首先当然要推荐这个必备插件python了，提供了代码分析，高亮，规范化等很多基本功能，装好这个就可以开始愉快的写python了。</p><ul><li>Bracket Pair Colorizer</li></ul><p>代码颜色高亮一般只会帮你区分不同的变量，这款插件给不同的括号换上了不同的颜色，括号的多的时候非常实用。</p><ul><li>Visual Studio IntelliCode</li></ul><p>自动补全配置</p><ul><li>Code Runner</li></ul><p>支持多种语言，包括 Python，运行执行一段任意代码。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>命令行不能执行 python or other</p><blockquote><p>打开vs code属性里的兼容性，勾选以管理员身份运行，然后应用</p></blockquote><p>就是找到启动的 .exe文件右键 =&gt; 属性</p>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://images.cnblogs.com/cnblogs_com/luoyangyang/1573981/t_191129021248VSCode.jpg&quot; alt=&quot;VSCode&quot;&gt;&lt;/p&gt;
     
     </summary>
     
     
-      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
+      <category term="工具" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
@@ -109,29 +109,6 @@
   </entry>
   
   <entry>
-    <title>多媒体&amp;FFmpeg命令</title>
-    <link href="http://yoursite.com/2019/09/13/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
-    <id>http://yoursite.com/2019/09/13/多媒体&amp;FFmpeg常用命令/</id>
-    <published>2019-09-13T09:25:25.000Z</published>
-    <updated>2019-11-30T06:41:28.167Z</updated>
-    
-    <content type="html"><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p><a id="more"></a><h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。码率：码率 = 采样率 * 采样位数 * 声道数如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。-f 输出hls格式。hls协议流媒体网络传输协议：hls_list_size 3:HLS播放的列表，FFmpeg默认5。-hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。-hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环-ar freq 设置音频采样率 -ac channels 设置通道 缺省为与输入相同 -acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul><li>合并多段音频</li></ul><p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p><ul><li>aac =&gt; mp3</li></ul><p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p><ul><li>一段音频剪切中间一段</li></ul><p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;多媒体基本概念及 FFmpeg 常用命令介绍&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="多媒体" scheme="http://yoursite.com/categories/%E5%A4%9A%E5%AA%92%E4%BD%93/"/>
-    
-    
-      <category term="多媒体" scheme="http://yoursite.com/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/"/>
-    
-  </entry>
-  
-  <entry>
     <title>pm2工作使用</title>
     <link href="http://yoursite.com/2019/09/13/pm2%E5%B7%A5%E4%BD%9C%E4%BD%BF%E7%94%A8/"/>
     <id>http://yoursite.com/2019/09/13/pm2工作使用/</id>
@@ -151,6 +128,29 @@
     
     
       <category term="node" scheme="http://yoursite.com/tags/node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多媒体&amp;FFmpeg命令</title>
+    <link href="http://yoursite.com/2019/09/13/%E5%A4%9A%E5%AA%92%E4%BD%93&amp;FFmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <id>http://yoursite.com/2019/09/13/多媒体&amp;FFmpeg常用命令/</id>
+    <published>2019-09-13T09:25:25.000Z</published>
+    <updated>2019-11-30T06:41:28.167Z</updated>
+    
+    <content type="html"><![CDATA[<p>多媒体基本概念及 FFmpeg 常用命令介绍</p><a id="more"></a><h3 id="多媒体基本概念"><a href="#多媒体基本概念" class="headerlink" title="多媒体基本概念"></a>多媒体基本概念</h3><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><pre><code>容器(Container)——容器就是一种文件格式，比如flv，mkv等。包含下面5种流以及文件头信息。流(Stream)——是一种视频数据信息的传输方式，5种流：音频，视频，字幕，附件，数据。帧(Frame)——帧代表一幅静止的图像，分为I帧，P帧，B帧。编解码器(Codec)——是对视频进行压缩或者解压缩，CODEC =COde （编码） +DECode（解码）复用/解复用(mux/demux)——把不同的流按照某种容器的规则放入容器，这种行为叫做复用（mux）把不同的流从某种容器中解析出来，这种行为叫做解复用(demux)采样率：录音设备在一秒钟内对声音信号的采样次数，采样频率越高声音的还原就越真实越自然。采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级。8KHz - 电话所用采样率, 对于人的说话已经足够，22.05KHz只能达到FM广播的声音品质，44.1KHz则是理论上的CD音质界限，48KHz则更加精确一些。采样位数：记录每次采样值数值大小的位数。采样位数通常有8bits或16bits两种，采样位数越大，所能记录声音的变化度就越细腻，相应的数据量就越大。声道数：声道数是指支持能不同发声的音响的个数，它是衡量音响设备的重要指标之一。单声道的声道数为1个声道；双声道的声道数为2个声道；立体声道的声道数默认为2个声道；立体声道（4声道）的声道数为4个声道。码率：码率 = 采样率 * 采样位数 * 声道数如果是CD音质，采样率44.1KHz，采样位数16bit，立体声(双声道)，码率 = 44.1 * 16 * 2 = 1411.2Kbps = 176.4KBps，那么录制一分钟的音乐，大概10.34MB。音频帧：音频数据是流式的，本身没有明确的一帧帧的概念，在实际的应用中，为了音频算法处理/传输的方便，一般约定俗成取2.5ms~60ms为单位的数据量为一帧音频。这个时间被称之为“采样时间”，其长度没有特别的标准，它是根据编解码器和具体应用的需求来决定的。编码：通过一定协议或规则把一段声音或图像转化成计算机数字文件的过程。音频编码：将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。常见的音频编码方案有AAC、MP3、WMA。 AAC原始码流（又称为“裸流”）是由一个一个的ADTS frame组成的。解码：编码的逆过程，把编码过的媒体文件重新转化成声音或图像。</code></pre><h5 id="视频基本概念"><a href="#视频基本概念" class="headerlink" title="视频基本概念"></a>视频基本概念</h5><pre><code>视频：静止的画面叫图像（picture）。连续的图像变化每秒超过24帧（frame）画面以上时，根椐视觉暂留原理，人眼无法辨别每幅单独的静态画面，看上去是平滑连续的视觉效果。这样的连续画面叫视频。当连续图像变化每秒低于24帧画面时，人眼有不连续的感觉叫动画（cartoon）。帧率：帧/秒（frames per second）的缩写，也称为帧速率，测量用于保存、显示动态视频的信息数量。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。每秒钟帧数 （fps） 愈多，所显示的动作就会愈流畅，可理解为秒钟时间里刷新的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，也就是指每秒钟能够播放（或者录制）多少格画面。分辨率：一个表示平面图像精细程度的概念，通常它是以横向和纵向点的数量来衡量的，表示成水平点数垂直点数的形式，在计算机显示领域我们也表示成“每英寸像素”（ppi）。在一个固定的平面内，分辨率越高，意味着可使用的点数越多，图像越细致。</code></pre><h5 id="M3U8-amp-HLS"><a href="#M3U8-amp-HLS" class="headerlink" title="M3U8 &amp; HLS"></a>M3U8 &amp; HLS</h5><pre><code>M3U8是一种常见的流媒体格式，主要以文件列表的形式存在，既支持直播又支持点播HLS（全称：Http Live Streaming）是由Apple公司定义的用于实时流传输的协议，HLS基于HTTP协议实现，传输内容包括两部分：        一是M3U8描述文件：是指UTF-8编码格式的M3U文件。M3U文件是记录了一个索引纯文本文件，打开它时播放软件并不是播放它，而是根据它的索引找到对应的音视频文件的网络地址进行在线播放。        二是TS(Transport Stream)媒体文件：为什么要用 TS 而不是 MP4？这是因为两个 TS 片段可以无缝拼接，播放器能连续播放，而 MP4 文件由于编码方式的原因，两段 MP4 不能无缝拼接，连续播放会产生破音和画面间断</code></pre><h5 id="MP3-amp-AAC-区别"><a href="#MP3-amp-AAC-区别" class="headerlink" title="MP3 &amp; AAC 区别"></a>MP3 &amp; AAC 区别</h5><pre><code>MP3和AAC都是音频格式，后者是前者的进化版MP3：MP3是一种数字音乐格式，可以将CD轨道减小到其正常大小的十分之一左右，而不会明显降低质量。，MP3高频数据丢失严重AAC：AAC与MP3相似。它实质上可以切出或压缩人耳无法拾取的信息，从而使数字文件更小，更易于管理，因此下载速度更快。AAC的大小约为MP3的一半，但质量更高。压缩程度更高,提升压缩率，支持多声道，更高的解析度，提升的解码效率。相比MP3音质和占有空间更小ADTS全称是(Audio Data Transport Stream)，是AAC的一种十分常见的传输格式。</code></pre><h5 id="常见音频格式"><a href="#常见音频格式" class="headerlink" title="常见音频格式"></a>常见音频格式</h5><pre><code>有损格式主要有MP3, WMA, OGG, MP3pro, AAC, VQF, ASF等。无损：WAV</code></pre><h2 id="FFmpeg-常用命令"><a href="#FFmpeg-常用命令" class="headerlink" title="FFmpeg 常用命令"></a>FFmpeg 常用命令</h2><pre><code>-y 覆盖输出文件，若存在不提示覆盖。-f 输出hls格式。hls协议流媒体网络传输协议：hls_list_size 3:HLS播放的列表，FFmpeg默认5。-hls_time 1:设置M3U8列表中切片的duration,每一片TS文件时长1秒左右。-hls_wrap 10:表示为最大的TS循环数，10个，每10个一个循环-ar freq 设置音频采样率 -ac channels 设置通道 缺省为与输入相同 -acodec 使用pcm_s16le编码</code></pre><h2 id="FFmpeg常用操作"><a href="#FFmpeg常用操作" class="headerlink" title="FFmpeg常用操作"></a>FFmpeg常用操作</h2><ul><li>合并多段音频</li></ul><p><code>ffmpeg -y -i &quot;concat:${pathList.join(&#39;|&#39;)}&quot; -acodec copy part_all.aac</code> 注：pathlist为多段音频地址<br>参数： -acodec copy表示使用跟原视频一样的音频编解码器</p><ul><li>aac =&gt; mp3</li></ul><p><code>ffmpeg -y -i &#39;${filePrefix}all${version}.aac&#39; &#39;${filePrefix}all${version}.mp3&#39;</code></p><ul><li>一段音频剪切中间一段</li></ul><p><code>ffmpeg -i part_all4.mp3 -filter_complex &quot;[0]atrim=duration=start_pos[a];[0]atrim=start=end_pos[b];[a][b]concat=n=2:v=0:a=1&quot; output.mp3</code>  注：start_pos起始位置 end_pos终止位置</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;多媒体基本概念及 FFmpeg 常用命令介绍&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="多媒体" scheme="http://yoursite.com/categories/%E5%A4%9A%E5%AA%92%E4%BD%93/"/>
+    
+    
+      <category term="多媒体" scheme="http://yoursite.com/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/"/>
     
   </entry>
   
@@ -231,9 +231,9 @@
     <link href="http://yoursite.com/2019/08/20/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/"/>
     <id>http://yoursite.com/2019/08/20/面试总结/</id>
     <published>2019-08-20T07:25:25.000Z</published>
-    <updated>2019-11-30T06:41:24.404Z</updated>
+    <updated>2019-12-02T07:33:13.020Z</updated>
     
-    <content type="html"><![CDATA[<p>关于面试的点点滴滴</p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://yangshun.github.io/tech-interview-handbook/coding-round-overview" target="_blank" rel="noopener">如何准备编程面试</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/cheatsheet" target="_blank" rel="noopener">面试备忘录</a>：涉及面试前需要准备的问题，收到面试题的考虑方式、编程测试准备流程、面试总结</li><li><a href="https://yangshun.github.io/tech-interview-handbook/algorithms/algorithms-introduction" target="_blank" rel="noopener">算法小贴士</a>：各类算法小贴士，以及按主题分类过的最容易考到的问题</li><li><a href="https://github.com/yangshun/front-end-interview-handbook" target="_blank" rel="noopener">前端求职面试问题答案</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/company-interview-formats" target="_blank" rel="noopener">互联网大厂的面试形式解析</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/behavioral-questions" target="_blank" rel="noopener">科技巨头们的通用常见问题，以及几个大厂的常见通用非技术问题</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/questions-to-ask" target="_blank" rel="noopener">适合在面试结束时问考官的好问题！</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/resume" target="_blank" rel="noopener">做简历注意事项，让你的简历更能引起面试官注意</a></li><li><a href="http://www.cjjjs.com/page/topicinfo?id_topic=63" target="_blank" rel="noopener">面试题</a></li></ul>]]></content>
+    <content type="html"><![CDATA[<p>关于面试的点点滴滴</p><a id="more"></a><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://yangshun.github.io/tech-interview-handbook/coding-round-overview" target="_blank" rel="noopener">如何准备编程面试</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/cheatsheet" target="_blank" rel="noopener">面试备忘录</a>：涉及面试前需要准备的问题，收到面试题的考虑方式、编程测试准备流程、面试总结</li><li><a href="https://yangshun.github.io/tech-interview-handbook/algorithms/algorithms-introduction" target="_blank" rel="noopener">算法小贴士</a>：各类算法小贴士，以及按主题分类过的最容易考到的问题</li><li><a href="https://github.com/yangshun/front-end-interview-handbook" target="_blank" rel="noopener">前端求职面试问题答案</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/company-interview-formats" target="_blank" rel="noopener">互联网大厂的面试形式解析</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/behavioral-questions" target="_blank" rel="noopener">科技巨头们的通用常见问题，以及几个大厂的常见通用非技术问题</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/questions-to-ask" target="_blank" rel="noopener">适合在面试结束时问考官的好问题！</a></li><li><a href="https://yangshun.github.io/tech-interview-handbook/resume" target="_blank" rel="noopener">做简历注意事项，让你的简历更能引起面试官注意</a></li><li><a href="http://www.cjjjs.com/page/topicinfo?id_topic=63" target="_blank" rel="noopener">面试题</a></li><li><a href="https://juejin.im/post/5cb6c4ef51882532b70e6ff0" target="_blank" rel="noopener">MySQL</a></li></ul><h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2>]]></content>
     
     <summary type="html">
     
@@ -389,29 +389,6 @@
   </entry>
   
   <entry>
-    <title>理解高性能网络模型</title>
-    <link href="http://yoursite.com/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
-    <id>http://yoursite.com/2019/06/11/理解高性能网络模型/</id>
-    <published>2019-06-11T09:25:25.000Z</published>
-    <updated>2019-11-27T08:53:26.362Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
     <title>数据结构与算法</title>
     <link href="http://yoursite.com/2019/06/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
     <id>http://yoursite.com/2019/06/11/数据结构与算法/</id>
@@ -431,6 +408,29 @@
     
     
       <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>理解高性能网络模型</title>
+    <link href="http://yoursite.com/2019/06/11/%E7%90%86%E8%A7%A3%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://yoursite.com/2019/06/11/理解高性能网络模型/</id>
+    <published>2019-06-11T09:25:25.000Z</published>
+    <updated>2019-11-27T08:53:26.362Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png" alt="mysql"></p><a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://www.youhutong.com/static/appImage/article/thumb/8e43ba8c3810921daff968b4105fbfa5.png&quot; alt=&quot;mysql&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
